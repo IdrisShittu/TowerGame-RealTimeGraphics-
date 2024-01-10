@@ -1,0 +1,436 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="DDSImages">
+      <UniqueIdentifier>{b8000df3-5906-46bd-b28d-105d86e69982}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Shader Classes">
+      <UniqueIdentifier>{edad2164-868e-4e75-9b22-4e545fe4a22e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Shader Headers">
+      <UniqueIdentifier>{75995f69-ccb5-4369-a406-1d0001a524bb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Shaders">
+      <UniqueIdentifier>{90a586ff-d1ce-437f-a102-2465d4c79f05}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Managers">
+      <UniqueIdentifier>{e0a0f01c-f1c9-47c2-b58a-55ab3a74fbc3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Managers">
+      <UniqueIdentifier>{ec710082-273d-4e28-b163-082f7b12417a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Components">
+      <UniqueIdentifier>{84e6ab33-3c68-40e1-9bca-f26ed94c8b4b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Components">
+      <UniqueIdentifier>{81daba7b-59d4-442c-8427-3f31bd99c911}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Shaders\VertexShader">
+      <UniqueIdentifier>{3eddbe00-c6bc-4fbd-9c09-ced09d33fd7d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Shaders\PixelShader">
+      <UniqueIdentifier>{96f354b0-06c3-4822-a93d-b31585c3ff14}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Shaders\HullShader">
+      <UniqueIdentifier>{d6b193be-933e-4545-b230-8ac4e265428f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Shaders\DomainShader">
+      <UniqueIdentifier>{555aa054-b160-4650-a939-a84bc4239a6b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\ParticleSystems">
+      <UniqueIdentifier>{49e61772-8bf6-4d8f-888e-f42cfc5a64e0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\ParticleSystems">
+      <UniqueIdentifier>{d061fce1-6423-4895-b752-544a0bda7ce5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\GameObjects">
+      <UniqueIdentifier>{6f966321-48ca-419c-9077-d6069d58659d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\GameObjects">
+      <UniqueIdentifier>{aa752513-619b-4df6-b5cb-41b9558f3485}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Lights">
+      <UniqueIdentifier>{c75692e5-e1dc-4f76-90b8-5de7ae84236d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Lights">
+      <UniqueIdentifier>{1c5b439d-d6c8-42ea-bfdc-1a3f13439b5f}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="WinMain.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="D3DContainer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ColourShader.cpp">
+      <Filter>Source Files\Shader Classes</Filter>
+    </ClCompile>
+    <ClCompile Include="LightShader.cpp">
+      <Filter>Source Files\Shader Classes</Filter>
+    </ClCompile>
+    <ClCompile Include="Camera.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GraphicsRenderer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GraphicsEngine.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="InputManager.cpp">
+      <Filter>Source Files\Managers</Filter>
+    </ClCompile>
+    <ClCompile Include="Model.cpp">
+      <Filter>Source Files\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="ResourceManager.cpp">
+      <Filter>Source Files\Managers</Filter>
+    </ClCompile>
+    <ClCompile Include="ShaderManager.cpp">
+      <Filter>Source Files\Managers</Filter>
+    </ClCompile>
+    <ClCompile Include="Texture.cpp">
+      <Filter>Source Files\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Position.cpp">
+      <Filter>Source Files\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Rotation.cpp">
+      <Filter>Source Files\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Scale.cpp">
+      <Filter>Source Files\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="RigidBody.cpp">
+      <Filter>Source Files\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Shader.cpp">
+      <Filter>Source Files\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="TextureNormalMappingShader.cpp">
+      <Filter>Source Files\Shader Classes</Filter>
+    </ClCompile>
+    <ClCompile Include="TextureNormalSpecularShader.cpp">
+      <Filter>Source Files\Shader Classes</Filter>
+    </ClCompile>
+    <ClCompile Include="TextureDisplacement.cpp">
+      <Filter>Source Files\Shader Classes</Filter>
+    </ClCompile>
+    <ClCompile Include="LightManager.cpp">
+      <Filter>Source Files\Managers</Filter>
+    </ClCompile>
+    <ClCompile Include="RenderToTexture.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="DepthShader.cpp">
+      <Filter>Source Files\Shader Classes</Filter>
+    </ClCompile>
+    <ClCompile Include="ShadowMapManager.cpp">
+      <Filter>Source Files\Managers</Filter>
+    </ClCompile>
+    <ClCompile Include="ParticleSystem.cpp">
+      <Filter>Source Files\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="SmokeParticleSystem.cpp">
+      <Filter>Source Files\ParticleSystems</Filter>
+    </ClCompile>
+    <ClCompile Include="FireJetParticleSystem.cpp">
+      <Filter>Source Files\ParticleSystems</Filter>
+    </ClCompile>
+    <ClCompile Include="ParticleShader.cpp">
+      <Filter>Source Files\Shader Classes</Filter>
+    </ClCompile>
+    <ClCompile Include="ParticleSystemManager.cpp">
+      <Filter>Source Files\Managers</Filter>
+    </ClCompile>
+    <ClCompile Include="Texture2DShader.cpp">
+      <Filter>Source Files\Shader Classes</Filter>
+    </ClCompile>
+    <ClCompile Include="TextureCubeShader.cpp">
+      <Filter>Source Files\Shader Classes</Filter>
+    </ClCompile>
+    <ClCompile Include="ReflectionShader.cpp">
+      <Filter>Source Files\Shader Classes</Filter>
+    </ClCompile>
+    <ClCompile Include="GameObject.cpp">
+      <Filter>Source Files\GameObjects</Filter>
+    </ClCompile>
+    <ClCompile Include="Terrain.cpp">
+      <Filter>Source Files\GameObjects</Filter>
+    </ClCompile>
+    <ClCompile Include="Rocket.cpp">
+      <Filter>Source Files\GameObjects</Filter>
+    </ClCompile>
+    <ClCompile Include="Light.cpp">
+      <Filter>Source Files\Lights</Filter>
+    </ClCompile>
+    <ClCompile Include="PointLight.cpp">
+      <Filter>Source Files\Lights</Filter>
+    </ClCompile>
+    <ClCompile Include="DirectionalLight.cpp">
+      <Filter>Source Files\Lights</Filter>
+    </ClCompile>
+    <ClCompile Include="ConfigurationFileLoader.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Camera.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="D3DContainer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GraphicsRenderer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GraphicsEngine.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ColourShader.h">
+      <Filter>Header Files\Shader Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="LightShader.h">
+      <Filter>Header Files\Shader Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="InputManager.h">
+      <Filter>Header Files\Managers</Filter>
+    </ClInclude>
+    <ClInclude Include="ResourceManager.h">
+      <Filter>Header Files\Managers</Filter>
+    </ClInclude>
+    <ClInclude Include="ShaderManager.h">
+      <Filter>Header Files\Managers</Filter>
+    </ClInclude>
+    <ClInclude Include="Texture.h">
+      <Filter>Header Files\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Model.h">
+      <Filter>Header Files\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Position.h">
+      <Filter>Header Files\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Rotation.h">
+      <Filter>Header Files\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Scale.h">
+      <Filter>Header Files\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="RigidBody.h">
+      <Filter>Header Files\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Shader.h">
+      <Filter>Header Files\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="TextureNormalMappingShader.h">
+      <Filter>Header Files\Shader Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="TextureNormalSpecularShader.h">
+      <Filter>Header Files\Shader Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="TextureDisplacement.h">
+      <Filter>Header Files\Shader Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="LightManager.h">
+      <Filter>Header Files\Managers</Filter>
+    </ClInclude>
+    <ClInclude Include="RenderToTexture.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="DepthShader.h">
+      <Filter>Header Files\Shader Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="ShadowMapManager.h">
+      <Filter>Header Files\Managers</Filter>
+    </ClInclude>
+    <ClInclude Include="ParticleSystem.h">
+      <Filter>Header Files\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="FireJetParticleSystem.h">
+      <Filter>Header Files\ParticleSystems</Filter>
+    </ClInclude>
+    <ClInclude Include="SmokeParticleSystem.h">
+      <Filter>Header Files\ParticleSystems</Filter>
+    </ClInclude>
+    <ClInclude Include="ParticleShader.h">
+      <Filter>Header Files\Shader Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="ParticleSystemManager.h">
+      <Filter>Header Files\Managers</Filter>
+    </ClInclude>
+    <ClInclude Include="Texture2DShader.h">
+      <Filter>Header Files\Shader Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="TextureCubeShader.h">
+      <Filter>Header Files\Shader Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="ReflectionShader.h">
+      <Filter>Header Files\Shader Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Terrain.h">
+      <Filter>Header Files\GameObjects</Filter>
+    </ClInclude>
+    <ClInclude Include="GameObject.h">
+      <Filter>Header Files\GameObjects</Filter>
+    </ClInclude>
+    <ClInclude Include="Rocket.h">
+      <Filter>Header Files\GameObjects</Filter>
+    </ClInclude>
+    <ClInclude Include="Light.h">
+      <Filter>Header Files\Lights</Filter>
+    </ClInclude>
+    <ClInclude Include="DirectionalLight.h">
+      <Filter>Header Files\Lights</Filter>
+    </ClInclude>
+    <ClInclude Include="PointLight.h">
+      <Filter>Header Files\Lights</Filter>
+    </ClInclude>
+    <ClInclude Include="ConfigurationFileLoader.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="ColourPixelShader.hlsl">
+      <Filter>Shaders\PixelShader</Filter>
+    </FxCompile>
+    <FxCompile Include="LightPixelShader.hlsl">
+      <Filter>Shaders\PixelShader</Filter>
+    </FxCompile>
+    <FxCompile Include="TextureNormalPixelShader.hlsl">
+      <Filter>Shaders\PixelShader</Filter>
+    </FxCompile>
+    <FxCompile Include="TextureNormalVertexShader.hlsl">
+      <Filter>Shaders\VertexShader</Filter>
+    </FxCompile>
+    <FxCompile Include="LightVertexShader.hlsl">
+      <Filter>Shaders\VertexShader</Filter>
+    </FxCompile>
+    <FxCompile Include="ColourVertexShader.hlsl">
+      <Filter>Shaders\VertexShader</Filter>
+    </FxCompile>
+    <FxCompile Include="TextureNormalSpecularVS.hlsl">
+      <Filter>Shaders\VertexShader</Filter>
+    </FxCompile>
+    <FxCompile Include="TextureNormalSpecularPS.hlsl">
+      <Filter>Shaders\PixelShader</Filter>
+    </FxCompile>
+    <FxCompile Include="TextureDisplacementVS.hlsl">
+      <Filter>Shaders\VertexShader</Filter>
+    </FxCompile>
+    <FxCompile Include="TextureDisplacementHS.hlsl">
+      <Filter>Shaders\HullShader</Filter>
+    </FxCompile>
+    <FxCompile Include="TextureDisplacementPS.hlsl">
+      <Filter>Shaders\PixelShader</Filter>
+    </FxCompile>
+    <FxCompile Include="TextureDisplacementDS.hlsl">
+      <Filter>Shaders\DomainShader</Filter>
+    </FxCompile>
+    <FxCompile Include="ColourHullShader.hlsl">
+      <Filter>Shaders\HullShader</Filter>
+    </FxCompile>
+    <FxCompile Include="ColourDomainShader.hlsl">
+      <Filter>Shaders\DomainShader</Filter>
+    </FxCompile>
+    <FxCompile Include="LightHullShader.hlsl">
+      <Filter>Shaders\HullShader</Filter>
+    </FxCompile>
+    <FxCompile Include="LightDomainShader.hlsl">
+      <Filter>Shaders\DomainShader</Filter>
+    </FxCompile>
+    <FxCompile Include="TextureNormalHullShader.hlsl">
+      <Filter>Shaders\HullShader</Filter>
+    </FxCompile>
+    <FxCompile Include="TextureNormalDomainShader.hlsl">
+      <Filter>Shaders\DomainShader</Filter>
+    </FxCompile>
+    <FxCompile Include="TextureNormalSpecularDS.hlsl">
+      <Filter>Shaders\DomainShader</Filter>
+    </FxCompile>
+    <FxCompile Include="TextureNormalSpecularHS.hlsl">
+      <Filter>Shaders\HullShader</Filter>
+    </FxCompile>
+    <FxCompile Include="DepthVertexShader.hlsl">
+      <Filter>Shaders\VertexShader</Filter>
+    </FxCompile>
+    <FxCompile Include="DepthHullShader.hlsl">
+      <Filter>Shaders\HullShader</Filter>
+    </FxCompile>
+    <FxCompile Include="DepthDomainShader.hlsl">
+      <Filter>Shaders\DomainShader</Filter>
+    </FxCompile>
+    <FxCompile Include="DepthPixelShader.hlsl">
+      <Filter>Shaders\PixelShader</Filter>
+    </FxCompile>
+    <FxCompile Include="ParticleVertexShader.hlsl">
+      <Filter>Shaders\VertexShader</Filter>
+    </FxCompile>
+    <FxCompile Include="ParticleHullShader.hlsl">
+      <Filter>Shaders\HullShader</Filter>
+    </FxCompile>
+    <FxCompile Include="ParticleDomainShader.hlsl">
+      <Filter>Shaders\DomainShader</Filter>
+    </FxCompile>
+    <FxCompile Include="ParticlePixelShader.hlsl">
+      <Filter>Shaders\PixelShader</Filter>
+    </FxCompile>
+    <FxCompile Include="Texture2DDomainShader.hlsl">
+      <Filter>Shaders\DomainShader</Filter>
+    </FxCompile>
+    <FxCompile Include="Texture2DHullShader.hlsl">
+      <Filter>Shaders\HullShader</Filter>
+    </FxCompile>
+    <FxCompile Include="Texture2DPixelShader.hlsl">
+      <Filter>Shaders\PixelShader</Filter>
+    </FxCompile>
+    <FxCompile Include="Texture2DVertexShader.hlsl">
+      <Filter>Shaders\VertexShader</Filter>
+    </FxCompile>
+    <FxCompile Include="TextureCubeVertexShader.hlsl">
+      <Filter>Shaders\VertexShader</Filter>
+    </FxCompile>
+    <FxCompile Include="TextureCubeHullShader.hlsl">
+      <Filter>Shaders\HullShader</Filter>
+    </FxCompile>
+    <FxCompile Include="TextureCubeDomainShader.hlsl">
+      <Filter>Shaders\DomainShader</Filter>
+    </FxCompile>
+    <FxCompile Include="TextureCubePixelShader.hlsl">
+      <Filter>Shaders\PixelShader</Filter>
+    </FxCompile>
+    <FxCompile Include="ReflectionPixelShader.hlsl">
+      <Filter>Shaders\PixelShader</Filter>
+    </FxCompile>
+    <FxCompile Include="ReflectionDomainShader.hlsl">
+      <Filter>Shaders\DomainShader</Filter>
+    </FxCompile>
+    <FxCompile Include="ReflectionHullShader.hlsl">
+      <Filter>Shaders\HullShader</Filter>
+    </FxCompile>
+    <FxCompile Include="ReflectionVertexShader.hlsl">
+      <Filter>Shaders\VertexShader</Filter>
+    </FxCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="seafloor.dds">
+      <Filter>DDSImages</Filter>
+    </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+</Project>

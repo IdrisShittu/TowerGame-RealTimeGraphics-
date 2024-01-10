@@ -1,0 +1,51 @@
+CameraPosition
+0.0 5.0 -20.0
+
+TerrainDimensions
+200 30 50
+
+TerrainScale
+1 1 1
+
+RocketPosition
+2.0 3.0 0.0
+
+RocketRotation
+0.0 0.0 -0.78539816339
+
+RocketScale
+1.0 1.0 1.0
+
+SunAmbient
+0.15 0.15 0.15 1.0
+
+SunDiffuse
+1.0 1.0 1.0 1.0
+
+SunSpecular
+1.0 1.0 1.0 1.0
+
+SunSpecularPower
+15.0
+
+MoonAmbient
+0.15 0.15 0.15 1.0
+
+MoonDiffuse
+0.8 0.8 0.8 1.0
+
+MoonSpecular
+0.4 0.4 0.4 1.0
+
+MoonSpecularPower
+50.0
+
+LaunchPadScale
+10.0 10.0 10.0
+
+LaunchPadTessellationValues
+5.0 20.0 8.0 1.0
+
+LaunchPadDisplacementValues
+20.0 0.0 6.0 0.17
+
