@@ -119,8 +119,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\imgui-master\imgui-master\examples\example_sdl2_vulkan\main.cpp" />
-    <ClCompile Include="..\..\..\imgui-master\imgui-master\examples\libs\usynergy\uSynergy.c" />
+    
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="ColourShader.cpp" />
     <ClCompile Include="ConfigurationFileLoader.cpp" />
