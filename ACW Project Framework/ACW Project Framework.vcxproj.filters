@@ -90,7 +90,7 @@
     <ClCompile Include="GraphicsEngine.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="InputManager.cpp">
+    <ClCompile Include="Keyboard.cpp">
       <Filter>Source Files\Managers</Filter>
     </ClCompile>
     <ClCompile Include="Model.cpp">
@@ -186,6 +186,93 @@
     <ClCompile Include="ConfigurationFileLoader.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\imgui-master\imgui-master\examples\example_allegro5\main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\imgui-master\imgui-master\examples\example_android_opengl3\main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\imgui-master\imgui-master\examples\example_emscripten_wgpu\main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\imgui-master\imgui-master\examples\example_glfw_opengl2\main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\imgui-master\imgui-master\examples\example_glfw_opengl3\main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\imgui-master\imgui-master\examples\example_glfw_vulkan\main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\imgui-master\imgui-master\examples\example_glut_opengl2\main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\imgui-master\imgui-master\examples\example_null\main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\imgui-master\imgui-master\examples\example_sdl2_directx11\main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\imgui-master\imgui-master\examples\example_sdl2_opengl2\main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\imgui-master\imgui-master\examples\example_sdl2_opengl3\main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\imgui-master\imgui-master\examples\example_sdl2_sdlrenderer2\main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\imgui-master\imgui-master\examples\example_sdl2_vulkan\main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\imgui-master\imgui-master\examples\example_sdl3_opengl3\main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\imgui-master\imgui-master\examples\example_sdl3_sdlrenderer3\main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\imgui-master\imgui-master\examples\example_win32_directx10\main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\imgui-master\imgui-master\examples\example_win32_directx11\main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\imgui-master\imgui-master\examples\example_win32_directx12\main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\imgui-master\imgui-master\examples\example_win32_directx9\main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\imgui-master\imgui-master\examples\example_win32_opengl3\main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\imgui-master\imgui-master\examples\libs\usynergy\uSynergy.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\imgui-master\imgui-master\imgui.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\imgui-master\imgui-master\imgui_demo.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\imgui-master\imgui-master\imgui_draw.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\imgui-master\imgui-master\imgui_tables.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\imgui-master\imgui-master\imgui_widgets.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\imgui-master\imgui-master\Sources\imgui_impl_dx11.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\imgui-master\imgui-master\Sources\imgui_impl_win32.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\imgui-master\imgui-master\Sources\imgui_stdlib.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Camera.h">
@@ -206,7 +293,7 @@
     <ClInclude Include="LightShader.h">
       <Filter>Header Files\Shader Headers</Filter>
     </ClInclude>
-    <ClInclude Include="InputManager.h">
+    <ClInclude Include="Keyboard.h">
       <Filter>Header Files\Managers</Filter>
     </ClInclude>
     <ClInclude Include="ResourceManager.h">
@@ -300,6 +387,48 @@
       <Filter>Header Files\Lights</Filter>
     </ClInclude>
     <ClInclude Include="ConfigurationFileLoader.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\imgui-master\imgui-master\examples\example_allegro5\imconfig_allegro5.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\imgui-master\imgui-master\examples\libs\emscripten\emscripten_mainloop_stub.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\imgui-master\imgui-master\examples\libs\glfw\include\GLFW\glfw3.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\imgui-master\imgui-master\examples\libs\glfw\include\GLFW\glfw3native.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\imgui-master\imgui-master\examples\libs\usynergy\uSynergy.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\imgui-master\imgui-master\imconfig.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\imgui-master\imgui-master\imgui.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\imgui-master\imgui-master\imgui_internal.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\imgui-master\imgui-master\imstb_rectpack.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\imgui-master\imgui-master\imstb_textedit.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\imgui-master\imgui-master\imstb_truetype.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\imgui-master\imgui-master\Sources\imgui_impl_dx11.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\imgui-master\imgui-master\Sources\imgui_impl_win32.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\imgui-master\imgui-master\Sources\imgui_stdlib.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -432,5 +561,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+    <None Include="..\..\..\imgui-master\imgui-master\examples\example_emscripten_wgpu\web\index.html" />
+    <None Include="..\..\..\imgui-master\imgui-master\examples\libs\emscripten\shell_minimal.html" />
   </ItemGroup>
 </Project>

@@ -119,6 +119,35 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\..\imgui-master\imgui-master\examples\example_allegro5\main.cpp" />
+    <ClCompile Include="..\..\..\imgui-master\imgui-master\examples\example_android_opengl3\main.cpp" />
+    <ClCompile Include="..\..\..\imgui-master\imgui-master\examples\example_emscripten_wgpu\main.cpp" />
+    <ClCompile Include="..\..\..\imgui-master\imgui-master\examples\example_glfw_opengl2\main.cpp" />
+    <ClCompile Include="..\..\..\imgui-master\imgui-master\examples\example_glfw_opengl3\main.cpp" />
+    <ClCompile Include="..\..\..\imgui-master\imgui-master\examples\example_glfw_vulkan\main.cpp" />
+    <ClCompile Include="..\..\..\imgui-master\imgui-master\examples\example_glut_opengl2\main.cpp" />
+    <ClCompile Include="..\..\..\imgui-master\imgui-master\examples\example_null\main.cpp" />
+    <ClCompile Include="..\..\..\imgui-master\imgui-master\examples\example_sdl2_directx11\main.cpp" />
+    <ClCompile Include="..\..\..\imgui-master\imgui-master\examples\example_sdl2_opengl2\main.cpp" />
+    <ClCompile Include="..\..\..\imgui-master\imgui-master\examples\example_sdl2_opengl3\main.cpp" />
+    <ClCompile Include="..\..\..\imgui-master\imgui-master\examples\example_sdl2_sdlrenderer2\main.cpp" />
+    <ClCompile Include="..\..\..\imgui-master\imgui-master\examples\example_sdl2_vulkan\main.cpp" />
+    <ClCompile Include="..\..\..\imgui-master\imgui-master\examples\example_sdl3_opengl3\main.cpp" />
+    <ClCompile Include="..\..\..\imgui-master\imgui-master\examples\example_sdl3_sdlrenderer3\main.cpp" />
+    <ClCompile Include="..\..\..\imgui-master\imgui-master\examples\example_win32_directx10\main.cpp" />
+    <ClCompile Include="..\..\..\imgui-master\imgui-master\examples\example_win32_directx11\main.cpp" />
+    <ClCompile Include="..\..\..\imgui-master\imgui-master\examples\example_win32_directx12\main.cpp" />
+    <ClCompile Include="..\..\..\imgui-master\imgui-master\examples\example_win32_directx9\main.cpp" />
+    <ClCompile Include="..\..\..\imgui-master\imgui-master\examples\example_win32_opengl3\main.cpp" />
+    <ClCompile Include="..\..\..\imgui-master\imgui-master\examples\libs\usynergy\uSynergy.c" />
+    <ClCompile Include="..\..\..\imgui-master\imgui-master\imgui.cpp" />
+    <ClCompile Include="..\..\..\imgui-master\imgui-master\imgui_demo.cpp" />
+    <ClCompile Include="..\..\..\imgui-master\imgui-master\imgui_draw.cpp" />
+    <ClCompile Include="..\..\..\imgui-master\imgui-master\imgui_tables.cpp" />
+    <ClCompile Include="..\..\..\imgui-master\imgui-master\imgui_widgets.cpp" />
+    <ClCompile Include="..\..\..\imgui-master\imgui-master\Sources\imgui_impl_dx11.cpp" />
+    <ClCompile Include="..\..\..\imgui-master\imgui-master\Sources\imgui_impl_win32.cpp" />
+    <ClCompile Include="..\..\..\imgui-master\imgui-master\Sources\imgui_stdlib.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="ColourShader.cpp" />
     <ClCompile Include="ConfigurationFileLoader.cpp" />
@@ -128,7 +157,7 @@
     <ClCompile Include="FireJetParticleSystem.cpp" />
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="GraphicsRenderer.cpp" />
-    <ClCompile Include="InputManager.cpp" />
+    <ClCompile Include="Keyboard.cpp" />
     <ClCompile Include="Light.cpp" />
     <ClCompile Include="LightManager.cpp" />
     <ClCompile Include="LightShader.cpp" />
@@ -160,6 +189,20 @@
     <ClCompile Include="WinMain.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\..\imgui-master\imgui-master\examples\example_allegro5\imconfig_allegro5.h" />
+    <ClInclude Include="..\..\..\imgui-master\imgui-master\examples\libs\emscripten\emscripten_mainloop_stub.h" />
+    <ClInclude Include="..\..\..\imgui-master\imgui-master\examples\libs\glfw\include\GLFW\glfw3.h" />
+    <ClInclude Include="..\..\..\imgui-master\imgui-master\examples\libs\glfw\include\GLFW\glfw3native.h" />
+    <ClInclude Include="..\..\..\imgui-master\imgui-master\examples\libs\usynergy\uSynergy.h" />
+    <ClInclude Include="..\..\..\imgui-master\imgui-master\imconfig.h" />
+    <ClInclude Include="..\..\..\imgui-master\imgui-master\imgui.h" />
+    <ClInclude Include="..\..\..\imgui-master\imgui-master\imgui_internal.h" />
+    <ClInclude Include="..\..\..\imgui-master\imgui-master\imstb_rectpack.h" />
+    <ClInclude Include="..\..\..\imgui-master\imgui-master\imstb_textedit.h" />
+    <ClInclude Include="..\..\..\imgui-master\imgui-master\imstb_truetype.h" />
+    <ClInclude Include="..\..\..\imgui-master\imgui-master\Sources\imgui_impl_dx11.h" />
+    <ClInclude Include="..\..\..\imgui-master\imgui-master\Sources\imgui_impl_win32.h" />
+    <ClInclude Include="..\..\..\imgui-master\imgui-master\Sources\imgui_stdlib.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="ColourShader.h" />
     <ClInclude Include="ConfigurationFileLoader.h" />
@@ -169,7 +212,7 @@
     <ClInclude Include="FireJetParticleSystem.h" />
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="GraphicsRenderer.h" />
-    <ClInclude Include="InputManager.h" />
+    <ClInclude Include="Keyboard.h" />
     <ClInclude Include="Light.h" />
     <ClInclude Include="LightManager.h" />
     <ClInclude Include="LightShader.h" />
@@ -690,6 +733,8 @@
     </Image>
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\..\..\imgui-master\imgui-master\examples\example_emscripten_wgpu\web\index.html" />
+    <None Include="..\..\..\imgui-master\imgui-master\examples\libs\emscripten\shell_minimal.html" />
     <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

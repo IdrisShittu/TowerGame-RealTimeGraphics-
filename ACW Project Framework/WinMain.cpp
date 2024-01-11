@@ -9,7 +9,7 @@ int WINAPI WinMain(
 ) {
     GraphicsEngine* graphicsEngine = new GraphicsEngine();
     if (!graphicsEngine->Initialize()) {
-        delete graphicsEngine;  // Ensure resources are cleaned up
+        delete graphicsEngine;  
         return 0;
     }
 
