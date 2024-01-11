@@ -119,10 +119,9 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="ColourShader.cpp" />
-    <ClCompile Include="ConfigurationFileLoader.cpp" />
+    <ClCompile Include="SimulationConfigLoader.cpp" />
     <ClCompile Include="D3DContainer.cpp" />
     <ClCompile Include="DepthShader.cpp" />
     <ClCompile Include="DirectionalLight.cpp" />
@@ -177,7 +176,7 @@
     <ClInclude Include="..\..\..\imgui-master\imgui-master\Sources\imgui_stdlib.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="ColourShader.h" />
-    <ClInclude Include="ConfigurationFileLoader.h" />
+    <ClInclude Include="SimulationConfigLoader.h" />
     <ClInclude Include="D3DContainer.h" />
     <ClInclude Include="DepthShader.h" />
     <ClInclude Include="DirectionalLight.h" />

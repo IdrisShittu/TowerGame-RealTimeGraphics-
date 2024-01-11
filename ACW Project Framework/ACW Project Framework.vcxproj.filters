@@ -183,13 +183,7 @@
     <ClCompile Include="DirectionalLight.cpp">
       <Filter>Source Files\Lights</Filter>
     </ClCompile>
-    <ClCompile Include="ConfigurationFileLoader.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\imgui-master\imgui-master\examples\example_sdl2_vulkan\main.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\imgui-master\imgui-master\examples\libs\usynergy\uSynergy.c">
+    <ClCompile Include="SimulationConfigLoader.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -305,7 +299,7 @@
     <ClInclude Include="PointLight.h">
       <Filter>Header Files\Lights</Filter>
     </ClInclude>
-    <ClInclude Include="ConfigurationFileLoader.h">
+    <ClInclude Include="SimulationConfigLoader.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\imgui-master\imgui-master\examples\example_allegro5\imconfig_allegro5.h">

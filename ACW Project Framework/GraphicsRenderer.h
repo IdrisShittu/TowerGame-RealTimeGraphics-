@@ -18,7 +18,7 @@
 #include "Rocket.h"
 #include "ParticleSystemManager.h"
 #include "AntTweakBar.h"
-#include "ConfigurationFileLoader.h"
+#include "SimulationConfigLoader.h"
 
 auto const FULL_SCREEN = false;
 auto const VSYNC_ENABLED = true;
@@ -58,42 +58,42 @@ public:
 private:
 	bool RenderFrame();
 
-	bool m_initializationFailed;
+	bool  initializationFailed;
 
-	shared_ptr<ConfigurationFileLoader> m_configuration;
+	shared_ptr<SimulationConfigLoader>  configuration;
 
-	shared_ptr<D3DContainer> m_d3D;
+	shared_ptr<D3DContainer>  d3D;
 
-	TwBar* m_antTweakBarStatistics;
+	TwBar*  antTweakBarStatistics;
 
-	shared_ptr<Camera> m_camera;
-	shared_ptr<LightManager> m_lightManager;
+	shared_ptr<Camera>  camera;
+	shared_ptr<LightManager>  lightManager;
 
-	shared_ptr<Terrain> m_terrain;
-	shared_ptr<Rocket> m_rocket;
+	shared_ptr<Terrain>  terrain;
+	shared_ptr<Rocket>  rocket;
 
-	shared_ptr<GameObject> m_displacedFloor;
-	shared_ptr<GameObject> m_skyBox;
+	shared_ptr<GameObject>  displacedFloor;
+	shared_ptr<GameObject>  skyBox;
 
-	vector<shared_ptr<GameObject>> m_gameObjects;
+	vector<shared_ptr<GameObject>>  gameObjects;
 
-	shared_ptr<ShaderManager> m_shaderManager;
-	shared_ptr<ResourceManager> m_resourceManager;
-	shared_ptr<ParticleSystemManager> m_particleSystemManager;
-	shared_ptr<ShadowMapManager> m_shadowMapManager;
+	shared_ptr<ShaderManager>  shaderManager;
+	shared_ptr<ResourceManager>  resourceManager;
+	shared_ptr<ParticleSystemManager>  particleSystemManager;
+	shared_ptr<ShadowMapManager>  shadowMapManager;
 
-	float m_windowWidth;
-	float m_windowHeight;
+	float  windowWidth;
+	float  windowHeight;
 
-	int m_renderToggle;
-	bool m_renderOptionalGameObjects;
-	int m_timeScale;
-	bool m_updateCamera;
-	int m_cameraMode;
+	int  renderToggle;
+	bool  renderOptionalGameObjects;
+	int  timeScale;
+	bool  updateCamera;
+	int  cameraMode;
 
-	float m_dt;
-	float m_fps;
-	LARGE_INTEGER m_start;
-	LARGE_INTEGER m_end;
-	LARGE_INTEGER m_frequency;
+	float  dt;
+	float  fps;
+	LARGE_INTEGER  start;
+	LARGE_INTEGER  end;
+	LARGE_INTEGER  frequency;
 };
