@@ -115,10 +115,15 @@ GraphicsRenderer::GraphicsRenderer(int screenWidth, int screenHeight, HWND const
 	}
 
 	textureNames.clear();
-	textureNames.push_back(L"BodyColour.dds");
+	/*textureNames.push_back(L"BodyColour.dds");
 	textureNames.push_back(L"BodyNormal.dds");
 	textureNames.push_back(L"BodySpecular.dds");
-	textureNames.push_back(L"BodyDisplacement.dds");
+	textureNames.push_back(L"BodyDisplacement.dds");*/
+
+	textureNames.push_back(L"BaseColour.dds");
+	textureNames.push_back(L"BaseNormal.dds");
+	textureNames.push_back(L"BaseSpecular.dds");
+	textureNames.push_back(L"BaseDisplacement.dds");
 
 	 gameObjects.push_back(make_shared<GameObject>());
 	 gameObjects.back()->AddPositionComponent(XMFLOAT3(5.0f, 2.0f, 0.0f));

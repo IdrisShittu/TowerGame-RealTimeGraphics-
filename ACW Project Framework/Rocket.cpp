@@ -6,10 +6,14 @@ Rocket::Rocket(ID3D11Device* const device, const XMFLOAT3& position, const XMFLO
 	m_initialLauncherRotation = rotation;
 
 	vector<const WCHAR*> textureNames;
-	textureNames.push_back(L"MetalCrystalColour.dds");
+	/*textureNames.push_back(L"MetalCrystalColour.dds");
 	textureNames.push_back(L"MetalCrystalNormal.dds");
 	textureNames.push_back(L"MetalCrystalSpecular.dds");
-	textureNames.push_back(L"MetalCrystalDisplacement.dds");
+	textureNames.push_back(L"MetalCrystalDisplacement.dds");*/
+	textureNames.push_back(L"BaseColour.dds");
+	textureNames.push_back(L"BaseNormal.dds");
+	textureNames.push_back(L"BaseSpecular.dds");
+	textureNames.push_back(L"BaseDisplacement.dds");
 
 	m_rocketBody = make_shared<GameObject>();
 	m_rocketBody->AddPositionComponent(position);

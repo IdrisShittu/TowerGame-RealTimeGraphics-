@@ -15,9 +15,13 @@ Terrain::Terrain(ID3D11Device* const device, const XMFLOAT3& voxelArea, const XM
 	vector<const WCHAR*> textureNames;
 
 	textureNames.clear();
-	textureNames.push_back(L"RoughRockColour.dds");
+	/*textureNames.push_back(L"RoughRockColour.dds");
 	textureNames.push_back(L"RoughRockNormal.dds");
-	textureNames.push_back(L"RoughRockSpecular.dds");
+	textureNames.push_back(L"RoughRockSpecular.dds");*/
+	textureNames.push_back(L"FloorColour.dds");
+	textureNames.push_back(L"FloorNormal.dds");
+	textureNames.push_back(L"FloorSpecular.dds");
+	textureNames.push_back(L"FloorDisplacement.dds");
 	//textureNames.push_back(L"StoneFloorDisplacement.dds");
 
 	//for (auto i = cubeScale.x; i < voxelArea.x * cubeScale.x + cubeScale.x; i = i + cubeScale.x)
