@@ -7,6 +7,7 @@ GraphicsRenderer::GraphicsRenderer(int screenWidth, int screenHeight, HWND const
 	 windowWidth = screenWidth;
 	 windowHeight = screenHeight;
 
+
 	// Initialize AntTweakBar
 	if (!TwInit(TW_DIRECT3D11,  d3D->GetDevice()))
 	{
