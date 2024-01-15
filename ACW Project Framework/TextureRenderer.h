@@ -8,16 +8,16 @@
 using namespace std;
 using namespace DirectX;
 
-class RenderToTexture
+class TextureRenderer
 {
 public:
-	RenderToTexture(ID3D11Device* const device, const int textureWidth, const int textureHeight);
-	RenderToTexture(const RenderToTexture& other); // Copy Constructor
-	RenderToTexture(RenderToTexture&& other) noexcept; // Move Constructor
-	~RenderToTexture(); 
+	TextureRenderer(ID3D11Device* const device, const int textureWidth, const int textureHeight);
+	TextureRenderer(const TextureRenderer& other); // Copy Constructor
+	TextureRenderer(TextureRenderer&& other) noexcept; // Move Constructor
+	~TextureRenderer(); 
 
-	RenderToTexture& operator = (const RenderToTexture& other); // Copy Assignment Operator
-	RenderToTexture& operator = (RenderToTexture&& other) noexcept; // Move Assignment Operator
+	TextureRenderer& operator = (const TextureRenderer& other); // Copy Assignment Operator
+	TextureRenderer& operator = (TextureRenderer&& other) noexcept; // Move Assignment Operator
 
 	void SetShader(const shared_ptr<Shader>& shader);
 	bool RenderObjectsToTexture(ID3D11DeviceContext* const deviceContext, ID3D11DepthStencilView* const depthStencilView, const XMMATRIX& viewMatrix, const XMMATRIX& projectionMatrix, const vector<shared_ptr<Light>>& pointLightList, const vector<shared_ptr<GameObject>>& gameObjects, const XMFLOAT3& cameraPosition) const;
@@ -26,9 +26,19 @@ public:
 
 	bool GetInitializationState() const;
 
+	bool InitializeTexture(ID3D11Device* const device, const int textureWidth, const int textureHeight);
+
+	bool InitializeRenderTargetView(ID3D11Device* const device);
+
+	bool InitializeShaderResourceView(ID3D11Device* const device);
+
+	void ReleaseResources();
+
 private:
 	void SetRenderTarget(ID3D11DeviceContext* const deviceContext, ID3D11DepthStencilView* const depthStencilView) const;
 	void ClearRenderTarget(ID3D11DeviceContext* const deviceContext, ID3D11DepthStencilView* const depthStencilView, const XMFLOAT4& RGBA) const;
+
+	void SwapShaderAndApplyVariables(const shared_ptr<GameObject>& gameObject) const;
 
 	bool initializationFailed;
 
@@ -36,6 +46,7 @@ private:
 	ID3D11RenderTargetView* renderTargetView;
 	ID3D11ShaderResourceView* shaderResourceView;
 
-	shared_ptr<Shader> shader;
+	mutable shared_ptr<Shader> shader;
+
 };
 

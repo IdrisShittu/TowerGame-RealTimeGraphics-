@@ -139,7 +139,7 @@
     <ClCompile Include="PointLight.cpp" />
     <ClCompile Include="Position.cpp" />
     <ClCompile Include="ReflectionShader.cpp" />
-    <ClCompile Include="RenderToTexture.cpp" />
+    <ClCompile Include="TextureRenderer.cpp" />
     <ClCompile Include="ResourceManager.cpp" />
     <ClCompile Include="RigidBody.cpp" />
     <ClCompile Include="Rocket.cpp" />
@@ -194,7 +194,7 @@
     <ClInclude Include="PointLight.h" />
     <ClInclude Include="Position.h" />
     <ClInclude Include="ReflectionShader.h" />
-    <ClInclude Include="RenderToTexture.h" />
+    <ClInclude Include="TextureRenderer.h" />
     <ClInclude Include="ResourceManager.h" />
     <ClInclude Include="RigidBody.h" />
     <ClInclude Include="Rocket.h" />
@@ -704,7 +704,6 @@
     </Image>
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\..\..\imgui-master\imgui-master\examples\libs\emscripten\shell_minimal.html" />
     <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

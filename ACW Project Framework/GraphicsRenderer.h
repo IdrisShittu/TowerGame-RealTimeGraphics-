@@ -9,7 +9,7 @@
 #include "ShaderManager.h"
 #include "ResourceManager.h"
 #include "LightManager.h"
-#include "RenderToTexture.h"
+#include "TextureRenderer.h"
 #include "ShadowMapManager.h"
 #include "ParticleSystem.h"
 #include "FireJetParticleSystem.h"

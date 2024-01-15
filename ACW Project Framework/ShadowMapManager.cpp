@@ -8,7 +8,7 @@ ShadowMapManager::ShadowMapManager(HWND const hwnd, ID3D11Device* const device, 
 	for (auto i = 0; i < lightCount; i++)
 	{
 		//Create new render to texture
-		renderToTextures.push_back(make_shared<RenderToTexture>(device, shadowMapWidth, shadowMapHeight));
+		renderToTextures.push_back(make_shared<TextureRenderer>(device, shadowMapWidth, shadowMapHeight));
 
 		if (!renderToTextures[i] || renderToTextures[i]->GetInitializationState())
 		{
@@ -36,7 +36,7 @@ ShadowMapManager& ShadowMapManager::operator=(ShadowMapManager&& other) noexcept
 void ShadowMapManager::AddShadowMap(ID3D11Device* const device, const int shadowMapWidth, const int shadowMapHeight)
 {
 	//Create new render to texture
-	renderToTextures.push_back(make_shared<RenderToTexture>(device, shadowMapWidth, shadowMapHeight));
+	renderToTextures.push_back(make_shared<TextureRenderer>(device, shadowMapWidth, shadowMapHeight));
 
 	if (!renderToTextures.back() || renderToTextures.back()->GetInitializationState())
 	{

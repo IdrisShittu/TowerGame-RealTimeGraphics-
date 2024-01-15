@@ -70,7 +70,7 @@ Rocket::Rocket(ID3D11Device* const device, const XMFLOAT3& position, const XMFLO
 	}
 
 	textureNames.clear();
-	textureNames.push_back(L"Mars.dds");
+	textureNames.push_back(L"skybox.dds");
 
 	rocketCone = make_shared<GameObject>();
  	rocketCone->AddPositionComponent(0.0f, (3.0f * scale.y + 1.0f), 0.0f);

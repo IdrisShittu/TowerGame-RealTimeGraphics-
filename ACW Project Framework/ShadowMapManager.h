@@ -4,7 +4,7 @@
 #include <DirectXMath.h>
 #include "Shader.h"
 #include "GameObject.h"
-#include "RenderToTexture.h"
+#include "TextureRenderer.h"
 
 using namespace std;
 
@@ -35,7 +35,7 @@ private:
 	shared_ptr<Shader> depthShader;
 
 	//List of renderToTexture instances
-	vector<shared_ptr<RenderToTexture>> renderToTextures;
+	vector<shared_ptr<TextureRenderer>> renderToTextures;
 
 	//List of shader resource views, don't have to delete as these exist within renderToTexture so they will dispose of the resource
 	vector<ID3D11ShaderResourceView*> shadowMapShaderResources;
