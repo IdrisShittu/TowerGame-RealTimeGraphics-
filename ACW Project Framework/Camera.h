@@ -36,13 +36,13 @@ public:
 	void Render();
 
 private:
-	float m_positionX;
-	float m_positionY;
-	float m_positionZ;
+	float positionX;
+	float positionY;
+	float positionZ;
 
-	float m_rotationX;
-	float m_rotationY;
-	float m_rotationZ;
+	float rotationX;
+	float rotationY;
+	float rotationZ;
 
-	XMFLOAT4X4 m_viewMatrix;
+	XMFLOAT4X4 viewMatrix;
 };

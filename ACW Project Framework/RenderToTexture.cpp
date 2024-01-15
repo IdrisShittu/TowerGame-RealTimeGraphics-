@@ -1,6 +1,6 @@
 #include "RenderToTexture.h"
 
-RenderToTexture::RenderToTexture(ID3D11Device* const device, const int textureWidth, const int textureHeight) : m_initializationFailed(false), m_renderTargetTexture(nullptr), m_renderTargetView(nullptr), m_shaderResourceView(nullptr), m_shader(nullptr)
+RenderToTexture::RenderToTexture(ID3D11Device* const device, const int textureWidth, const int textureHeight) : initializationFailed(false), renderTargetTexture(nullptr), renderTargetView(nullptr), shaderResourceView(nullptr), shader(nullptr)
 {
 	//Create texture description
 	D3D11_TEXTURE2D_DESC textureDescription;
@@ -20,11 +20,11 @@ RenderToTexture::RenderToTexture(ID3D11Device* const device, const int textureWi
 	textureDescription.MiscFlags = 0;
 
 	//Create render target texture
-	auto result = device->CreateTexture2D(&textureDescription, nullptr, &m_renderTargetTexture);
+	auto result = device->CreateTexture2D(&textureDescription, nullptr, &renderTargetTexture);
 
 	if (FAILED(result))
 	{
-		m_initializationFailed = true;
+		initializationFailed = true;
 		return;
 	}
 
@@ -36,11 +36,11 @@ RenderToTexture::RenderToTexture(ID3D11Device* const device, const int textureWi
 	renderTargetViewDescription.Texture2D.MipSlice = 0;
 
 	//Create render target view
-	result = device->CreateRenderTargetView(m_renderTargetTexture, &renderTargetViewDescription, &m_renderTargetView);
+	result = device->CreateRenderTargetView(renderTargetTexture, &renderTargetViewDescription, &renderTargetView);
 
 	if (FAILED(result))
 	{
-		m_initializationFailed = true;
+		initializationFailed = true;
 		return;
 	}
 
@@ -53,11 +53,11 @@ RenderToTexture::RenderToTexture(ID3D11Device* const device, const int textureWi
 	shaderResourceViewDescription.Texture2D.MipLevels = 1;
 
 	//Create shader resource view
-	result = device->CreateShaderResourceView(m_renderTargetTexture, &shaderResourceViewDescription, &m_shaderResourceView);
+	result = device->CreateShaderResourceView(renderTargetTexture, &shaderResourceViewDescription, &shaderResourceView);
 
 	if (FAILED(result))
 	{
-		m_initializationFailed = true;
+		initializationFailed = true;
 		return;
 	}
 }
@@ -70,22 +70,22 @@ RenderToTexture::~RenderToTexture()
 {
 	try
 	{
-		if (m_shaderResourceView)
+		if (shaderResourceView)
 		{
-			m_shaderResourceView->Release();
-			m_shaderResourceView = nullptr;
+			shaderResourceView->Release();
+			shaderResourceView = nullptr;
 		}
 
-		if (m_renderTargetView)
+		if (renderTargetView)
 		{
-			m_renderTargetView->Release();
-			m_renderTargetView = nullptr;
+			renderTargetView->Release();
+			renderTargetView = nullptr;
 		}
 
-		if (m_renderTargetTexture)
+		if (renderTargetTexture)
 		{
-			m_renderTargetTexture->Release();
-			m_renderTargetTexture = nullptr;
+			renderTargetTexture->Release();
+			renderTargetTexture = nullptr;
 		}
 	}
 	catch (exception& e)
@@ -100,7 +100,7 @@ RenderToTexture& RenderToTexture::operator=(RenderToTexture&& other) noexcept = 
 
 void RenderToTexture::SetShader(const shared_ptr<Shader>& shader)
 {
-	m_shader = shader;
+	shader = shader;
 }
 
 bool RenderToTexture::RenderObjectsToTexture(ID3D11DeviceContext* const deviceContext, ID3D11DepthStencilView* const depthStencilView, const XMMATRIX& viewMatrix, const XMMATRIX& projectionMatrix, const vector<shared_ptr<Light>>& pointLightList, const vector<shared_ptr<GameObject>>& gameObjects, const XMFLOAT3& cameraPosition) const
@@ -115,29 +115,29 @@ bool RenderToTexture::RenderObjectsToTexture(ID3D11DeviceContext* const deviceCo
 
 	//deviceContext->RSGetViewports(&numberOfViewports, &viewport);
 
-	//deviceContext->RSSetViewports(1, &m_viewport);
+	//deviceContext->RSSetViewports(1, &viewport);
 
 	//For each gameobject we want to swap the shader to the shader given and then swap it back
 	for (const auto& gameObject : gameObjects)
 	{
 		const auto originalShader = gameObject->GetShaderComponent();
 
-		if (m_shader)
+		if (shader)
 		{
 			auto mipInterval = 0.0f;
 			auto mipClampMinimum = 0.0f;
 			auto mipClampMaximum = 0.0f;
 			auto displacementPower = 0.0f;
 
-			gameObject->SetShaderComponent(m_shader);
+			gameObject->SetShaderComponent(shader);
 
 			originalShader->GetDisplacementVariables(mipInterval, mipClampMinimum, mipClampMaximum, displacementPower);
-			m_shader->SetDisplacementVariables(mipInterval, mipClampMinimum, mipClampMaximum, displacementPower);
+			shader->SetDisplacementVariables(mipInterval, mipClampMinimum, mipClampMaximum, displacementPower);
 		}
 
 		const auto result = gameObject->Render(deviceContext, viewMatrix, projectionMatrix, {}, pointLightList, cameraPosition);
 
-		if (m_shader)
+		if (shader)
 		{
 			//Set shader back to the original shader
 			gameObject->SetShaderComponent(originalShader);
@@ -156,22 +156,22 @@ bool RenderToTexture::RenderObjectsToTexture(ID3D11DeviceContext* const deviceCo
 
 void RenderToTexture::SetRenderTarget(ID3D11DeviceContext* const deviceContext, ID3D11DepthStencilView* const depthStencilView) const {
 
-	deviceContext->OMSetRenderTargets(1, &m_renderTargetView, depthStencilView);
+	deviceContext->OMSetRenderTargets(1, &renderTargetView, depthStencilView);
 }
 
 void RenderToTexture::ClearRenderTarget(ID3D11DeviceContext* const deviceContext, ID3D11DepthStencilView* const depthStencilView, const XMFLOAT4& RGBA) const
 {
 	const float colour[4] {RGBA.x, RGBA.y, RGBA.z, RGBA.w};
 	
-	deviceContext->ClearRenderTargetView(m_renderTargetView, colour);
+	deviceContext->ClearRenderTargetView(renderTargetView, colour);
 
 	deviceContext->ClearDepthStencilView(depthStencilView, D3D11_CLEAR_DEPTH, 1.0f, 0);
 }
 
 ID3D11ShaderResourceView* RenderToTexture::GetShaderResourceView() const {
-	return m_shaderResourceView;
+	return shaderResourceView;
 }
 
 bool RenderToTexture::GetInitializationState() const {
-	return m_initializationFailed;
+	return initializationFailed;
 }

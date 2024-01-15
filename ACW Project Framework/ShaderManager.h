@@ -45,16 +45,16 @@ public:
 
 private:
 
-	bool m_initializationFailed;
+	bool initializationFailed;
 
-	shared_ptr<Shader> m_colourShader;
-	shared_ptr<Shader> m_lightShader;
-	shared_ptr<Shader> m_reflectionShader;
-	shared_ptr<Shader> m_texture2DShader;
-	shared_ptr<Shader> m_textureCubeShader;
-	shared_ptr<Shader> m_textureNormalShader;
-	shared_ptr<Shader> m_textureNormalSpecularShader;
-	shared_ptr<Shader> m_textureDisplacementShader;
-	shared_ptr<Shader> m_depthShader;
+	shared_ptr<Shader> colourShader;
+	shared_ptr<Shader> lightShader;
+	shared_ptr<Shader> reflectionShader;
+	shared_ptr<Shader> texture2DShader;
+	shared_ptr<Shader> textureCubeShader;
+	shared_ptr<Shader> textureNormalShader;
+	shared_ptr<Shader> textureNormalSpecularShader;
+	shared_ptr<Shader> textureDisplacementShader;
+	shared_ptr<Shader> depthShader;
 };
 

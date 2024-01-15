@@ -29,15 +29,15 @@ public:
 
 private:
 
-	bool m_initializationFailed;
+	bool initializationFailed;
 
 	//Depth shader
-	shared_ptr<Shader> m_depthShader;
+	shared_ptr<Shader> depthShader;
 
 	//List of renderToTexture instances
-	vector<shared_ptr<RenderToTexture>> m_renderToTextures;
+	vector<shared_ptr<RenderToTexture>> renderToTextures;
 
 	//List of shader resource views, don't have to delete as these exist within renderToTexture so they will dispose of the resource
-	vector<ID3D11ShaderResourceView*> m_shadowMapShaderResources;
+	vector<ID3D11ShaderResourceView*> shadowMapShaderResources;
 };
 

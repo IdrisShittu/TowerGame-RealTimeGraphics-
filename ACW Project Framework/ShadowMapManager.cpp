@@ -1,23 +1,23 @@
 #include "ShadowMapManager.h"
 
-ShadowMapManager::ShadowMapManager(HWND const hwnd, ID3D11Device* const device, const shared_ptr<Shader>& depthShader, const int lightCount, const int shadowMapWidth, const int shadowMapHeight) : m_initializationFailed(false), m_depthShader(nullptr), m_renderToTextures(), m_shadowMapShaderResources()
+ShadowMapManager::ShadowMapManager(HWND const hwnd, ID3D11Device* const device, const shared_ptr<Shader>& depthShader, const int lightCount, const int shadowMapWidth, const int shadowMapHeight) : initializationFailed(false), depthShader(nullptr), renderToTextures(), shadowMapShaderResources()
 {
-	m_depthShader = depthShader;
+	depthShader = depthShader;
 
 	//Generate the number of shadow maps depending on the light count
 	for (auto i = 0; i < lightCount; i++)
 	{
 		//Create new render to texture
-		m_renderToTextures.push_back(make_shared<RenderToTexture>(device, shadowMapWidth, shadowMapHeight));
+		renderToTextures.push_back(make_shared<RenderToTexture>(device, shadowMapWidth, shadowMapHeight));
 
-		if (!m_renderToTextures[i] || m_renderToTextures[i]->GetInitializationState())
+		if (!renderToTextures[i] || renderToTextures[i]->GetInitializationState())
 		{
-			m_initializationFailed = true;
+			initializationFailed = true;
 			MessageBox(hwnd, "Failed to initialize a render to texture in ShadowMapManager", "Error", MB_OK);
 			return;
 		}
 
-		m_renderToTextures[i]->SetShader(depthShader);
+		renderToTextures[i]->SetShader(depthShader);
 	}
 }
 
@@ -36,16 +36,16 @@ ShadowMapManager& ShadowMapManager::operator=(ShadowMapManager&& other) noexcept
 void ShadowMapManager::AddShadowMap(ID3D11Device* const device, const int shadowMapWidth, const int shadowMapHeight)
 {
 	//Create new render to texture
-	m_renderToTextures.push_back(make_shared<RenderToTexture>(device, shadowMapWidth, shadowMapHeight));
+	renderToTextures.push_back(make_shared<RenderToTexture>(device, shadowMapWidth, shadowMapHeight));
 
-	if (!m_renderToTextures.back() || m_renderToTextures.back()->GetInitializationState())
+	if (!renderToTextures.back() || renderToTextures.back()->GetInitializationState())
 	{
-		m_initializationFailed = true;
+		initializationFailed = true;
 		MessageBox(nullptr, "Failed to initialize a render to texture in ShadowMapManager", "Error", MB_OK);
 		return;
 	}
 
-	m_renderToTextures.back()->SetShader(m_depthShader);
+	renderToTextures.back()->SetShader(depthShader);
 }
 
 
@@ -53,11 +53,11 @@ bool ShadowMapManager::GenerateShadowMapResources(ID3D11DeviceContext* const dev
 {
 	auto result = true;
 
-	m_shadowMapShaderResources.clear();
+	shadowMapShaderResources.clear();
 
-	for (unsigned int i = 0; i < m_renderToTextures.size(); i++)
+	for (unsigned int i = 0; i < renderToTextures.size(); i++)
 	{
-		result = m_renderToTextures[i]->RenderObjectsToTexture(deviceContext, depthStencilView, pointLightList[i]->GetLightViewMatrix(), pointLightList[i]->GetLightProjectionMatrix(),
+		result = renderToTextures[i]->RenderObjectsToTexture(deviceContext, depthStencilView, pointLightList[i]->GetLightViewMatrix(), pointLightList[i]->GetLightProjectionMatrix(),
 			pointLightList, gameObjects, cameraPosition);
 
 		if (!result)
@@ -65,7 +65,7 @@ bool ShadowMapManager::GenerateShadowMapResources(ID3D11DeviceContext* const dev
 			return result;
 		}
 
-		m_shadowMapShaderResources.push_back(m_renderToTextures[i]->GetShaderResourceView());
+		shadowMapShaderResources.push_back(renderToTextures[i]->GetShaderResourceView());
 	}
 
 	return result;
@@ -73,12 +73,12 @@ bool ShadowMapManager::GenerateShadowMapResources(ID3D11DeviceContext* const dev
 
 const vector<ID3D11ShaderResourceView*>& ShadowMapManager::GetShadowMapResources() const
 {
-	return m_shadowMapShaderResources;
+	return shadowMapShaderResources;
 }
 
 bool ShadowMapManager::GetInitializationState() const
 {
-	return m_initializationFailed;
+	return initializationFailed;
 }
 
 

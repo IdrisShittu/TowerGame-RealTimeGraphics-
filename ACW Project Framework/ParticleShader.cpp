@@ -1,6 +1,6 @@
 #include "ParticleShader.h"
 
-ParticleShader::ParticleShader(ID3D11Device* const device, HWND const hwnd) : Shader("ParticleVertexShader", "ParticleHullShader", "ParticleDomainShader", "ParticlePixelShader", device, hwnd), m_transparency(0.0f), m_colourTint(0.0f, 0.0f, 0.0f), m_inputLayout(nullptr), m_sampleState(nullptr)
+ParticleShader::ParticleShader(ID3D11Device* const device, HWND const hwnd) : Shader("ParticleVertexShader", "ParticleHullShader", "ParticleDomainShader", "ParticlePixelShader", device, hwnd), transparency(0.0f), colourTint(0.0f, 0.0f, 0.0f), inputLayout(nullptr), sampleState(nullptr)
 {
 	D3D11_INPUT_ELEMENT_DESC polygonLayout[6];
 
@@ -61,7 +61,7 @@ ParticleShader::ParticleShader(ID3D11Device* const device, HWND const hwnd) : Sh
 	numberOfElements = sizeof(polygonLayout) / sizeof(polygonLayout[0]);
 
 	//Create vertex input layout
-	auto result = device->CreateInputLayout(polygonLayout, numberOfElements, GetVertexShaderBuffer()->GetBufferPointer(), GetVertexShaderBuffer()->GetBufferSize(), &m_inputLayout);
+	auto result = device->CreateInputLayout(polygonLayout, numberOfElements, GetVertexShaderBuffer()->GetBufferPointer(), GetVertexShaderBuffer()->GetBufferSize(), &inputLayout);
 
 	GetVertexShaderBuffer()->Release();
 	SetVertexShaderBuffer(nullptr);
@@ -91,7 +91,7 @@ ParticleShader::ParticleShader(ID3D11Device* const device, HWND const hwnd) : Sh
 	samplerDescription.MinLOD = 0.0f;
 	samplerDescription.MaxLOD = D3D11_FLOAT32_MAX;
 
-	result = device->CreateSamplerState(&samplerDescription, &m_sampleState);
+	result = device->CreateSamplerState(&samplerDescription, &sampleState);
 
 	if (FAILED(result))
 	{
@@ -108,7 +108,7 @@ ParticleShader::ParticleShader(ID3D11Device* const device, HWND const hwnd) : Sh
 	inverseViewMatrixBufferDescription.MiscFlags = 0;
 	inverseViewMatrixBufferDescription.StructureByteStride = 0;
 
-	result = device->CreateBuffer(&inverseViewMatrixBufferDescription, nullptr, &m_inverseViewMatrixBuffer);
+	result = device->CreateBuffer(&inverseViewMatrixBufferDescription, nullptr, &inverseViewMatrixBuffer);
 
 	if (FAILED(result))
 	{
@@ -125,7 +125,7 @@ ParticleShader::ParticleShader(ID3D11Device* const device, HWND const hwnd) : Sh
 	particleParametersBufferDescription.MiscFlags = 0;
 	particleParametersBufferDescription.StructureByteStride = 0;
 
-	result = device->CreateBuffer(&particleParametersBufferDescription, nullptr, &m_particleParametersBuffer);
+	result = device->CreateBuffer(&particleParametersBufferDescription, nullptr, &particleParametersBuffer);
 
 	if (FAILED(result))
 	{
@@ -143,16 +143,16 @@ ParticleShader::~ParticleShader()
 	try
 	{
 		//Release resources
-		if (m_sampleState)
+		if (sampleState)
 		{
-			m_sampleState->Release();
-			m_sampleState = nullptr;
+			sampleState->Release();
+			sampleState = nullptr;
 		}
 
-		if (m_inputLayout)
+		if (inputLayout)
 		{
-			m_inputLayout->Release();
-			m_inputLayout = nullptr;
+			inputLayout->Release();
+			inputLayout = nullptr;
 		}
 	}
 	catch (exception& e)
@@ -167,8 +167,8 @@ ParticleShader::~ParticleShader()
 
 void ParticleShader::SetParticleParameters(const XMFLOAT3& colourTint, const float transparency)
 {
-	m_colourTint = colourTint;
-	m_transparency = transparency;
+	colourTint = colourTint;
+	transparency = transparency;
 }
 
 
@@ -206,7 +206,7 @@ bool ParticleShader::SetParticleShaderParameters(ID3D11DeviceContext* const devi
 	auto mappedResource = GetMappedSubResource();
 
 	//Lock matrix constant buffer and set the transposed matrices to it
-	auto failed = deviceContext->Map(m_inverseViewMatrixBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource);
+	auto failed = deviceContext->Map(inverseViewMatrixBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource);
 
 	if (FAILED(failed))
 	{
@@ -223,15 +223,15 @@ bool ParticleShader::SetParticleShaderParameters(ID3D11DeviceContext* const devi
 
 	inverseViewMatrixBufferDataPointer = nullptr;
 
-	deviceContext->Unmap(m_inverseViewMatrixBuffer, 0);
+	deviceContext->Unmap(inverseViewMatrixBuffer, 0);
 
-	deviceContext->VSSetConstantBuffers(GetVertexBufferResourceCount(), 1, &m_inverseViewMatrixBuffer);
-	deviceContext->DSSetConstantBuffers(GetDomainBufferResourceCount(), 1, &m_inverseViewMatrixBuffer);
+	deviceContext->VSSetConstantBuffers(GetVertexBufferResourceCount(), 1, &inverseViewMatrixBuffer);
+	deviceContext->DSSetConstantBuffers(GetDomainBufferResourceCount(), 1, &inverseViewMatrixBuffer);
 
 	IncrementVertexBufferResourceCount();
 	IncrementDomainBufferResourceCount();
 
-	failed = deviceContext->Map(m_particleParametersBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource);
+	failed = deviceContext->Map(particleParametersBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource);
 
 	if (FAILED(failed))
 	{
@@ -240,14 +240,14 @@ bool ParticleShader::SetParticleShaderParameters(ID3D11DeviceContext* const devi
 
 	auto* particleParametersBufferDataPointer = static_cast<ParticleParametersBuffer*>(mappedResource.pData);
 
-	particleParametersBufferDataPointer->colourTint = m_colourTint;
-	particleParametersBufferDataPointer->transparency = m_transparency;
+	particleParametersBufferDataPointer->colourTint = colourTint;
+	particleParametersBufferDataPointer->transparency = transparency;
 
 	particleParametersBufferDataPointer = nullptr;
 
-	deviceContext->Unmap(m_particleParametersBuffer, 0);
+	deviceContext->Unmap(particleParametersBuffer, 0);
 
-	deviceContext->PSSetConstantBuffers(GetPixelBufferResourceCount(), 1, &m_particleParametersBuffer);
+	deviceContext->PSSetConstantBuffers(GetPixelBufferResourceCount(), 1, &particleParametersBuffer);
 
 	IncrementPixelBufferResourceCount();
 
@@ -257,13 +257,13 @@ bool ParticleShader::SetParticleShaderParameters(ID3D11DeviceContext* const devi
 void ParticleShader::RenderShader(ID3D11DeviceContext* const deviceContext, const int indexCount, const int instanceCount) const
 {
 	//Set input layout
-	deviceContext->IASetInputLayout(m_inputLayout);
+	deviceContext->IASetInputLayout(inputLayout);
 
 	//Set our shaders
 	SetShader(deviceContext);
 
 	//Set pixel shaders sampler state
-	deviceContext->PSSetSamplers(0, 1, &m_sampleState);
+	deviceContext->PSSetSamplers(0, 1, &sampleState);
 
 	//Render triangle
 	//deviceContext->DrawIndexed(indexCount, 0, 0);

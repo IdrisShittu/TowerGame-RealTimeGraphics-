@@ -53,10 +53,10 @@ private:
 		XMFLOAT3 padding;
 	};
 
-	ID3D11InputLayout* m_inputLayout;
-	ID3D11SamplerState* m_sampleStateWrap;
-	ID3D11SamplerState* m_sampleStateClamp;
-	ID3D11Buffer* m_lightMatrixBuffer;
-	ID3D11Buffer* m_lightBuffer;
+	ID3D11InputLayout* inputLayout;
+	ID3D11SamplerState* sampleStateWrap;
+	ID3D11SamplerState* sampleStateClamp;
+	ID3D11Buffer* lightMatrixBuffer;
+	ID3D11Buffer* lightBuffer;
 };
 

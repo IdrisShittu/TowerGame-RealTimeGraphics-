@@ -1,9 +1,9 @@
 #include "Rocket.h"
 
-Rocket::Rocket(ID3D11Device* const device, const XMFLOAT3& position, const XMFLOAT3& rotation, const XMFLOAT3& scale, const shared_ptr<ShaderManager>& shaderManager, const shared_ptr<ResourceManager>& resourceManager) : m_initializationFailed(false), m_rocketLaunched(false), m_changedParticleSystem(false), m_particleSystemActive(false), m_blastRadius(4.0f), m_initialVelocity(25.0f), m_gravity(-9.81f), m_velocity(XMFLOAT2()), m_angularVelocity(XMFLOAT2()), m_initialLauncherPosition(XMFLOAT3()), m_initialLauncherRotation(XMFLOAT3()), m_lookAtRocketPosition(XMFLOAT3()), m_lookAtRocketConePosition(XMFLOAT3()), m_rocketCone(nullptr), m_rocketBody(nullptr), m_rocketCap(nullptr), m_rocketLauncher(nullptr), m_particleSystemLight(nullptr), m_fireJetParticleSystem(nullptr), m_coneFlameParticleSystem(nullptr)
+Rocket::Rocket(ID3D11Device* const device, const XMFLOAT3& position, const XMFLOAT3& rotation, const XMFLOAT3& scale, const shared_ptr<ShaderManager>& shaderManager, const shared_ptr<ResourceManager>& resourceManager) : initializationFailed(false), rocketLaunched(false), changedParticleSystem(false), particleSystemActive(false), blastRadius(4.0f), initialVelocity(25.0f), gravity(-9.81f), velocity(XMFLOAT2()), angularVelocity(XMFLOAT2()), initialLauncherPosition(XMFLOAT3()), initialLauncherRotation(XMFLOAT3()), lookAtRocketPosition(XMFLOAT3()), lookAtRocketConePosition(XMFLOAT3()), rocketCone(nullptr), rocketBody(nullptr), rocketCap(nullptr), rocketLauncher(nullptr), particleSystemLight(nullptr), fireJetParticleSystem(nullptr), coneFlameParticleSystem(nullptr)
 {
-	m_initialLauncherPosition = position;
-	m_initialLauncherRotation = rotation;
+	initialLauncherPosition = position;
+	initialLauncherRotation = rotation;
 
 	vector<const WCHAR*> textureNames;
 	
@@ -12,35 +12,35 @@ Rocket::Rocket(ID3D11Device* const device, const XMFLOAT3& position, const XMFLO
 	textureNames.push_back(L"BaseSpecular.dds");
 	textureNames.push_back(L"BaseDisplacement.dds");
 
-	m_rocketBody = make_shared<GameObject>();
-	m_rocketBody->AddPositionComponent(position);
-	m_rocketBody->AddRotationComponent(rotation);
-	m_rocketBody->AddScaleComponent(1.0f * scale.x, 6.0f * scale.y, 1.0f * scale.z);
-	m_rocketBody->AddModelComponent(device, ModelType::LowPolyCylinder, resourceManager);
-	m_rocketBody->AddTextureComponent(device, textureNames, resourceManager);
-	m_rocketBody->SetShaderComponent(shaderManager->GetTextureDisplacementShader());
-	m_rocketBody->SetTessellationVariables(2.0f, 10.0f, 64.0f, 1.0f);
-	m_rocketBody->SetDisplacementVariables(20.0f, 0.0f, 6.0f, 0.18f);
+	rocketBody = make_shared<GameObject>();
+	rocketBody->AddPositionComponent(position);
+	rocketBody->AddRotationComponent(rotation);
+	rocketBody->AddScaleComponent(1.0f * scale.x, 6.0f * scale.y, 1.0f * scale.z);
+	rocketBody->AddModelComponent(device, ModelType::LowPolyCylinder, resourceManager);
+	rocketBody->AddTextureComponent(device, textureNames, resourceManager);
+	rocketBody->SetShaderComponent(shaderManager->GetTextureDisplacementShader());
+	rocketBody->SetTessellationVariables(2.0f, 10.0f, 64.0f, 1.0f);
+	rocketBody->SetDisplacementVariables(20.0f, 0.0f, 6.0f, 0.18f);
 
-	if (m_rocketBody->GetInitializationState())
+	if (rocketBody->GetInitializationState())
 	{
-		m_initializationFailed = true;
+		initializationFailed = true;
 		MessageBox(nullptr, "Could not initialize the rocket body game object.", "Error", MB_OK);
 		return;
 	}
 
-	m_rocketCap = make_shared<GameObject>();
-	m_rocketCap->AddPositionComponent(0.0f, -(3.0f * scale.y), 0.0f);
-	m_rocketCap->AddRotationComponent(0.0f, 0.0f, 0.0f);
-	m_rocketCap->AddScaleComponent(0.92f, 0.1f, 0.92f);
-	m_rocketCap->AddModelComponent(device, ModelType::Sphere, resourceManager);
-	m_rocketCap->AddTextureComponent(device, textureNames, resourceManager);
-	m_rocketCap->SetShaderComponent(shaderManager->GetTextureDisplacementShader());
-	m_rocketCap->AddParentGameObject(m_rocketBody);
+	rocketCap = make_shared<GameObject>();
+	rocketCap->AddPositionComponent(0.0f, -(3.0f * scale.y), 0.0f);
+	rocketCap->AddRotationComponent(0.0f, 0.0f, 0.0f);
+	rocketCap->AddScaleComponent(0.92f, 0.1f, 0.92f);
+	rocketCap->AddModelComponent(device, ModelType::Sphere, resourceManager);
+	rocketCap->AddTextureComponent(device, textureNames, resourceManager);
+	rocketCap->SetShaderComponent(shaderManager->GetTextureDisplacementShader());
+	rocketCap->AddParentGameObject(rocketBody);
 
-	if (m_rocketCap->GetInitializationState())
+	if (rocketCap->GetInitializationState())
 	{
-		m_initializationFailed = true;
+		initializationFailed = true;
 		MessageBox(nullptr, "Could not initialize the rocket cap game object.", "Error", MB_OK);
 		return;
 	}
@@ -51,20 +51,20 @@ Rocket::Rocket(ID3D11Device* const device, const XMFLOAT3& position, const XMFLO
 	textureNames.push_back(L"MetalMeshSpecular.dds");
 	textureNames.push_back(L"MetalMeshDisplacement.dds");
 
-	m_rocketLauncher = make_shared<GameObject>();
-	m_rocketLauncher->AddPositionComponent((1.3f * scale.x), 0.0f, 0.0f);
-	m_rocketLauncher->AddRotationComponent(0.0f, 0.0f, 0.0f);
-	m_rocketLauncher->AddScaleComponent(0.3f * scale.x, 8.0f * scale.y, 0.3f * scale.z);
-	m_rocketLauncher->AddModelComponent(device, ModelType::LowPolyCylinder, resourceManager);
-	m_rocketLauncher->AddTextureComponent(device, textureNames, resourceManager);
-	m_rocketLauncher->SetShaderComponent(shaderManager->GetTextureDisplacementShader());
-	m_rocketLauncher->SetTessellationVariables(2.0f, 10.0f, 64.0f, 1.0f);
-	m_rocketLauncher->SetDisplacementVariables(20.0f, 0.0f, 6.0f, 0.18f);
-	m_rocketLauncher->AddParentGameObject(m_rocketBody);
+	rocketLauncher = make_shared<GameObject>();
+	rocketLauncher->AddPositionComponent((1.3f * scale.x), 0.0f, 0.0f);
+	rocketLauncher->AddRotationComponent(0.0f, 0.0f, 0.0f);
+	rocketLauncher->AddScaleComponent(0.3f * scale.x, 8.0f * scale.y, 0.3f * scale.z);
+	rocketLauncher->AddModelComponent(device, ModelType::LowPolyCylinder, resourceManager);
+	rocketLauncher->AddTextureComponent(device, textureNames, resourceManager);
+	rocketLauncher->SetShaderComponent(shaderManager->GetTextureDisplacementShader());
+	rocketLauncher->SetTessellationVariables(2.0f, 10.0f, 64.0f, 1.0f);
+	rocketLauncher->SetDisplacementVariables(20.0f, 0.0f, 6.0f, 0.18f);
+	rocketLauncher->AddParentGameObject(rocketBody);
 
-	if (m_rocketLauncher->GetInitializationState())
+	if (rocketLauncher->GetInitializationState())
 	{
-		m_initializationFailed = true;
+		initializationFailed = true;
 		MessageBox(nullptr, "Could not initialize the rocket body game object.", "Error", MB_OK);
 		return;
 	}
@@ -72,26 +72,26 @@ Rocket::Rocket(ID3D11Device* const device, const XMFLOAT3& position, const XMFLO
 	textureNames.clear();
 	textureNames.push_back(L"Mars.dds");
 
-	m_rocketCone = make_shared<GameObject>();
- 	m_rocketCone->AddPositionComponent(0.0f, (3.0f * scale.y + 1.0f), 0.0f);
-	m_rocketCone->AddRotationComponent(0.0f, 0.0f, 0.0f);
-	m_rocketCone->AddScaleComponent(1.0f, 2.0f, 1.0f);
-	m_rocketCone->AddModelComponent(device, ModelType::Cone, resourceManager);
-	m_rocketCone->AddTextureComponent(device, textureNames, resourceManager);
-	m_rocketCone->SetShaderComponent(shaderManager->GetReflectionShader());
-	m_rocketCone->SetTessellationVariables(5.0f, 20.0f, 8.0f, 1.0f);
-	m_rocketCone->AddParentGameObject(m_rocketBody);
+	rocketCone = make_shared<GameObject>();
+ 	rocketCone->AddPositionComponent(0.0f, (3.0f * scale.y + 1.0f), 0.0f);
+	rocketCone->AddRotationComponent(0.0f, 0.0f, 0.0f);
+	rocketCone->AddScaleComponent(1.0f, 2.0f, 1.0f);
+	rocketCone->AddModelComponent(device, ModelType::Cone, resourceManager);
+	rocketCone->AddTextureComponent(device, textureNames, resourceManager);
+	rocketCone->SetShaderComponent(shaderManager->GetReflectionShader());
+	rocketCone->SetTessellationVariables(5.0f, 20.0f, 8.0f, 1.0f);
+	rocketCone->AddParentGameObject(rocketBody);
 
-	if (m_rocketCone->GetInitializationState())
+	if (rocketCone->GetInitializationState())
 	{
-		m_initializationFailed = true;
+		initializationFailed = true;
 		MessageBox(nullptr, "Could not initialize the rocket cone game object", "Error", MB_OK);
 		return;
 	}
 
-	const auto rocketBodyScale = m_rocketBody->GetScaleComponent()->GetScaleAt(0);
-	const auto rocketBodyRot = m_rocketBody->GetRotationComponent()->GetRotationAt(0);
-	const auto rocketBodyPos = m_rocketBody->GetPositionComponent()->GetPositionAt(0);
+	const auto rocketBodyScale = rocketBody->GetScaleComponent()->GetScaleAt(0);
+	const auto rocketBodyRot = rocketBody->GetRotationComponent()->GetRotationAt(0);
+	const auto rocketBodyPos = rocketBody->GetPositionComponent()->GetPositionAt(0);
 
 	auto rocketMatrix = XMMatrixIdentity();
 
@@ -126,24 +126,24 @@ Rocket::Rocket(ID3D11Device* const device, const XMFLOAT3& position, const XMFLO
 	XMStoreFloat3(&lightPositionFloat, lightPosition);
 	XMStoreFloat3(&lightPointPositionFloat, lightPointPosition);
 
-	m_particleSystemLight = make_shared<Light>();
-	m_particleSystemLight->SetLightOrbit(false);
-	m_particleSystemLight->SetLightPosition(lightPositionFloat);
-	m_particleSystemLight->SetLightPointPosition(lightPointPositionFloat);
-	m_particleSystemLight->SetAmbientColour(0.15f, 0.15f, 0.15f, 1.0f);
-	m_particleSystemLight->SetDiffuseColour(0.8f, 0.3f, 0.0f, 1.0f);
-	m_particleSystemLight->SetSpecularColour(0.8f, 0.3f, 0.0f, 1.0f);
-	m_particleSystemLight->SetSpecularPower(8.0f);
-	m_particleSystemLight->GenerateLightProjectionMatrix(45.0f, 45.0f, 0.1f, 1000.0f);
-	m_particleSystemLight->UpdateLightVariables(0.0f);
+	particleSystemLight = make_shared<Light>();
+	particleSystemLight->SetLightOrbit(false);
+	particleSystemLight->SetLightPosition(lightPositionFloat);
+	particleSystemLight->SetLightPointPosition(lightPointPositionFloat);
+	particleSystemLight->SetAmbientColour(0.15f, 0.15f, 0.15f, 1.0f);
+	particleSystemLight->SetDiffuseColour(0.8f, 0.3f, 0.0f, 1.0f);
+	particleSystemLight->SetSpecularColour(0.8f, 0.3f, 0.0f, 1.0f);
+	particleSystemLight->SetSpecularPower(8.0f);
+	particleSystemLight->GenerateLightProjectionMatrix(45.0f, 45.0f, 0.1f, 1000.0f);
+	particleSystemLight->UpdateLightVariables(0.0f);
 
-	m_fireJetParticleSystem = make_shared<FireJetParticleSystem>(device, nullptr, ModelType::Quad, XMFLOAT3(0.0f, -(3.0f * scale.y), 0.0f), XMFLOAT3(1.5f, 1.5f, 1.5f), XMFLOAT3(0.4f, 0.4f, 0.4f), 0.5f, 5.0f, 5.6f, 60, resourceManager);
-	m_fireJetParticleSystem->AddParentGameObject(m_rocketBody);
+	fireJetParticleSystem = make_shared<FireJetParticleSystem>(device, nullptr, ModelType::Quad, XMFLOAT3(0.0f, -(3.0f * scale.y), 0.0f), XMFLOAT3(1.5f, 1.5f, 1.5f), XMFLOAT3(0.4f, 0.4f, 0.4f), 0.5f, 5.0f, 5.6f, 60, resourceManager);
+	fireJetParticleSystem->AddParentGameObject(rocketBody);
 
-	m_coneFlameParticleSystem = make_shared<FireJetParticleSystem>(device, nullptr, ModelType::SphereInverted, XMFLOAT3(0.0f, (4.0f * scale.y), 0.0f), XMFLOAT3(1.5f, 1.5f, 1.5f), XMFLOAT3(1.0f, 1.0f, 1.0f), 0.8f, 5.0f, 4.0f, 10, resourceManager);
-	m_coneFlameParticleSystem->AddParentGameObject(m_rocketBody);
+	coneFlameParticleSystem = make_shared<FireJetParticleSystem>(device, nullptr, ModelType::SphereInverted, XMFLOAT3(0.0f, (4.0f * scale.y), 0.0f), XMFLOAT3(1.5f, 1.5f, 1.5f), XMFLOAT3(1.0f, 1.0f, 1.0f), 0.8f, 5.0f, 4.0f, 10, resourceManager);
+	coneFlameParticleSystem->AddParentGameObject(rocketBody);
 
-	m_rocketLauncher->Update();
+	rocketLauncher->Update();
 }
 
 //Rocket::Rocket(const Rocket& other) = default;
@@ -160,104 +160,104 @@ Rocket::~Rocket()
 
 void Rocket::AdjustRotationLeft() const
 {
-	if (!m_rocketLaunched)
+	if (!rocketLaunched)
 	{
-		auto launchAngle = m_rocketBody->GetRotationComponent()->GetRotationAt(0);
+		auto launchAngle = rocketBody->GetRotationComponent()->GetRotationAt(0);
 
-		launchAngle.z -= -XM_PIDIV4 / 30.0f;
+		launchAngle.z -= -XPIDIV4 / 30.0f;
 
 		if (launchAngle.z > 0.0f)
 		{
 			launchAngle.z = 0.0f;
 		}
 
-		m_rocketBody->SetRotation(launchAngle);
-		m_rocketLauncher->Update();
+		rocketBody->SetRotation(launchAngle);
+		rocketLauncher->Update();
 	}
 }
 
 void Rocket::AdjustRotationRight() const
 {
-	if (!m_rocketLaunched)
+	if (!rocketLaunched)
 	{
-		auto launchAngle = m_rocketBody->GetRotationComponent()->GetRotationAt(0);
+		auto launchAngle = rocketBody->GetRotationComponent()->GetRotationAt(0);
 
-		launchAngle.z += -XM_PIDIV4 / 30.0f;
+		launchAngle.z += -XPIDIV4 / 30.0f;
 
-		if (launchAngle.z < -XM_PIDIV2 + (XM_PIDIV4 / 10.0f))
+		if (launchAngle.z < -XPIDIV2 + (XPIDIV4 / 10.0f))
 		{
-			launchAngle.z = -XM_PIDIV2 + (XM_PIDIV4 / 10.0f);
+			launchAngle.z = -XPIDIV2 + (XPIDIV4 / 10.0f);
 		}
 
-		m_rocketBody->SetRotation(launchAngle);
-		m_rocketLauncher->Update();
+		rocketBody->SetRotation(launchAngle);
+		rocketLauncher->Update();
 	}
 }
 
 void Rocket::LaunchRocket()
 {
-	if (!m_rocketLaunched)
+	if (!rocketLaunched)
 	{
-		const auto launchAngle = m_rocketBody->GetRotationComponent()->GetRotationAt(0);
+		const auto launchAngle = rocketBody->GetRotationComponent()->GetRotationAt(0);
 
 		//Turn the rocket angle to the launch angle we need
-		const auto angle = XM_PIDIV2 + launchAngle.z;
+		const auto angle = XPIDIV2 + launchAngle.z;
 
-		m_velocity = XMFLOAT2(m_initialVelocity * cos(angle), m_initialVelocity * sin(angle));
-		m_angularVelocity = XMFLOAT2(cos(-angle), sin(-angle));
+		velocity = XMFLOAT2(initialVelocity * cos(angle), initialVelocity * sin(angle));
+		angularVelocity = XMFLOAT2(cos(-angle), sin(-angle));
 
-		const auto totalAngularMovement = angle + XM_PIDIV2;
+		const auto totalAngularMovement = angle + XPIDIV2;
 
-		const auto v = m_velocity.x * m_velocity.x + m_velocity.y * m_velocity.y;
+		const auto v = velocity.x * velocity.x + velocity.y * velocity.y;
 
-		auto totalTimeOfJourney = (v * sin(angle) + sqrt(((v * sin(angle)) * (v * sin(angle))) + 2.0f * (m_gravity * 3.0f))) / m_gravity;
+		auto totalTimeOfJourney = (v * sin(angle) + sqrt(((v * sin(angle)) * (v * sin(angle))) + 2.0f * (gravity * 3.0f))) / gravity;
 
 		totalTimeOfJourney *= 2.0f;
 
-		m_angularVelocity = XMFLOAT2(totalAngularMovement / totalTimeOfJourney, totalAngularMovement / totalTimeOfJourney);
+		angularVelocity = XMFLOAT2(totalAngularMovement / totalTimeOfJourney, totalAngularMovement / totalTimeOfJourney);
 
 		//totalTimeOfJourney = totalTimeOfJourney / (v * cos(angle));
 
-		//m_angularVelocity = XMFLOAT2(totalAngularMovement / totalTimeOfJourney, totalAngularMovement / totalTimeOfJourney);
-		//m_angularVelocity = XMFLOAT2(totalTimeOfJourney / totalAngularMovement, totalTimeOfJourney / totalAngularMovement);
+		//angularVelocity = XMFLOAT2(totalAngularMovement / totalTimeOfJourney, totalAngularMovement / totalTimeOfJourney);
+		//angularVelocity = XMFLOAT2(totalTimeOfJourney / totalAngularMovement, totalTimeOfJourney / totalAngularMovement);
 
-		m_rocketLaunched = true;
-		m_particleSystemActive = true;
+		rocketLaunched = true;
+		particleSystemActive = true;
 	}
 }
 
 const bool Rocket::RocketLaunched() const
 {
-	return m_rocketLaunched;
+	return rocketLaunched;
 }
 
 const bool Rocket::ParticleSystemActive() const
 {
-	return m_particleSystemActive;
+	return particleSystemActive;
 }
 
 
 
 const XMFLOAT3& Rocket::GetLauncherPosition() const
 {
-	return m_initialLauncherPosition;
+	return initialLauncherPosition;
 }
 
 const XMFLOAT3& Rocket::GetLookAtRocketPosition()
 {
-	const auto rocketBodyPosition = m_rocketBody->GetPositionComponent()->GetPositionAt(0);
-	const auto rocketBodyScale = m_rocketBody->GetScaleComponent()->GetScaleAt(0);
+	const auto rocketBodyPosition = rocketBody->GetPositionComponent()->GetPositionAt(0);
+	const auto rocketBodyScale = rocketBody->GetScaleComponent()->GetScaleAt(0);
 
-	m_lookAtRocketPosition = XMFLOAT3(rocketBodyPosition.x, rocketBodyPosition.y, rocketBodyPosition.z - rocketBodyScale.x);
+	lookAtRocketPosition = XMFLOAT3(rocketBodyPosition.x, rocketBodyPosition.y, rocketBodyPosition.z - rocketBodyScale.x);
 
-	return m_lookAtRocketPosition;
+	return lookAtRocketPosition;
 }
 
 const XMFLOAT3& Rocket::GetLookAtRocketConePosition()
 {
-	const auto rocketBodyScale = m_rocketBody->GetScaleComponent()->GetScaleAt(0);
-	const auto rocketBodyRot = m_rocketBody->GetRotationComponent()->GetRotationAt(0);
-	const auto rocketBodyPos = m_rocketBody->GetPositionComponent()->GetPositionAt(0);
+	const auto rocketBodyScale = rocketBody->GetScaleComponent()->GetScaleAt(0);
+	const auto rocketBodyRot = rocketBody->GetRotationComponent()->GetRotationAt(0);
+	const auto rocketBodyPos = rocketBody->GetPositionComponent()->GetPositionAt(0);
 
 	auto rocketMatrix = XMMatrixIdentity();
 
@@ -281,41 +281,41 @@ const XMFLOAT3& Rocket::GetLookAtRocketConePosition()
 
 	XMStoreFloat3(&conePositionFloat, lookAtRocketConePosition);
 
-	m_lookAtRocketConePosition = XMFLOAT3(conePositionFloat.x, conePositionFloat.y, conePositionFloat.z - rocketBodyScale.x);
+	lookAtRocketConePosition = XMFLOAT3(conePositionFloat.x, conePositionFloat.y, conePositionFloat.z - rocketBodyScale.x);
 
-	return m_lookAtRocketConePosition;
+	return lookAtRocketConePosition;
 }
 
 const shared_ptr<GameObject> Rocket::GetRocketBody() const
 {
-	return m_rocketBody;
+	return rocketBody;
 }
 
 const shared_ptr<GameObject> Rocket::GetRocketCone() const
 {
-	return m_rocketCone;
+	return rocketCone;
 }
 
 const shared_ptr<GameObject> Rocket::GetRocketCap() const
 {
-	return m_rocketCap;
+	return rocketCap;
 }
 
 const shared_ptr<GameObject> Rocket::GetRocketLauncher() const
 {
-	return m_rocketLauncher;
+	return rocketLauncher;
 }
 
 const shared_ptr<Light>& Rocket::GetParticleSystemLight() const
 {
-	return m_particleSystemLight;
+	return particleSystemLight;
 }
 
 bool Rocket::CheckForTerrainCollision(const shared_ptr<Terrain>& terrain, XMFLOAT3& outCollisionPosition, float& outBlastRadius)
 {
-	const auto rocketBodyScale = m_rocketBody->GetScaleComponent()->GetScaleAt(0);
-	const auto rocketBodyRot = m_rocketBody->GetRotationComponent()->GetRotationAt(0);
-	const auto rocketBodyPos = m_rocketBody->GetPositionComponent()->GetPositionAt(0);
+	const auto rocketBodyScale = rocketBody->GetScaleComponent()->GetScaleAt(0);
+	const auto rocketBodyRot = rocketBody->GetRotationComponent()->GetRotationAt(0);
+	const auto rocketBodyPos = rocketBody->GetPositionComponent()->GetPositionAt(0);
 
 	auto rocketMatrix = XMMatrixIdentity();
 
@@ -368,7 +368,7 @@ bool Rocket::CheckForTerrainCollision(const shared_ptr<Terrain>& terrain, XMFLOA
 			if (size*size <= radiusSum * radiusSum)
 			{
 				outCollisionPosition = terrainPositions[i];
-				outBlastRadius = m_blastRadius;
+				outBlastRadius = blastRadius;
 
 				terrain->GetPositionComponent()->TranslatePositionAt(XMFLOAT3(0.0f, -1000.0f, 0.0f), i);
 
@@ -383,7 +383,7 @@ bool Rocket::CheckForTerrainCollision(const shared_ptr<Terrain>& terrain, XMFLOA
 					XMStoreFloat(&size, XMVector3Length(XMLoadFloat3(&distance)));
 
 					//Destroy all blocks in the radius
-					radiusSum = XMVectorGetX(rocketConeScale) + terrainCubeRadius + m_blastRadius;
+					radiusSum = XMVectorGetX(rocketConeScale) + terrainCubeRadius + blastRadius;
 
 					if (size*size <= radiusSum * radiusSum)
 					{
@@ -407,57 +407,57 @@ bool Rocket::CheckForTerrainCollision(const shared_ptr<Terrain>& terrain, XMFLOA
 
 void Rocket::ResetRocketState()
 {
-	m_rocketBody->SetPosition(m_initialLauncherPosition);
-	m_rocketBody->SetRotation(m_initialLauncherRotation);
+	rocketBody->SetPosition(initialLauncherPosition);
+	rocketBody->SetRotation(initialLauncherRotation);
 
-	m_rocketLaunched = false;
-	m_particleSystemActive = false;
-	m_changedParticleSystem = false;
-	m_rocketLauncher->Update();
+	rocketLaunched = false;
+	particleSystemActive = false;
+	changedParticleSystem = false;
+	rocketLauncher->Update();
 }
 
 
 void Rocket::UpdateRocket(const float dt)
 {
-	if (m_rocketLaunched)
+	if (rocketLaunched)
 	{
-		m_velocity = XMFLOAT2(m_velocity.x, (m_velocity.y + (m_gravity * dt)));
-		m_angularVelocity = XMFLOAT2(m_angularVelocity.x, m_angularVelocity.y);
+		velocity = XMFLOAT2(velocity.x, (velocity.y + (gravity * dt)));
+		angularVelocity = XMFLOAT2(angularVelocity.x, angularVelocity.y);
 
-		if (m_velocity.y < 0.0f)
+		if (velocity.y < 0.0f)
 		{
-			if (!m_changedParticleSystem)
+			if (!changedParticleSystem)
 			{
-				m_particleSystemActive = false;
-				m_changedParticleSystem = true;
+				particleSystemActive = false;
+				changedParticleSystem = true;
 			}
 
-			auto rocketRotation = m_rocketBody->GetRotationComponent()->GetRotationAt(0);
+			auto rocketRotation = rocketBody->GetRotationComponent()->GetRotationAt(0);
 
-			rocketRotation = XMFLOAT3(rocketRotation.x, rocketRotation.y, rocketRotation.z + m_angularVelocity.x);
+			rocketRotation = XMFLOAT3(rocketRotation.x, rocketRotation.y, rocketRotation.z + angularVelocity.x);
 
-			m_rocketBody->SetRotation(rocketRotation);
+			rocketBody->SetRotation(rocketRotation);
 		}
 
-		const auto rocketPosition = m_rocketBody->GetPositionComponent()->GetPositionAt(0);
+		const auto rocketPosition = rocketBody->GetPositionComponent()->GetPositionAt(0);
 
-		m_rocketBody->SetPosition(rocketPosition.x + m_velocity.x * dt, rocketPosition.y + m_velocity.y * dt, rocketPosition.z);
+		rocketBody->SetPosition(rocketPosition.x + velocity.x * dt, rocketPosition.y + velocity.y * dt, rocketPosition.z);
 	}
 
-	m_rocketBody->Update();
-	m_rocketCone->Update();
-	m_rocketCap->Update();
-	m_fireJetParticleSystem->UpdateParticles(dt);
-	m_coneFlameParticleSystem->UpdateParticles(dt);
+	rocketBody->Update();
+	rocketCone->Update();
+	rocketCap->Update();
+	fireJetParticleSystem->UpdateParticles(dt);
+	coneFlameParticleSystem->UpdateParticles(dt);
 
 	UpdateLightPosition();
 }
 
 void Rocket::UpdateLightPosition() const
 {
-	const auto rocketBodyScale = m_rocketBody->GetScaleComponent()->GetScaleAt(0);
-	const auto rocketBodyRot = m_rocketBody->GetRotationComponent()->GetRotationAt(0);
-	const auto rocketBodyPos = m_rocketBody->GetPositionComponent()->GetPositionAt(0);
+	const auto rocketBodyScale = rocketBody->GetScaleComponent()->GetScaleAt(0);
+	const auto rocketBodyRot = rocketBody->GetRotationComponent()->GetRotationAt(0);
+	const auto rocketBodyPos = rocketBody->GetPositionComponent()->GetPositionAt(0);
 
 	auto rocketMatrix = XMMatrixIdentity();
 
@@ -492,8 +492,8 @@ void Rocket::UpdateLightPosition() const
 	XMStoreFloat3(&lightPositionFloat, lightPosition);
 	XMStoreFloat3(&lightPointPositionFloat, lightPointPosition);
 
-	m_particleSystemLight->SetLightPosition(lightPositionFloat);
-	m_particleSystemLight->SetLightPointPosition(lightPointPositionFloat);
+	particleSystemLight->SetLightPosition(lightPositionFloat);
+	particleSystemLight->SetLightPointPosition(lightPointPositionFloat);
 }
 
 
@@ -501,40 +501,40 @@ bool Rocket::RenderRocket(const shared_ptr<D3DContainer>& d3dContainer, const XM
 {
 	auto result = true;
 
-	result = m_rocketBody->Render(d3dContainer->GetDeviceContext(), viewMatrix, projectionMatrix, depthTextures, pointLightList, cameraPosition);
+	result = rocketBody->Render(d3dContainer->GetDeviceContext(), viewMatrix, projectionMatrix, depthTextures, pointLightList, cameraPosition);
 
 	if (!result)
 	{
 		return false;
 	}
 
-	result = m_rocketCone->Render(d3dContainer->GetDeviceContext(), viewMatrix, projectionMatrix, depthTextures, pointLightList, cameraPosition);
+	result = rocketCone->Render(d3dContainer->GetDeviceContext(), viewMatrix, projectionMatrix, depthTextures, pointLightList, cameraPosition);
 
 	if (!result)
 	{
 		return false;
 	}
 
-	result = m_rocketCap->Render(d3dContainer->GetDeviceContext(), viewMatrix, projectionMatrix, depthTextures, pointLightList, cameraPosition);
+	result = rocketCap->Render(d3dContainer->GetDeviceContext(), viewMatrix, projectionMatrix, depthTextures, pointLightList, cameraPosition);
 
 	if (!result)
 	{
 		return false;
 	}
 
-	result = m_rocketLauncher->Render(d3dContainer->GetDeviceContext(), viewMatrix, projectionMatrix, depthTextures, pointLightList, cameraPosition);
+	result = rocketLauncher->Render(d3dContainer->GetDeviceContext(), viewMatrix, projectionMatrix, depthTextures, pointLightList, cameraPosition);
 
 	if (!result)
 	{
 		return false;
 	}
 
-	if (m_particleSystemActive && m_rocketLaunched)
+	if (particleSystemActive && rocketLaunched)
 	{
 		d3dContainer->DisableDepthStencil();
 		d3dContainer->EnableAlphaBlending();
 
-		result = m_fireJetParticleSystem->RenderFireJetParticleSystem(d3dContainer->GetDeviceContext(), viewMatrix, projectionMatrix, cameraPosition);
+		result = fireJetParticleSystem->RenderFireJetParticleSystem(d3dContainer->GetDeviceContext(), viewMatrix, projectionMatrix, cameraPosition);
 
 		d3dContainer->EnabledDepthStencil();
 		d3dContainer->DisableAlphaBlending();
@@ -544,12 +544,12 @@ bool Rocket::RenderRocket(const shared_ptr<D3DContainer>& d3dContainer, const XM
 			return false;
 		}
 	}
-	else if (m_rocketLaunched)
+	else if (rocketLaunched)
 	{
 		d3dContainer->DisableDepthStencil();
 		d3dContainer->EnableAlphaBlending();
 
-		result = m_coneFlameParticleSystem->RenderFireJetParticleSystem(d3dContainer->GetDeviceContext(), viewMatrix, projectionMatrix, cameraPosition);
+		result = coneFlameParticleSystem->RenderFireJetParticleSystem(d3dContainer->GetDeviceContext(), viewMatrix, projectionMatrix, cameraPosition);
 
 		d3dContainer->EnabledDepthStencil();
 		d3dContainer->DisableAlphaBlending();

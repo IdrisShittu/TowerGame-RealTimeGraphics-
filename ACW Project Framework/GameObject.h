@@ -104,33 +104,33 @@ public:
 
 private:
 
-	bool m_initializationFailed;
+	bool initializationFailed;
 
-	bool m_updateInstanceData;
+	bool updateInstanceData;
 
 	//Tessellation only variables
-	float m_maxTessellationDistance;
-	float m_minTessellationDistance;
-	float m_maxTessellationFactor;
-	float m_minTessellationFactor;
+	float maxTessellationDistance;
+	float minTessellationDistance;
+	float maxTessellationFactor;
+	float minTessellationFactor;
 
 	//Displacement only variables
-	float m_mipInterval;
-	float m_mipClampMinimum;
-	float m_mipClampMaximum;
-	float m_displacementPower;
+	float mipInterval;
+	float mipClampMinimum;
+	float mipClampMaximum;
+	float displacementPower;
 
-	shared_ptr<Position> m_position;
-	shared_ptr<Rotation> m_rotation;
-	shared_ptr<Scale> m_scale;
+	shared_ptr<Position> position;
+	shared_ptr<Rotation> rotation;
+	shared_ptr<Scale> scale;
 
-	shared_ptr<RigidBody> m_rigidBody;
+	shared_ptr<RigidBody> rigidBody;
 
-	shared_ptr<Model> m_model;
-	shared_ptr<Texture> m_texture;
+	shared_ptr<Model> model;
+	shared_ptr<Texture> texture;
 
-	shared_ptr<Shader> m_shader;
+	shared_ptr<Shader> shader;
 
-	shared_ptr<GameObject> m_parentObject;
+	shared_ptr<GameObject> parentObject;
 };
 

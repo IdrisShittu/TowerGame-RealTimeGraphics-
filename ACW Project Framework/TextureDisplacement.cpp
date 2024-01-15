@@ -1,6 +1,6 @@
 #include "TextureDisplacement.h"
 
-TextureDisplacement::TextureDisplacement(ID3D11Device* const device, HWND const hwnd) : Shader("TextureDisplacementVS", "TextureDisplacementHS", "TextureDisplacementDS", "TextureDisplacementPS", device, hwnd), m_inputLayout(nullptr), m_sampleStateWrap(nullptr), m_sampleStateClamp(nullptr), m_lightBuffer(nullptr)
+TextureDisplacement::TextureDisplacement(ID3D11Device* const device, HWND const hwnd) : Shader("TextureDisplacementVS", "TextureDisplacementHS", "TextureDisplacementDS", "TextureDisplacementPS", device, hwnd), inputLayout(nullptr), sampleStateWrap(nullptr), sampleStateClamp(nullptr), lightBuffer(nullptr)
 {
 	if (GetInitializationState())
 	{
@@ -87,7 +87,7 @@ TextureDisplacement::TextureDisplacement(ID3D11Device* const device, HWND const 
 	numberOfElements = sizeof(polygonLayout) / sizeof(polygonLayout[0]);
 
 	//Create vertex input layout
-	auto result = device->CreateInputLayout(polygonLayout, numberOfElements, GetVertexShaderBuffer()->GetBufferPointer(), GetVertexShaderBuffer()->GetBufferSize(), &m_inputLayout);
+	auto result = device->CreateInputLayout(polygonLayout, numberOfElements, GetVertexShaderBuffer()->GetBufferPointer(), GetVertexShaderBuffer()->GetBufferSize(), &inputLayout);
 
 	if (FAILED(result))
 	{
@@ -118,7 +118,7 @@ TextureDisplacement::TextureDisplacement(ID3D11Device* const device, HWND const 
 	samplerWrapDescription.MinLOD = 0.0f;
 	samplerWrapDescription.MaxLOD = D3D11_FLOAT32_MAX;
 
-	result = device->CreateSamplerState(&samplerWrapDescription, &m_sampleStateWrap);
+	result = device->CreateSamplerState(&samplerWrapDescription, &sampleStateWrap);
 
 	if (FAILED(result))
 	{
@@ -142,7 +142,7 @@ TextureDisplacement::TextureDisplacement(ID3D11Device* const device, HWND const 
 	samplerClampDescription.MinLOD = 0.0f;
 	samplerClampDescription.MaxLOD = D3D11_FLOAT32_MAX;
 
-	result = device->CreateSamplerState(&samplerClampDescription, &m_sampleStateClamp);
+	result = device->CreateSamplerState(&samplerClampDescription, &sampleStateClamp);
 
 	if (FAILED(result))
 	{
@@ -159,7 +159,7 @@ TextureDisplacement::TextureDisplacement(ID3D11Device* const device, HWND const 
 	lightMatrixBufferDescription.MiscFlags = 0;
 	lightMatrixBufferDescription.StructureByteStride = 0;
 
-	result = device->CreateBuffer(&lightMatrixBufferDescription, nullptr, &m_lightMatrixBuffer);
+	result = device->CreateBuffer(&lightMatrixBufferDescription, nullptr, &lightMatrixBuffer);
 
 	if (FAILED(result))
 	{
@@ -176,7 +176,7 @@ TextureDisplacement::TextureDisplacement(ID3D11Device* const device, HWND const 
 	lightBufferDescription.MiscFlags = 0;
 	lightBufferDescription.StructureByteStride = 0;
 
-	result = device->CreateBuffer(&lightBufferDescription, nullptr, &m_lightBuffer);
+	result = device->CreateBuffer(&lightBufferDescription, nullptr, &lightBuffer);
 
 	if (FAILED(result))
 	{
@@ -193,34 +193,34 @@ TextureDisplacement::~TextureDisplacement()
 {
 	try
 	{
-		if (m_lightBuffer)
+		if (lightBuffer)
 		{
-			m_lightBuffer->Release();
-			m_lightBuffer = nullptr;
+			lightBuffer->Release();
+			lightBuffer = nullptr;
 		}
 
-		if(m_lightMatrixBuffer)
+		if(lightMatrixBuffer)
 		{
-			m_lightMatrixBuffer->Release();
-			m_lightMatrixBuffer = nullptr;
+			lightMatrixBuffer->Release();
+			lightMatrixBuffer = nullptr;
 		}
 
-		if (m_sampleStateClamp)
+		if (sampleStateClamp)
 		{
-			m_sampleStateClamp->Release();
-			m_sampleStateClamp = nullptr;
+			sampleStateClamp->Release();
+			sampleStateClamp = nullptr;
 		}
 
-		if (m_sampleStateWrap)
+		if (sampleStateWrap)
 		{
-			m_sampleStateWrap->Release();
-			m_sampleStateWrap = nullptr;
+			sampleStateWrap->Release();
+			sampleStateWrap = nullptr;
 		}
 
-		if (m_inputLayout)
+		if (inputLayout)
 		{
-			m_inputLayout->Release();
-			m_inputLayout = nullptr;
+			inputLayout->Release();
+			inputLayout = nullptr;
 		}
 	}
 	catch (exception& e)
@@ -275,7 +275,7 @@ bool TextureDisplacement::SetTextureDisplacementShaderParameters(ID3D11DeviceCon
 	auto mappedResource = GetMappedSubResource();
 
 	//Lock light constant buffer
-	auto failed = deviceContext->Map(m_lightBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource);
+	auto failed = deviceContext->Map(lightBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource);
 
 	if (FAILED(failed))
 	{
@@ -302,15 +302,15 @@ bool TextureDisplacement::SetTextureDisplacementShaderParameters(ID3D11DeviceCon
 	lightBufferDataPointer = nullptr;
 
 	//Unlock constant buffer
-	deviceContext->Unmap(m_lightBuffer, 0);
+	deviceContext->Unmap(lightBuffer, 0);
 
 	//Set light constant buffer in the pixel shader
-	deviceContext->PSSetConstantBuffers(GetPixelBufferResourceCount(), 1, &m_lightBuffer);
+	deviceContext->PSSetConstantBuffers(GetPixelBufferResourceCount(), 1, &lightBuffer);
 
 	IncrementPixelBufferResourceCount();
 
 	//Lock light constant buffer
-	failed = deviceContext->Map(m_lightMatrixBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource);
+	failed = deviceContext->Map(lightMatrixBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource);
 
 	if (FAILED(failed))
 	{
@@ -331,10 +331,10 @@ bool TextureDisplacement::SetTextureDisplacementShaderParameters(ID3D11DeviceCon
 	lightMatrixBufferDataPointer = nullptr;
 
 	//Unlock constant buffer
-	deviceContext->Unmap(m_lightMatrixBuffer, 0);
+	deviceContext->Unmap(lightMatrixBuffer, 0);
 
 	//Set light matrix constant buffer to domain shader
-	deviceContext->DSSetConstantBuffers(GetDomainBufferResourceCount(), 1, &m_lightMatrixBuffer);
+	deviceContext->DSSetConstantBuffers(GetDomainBufferResourceCount(), 1, &lightMatrixBuffer);
 
 	IncrementDomainBufferResourceCount();
 
@@ -350,14 +350,14 @@ bool TextureDisplacement::SetTextureDisplacementShaderParameters(ID3D11DeviceCon
 void TextureDisplacement::RenderShader(ID3D11DeviceContext* const deviceContext, const int indexCount, const int instanceCount) const
 {
 	//Set input layout
-	deviceContext->IASetInputLayout(m_inputLayout);
+	deviceContext->IASetInputLayout(inputLayout);
 
 	SetShader(deviceContext);
 
 	//Set pixel and domain shaders sampler state
-	deviceContext->DSSetSamplers(0, 1, &m_sampleStateWrap);
-	deviceContext->PSSetSamplers(0, 1, &m_sampleStateWrap);
-	deviceContext->PSSetSamplers(1, 1, &m_sampleStateClamp);
+	deviceContext->DSSetSamplers(0, 1, &sampleStateWrap);
+	deviceContext->PSSetSamplers(0, 1, &sampleStateWrap);
+	deviceContext->PSSetSamplers(1, 1, &sampleStateClamp);
 
 	deviceContext->DrawInstanced(indexCount, instanceCount, 0, 0);
 	//deviceContext->DrawIndexed(indexCount, 0, 0);

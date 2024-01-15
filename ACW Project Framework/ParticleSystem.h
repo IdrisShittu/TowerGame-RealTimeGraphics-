@@ -23,20 +23,20 @@ public:
 
 private:
 
-	XMFLOAT3 m_initialPosition;
-	XMFLOAT3 m_initialScale;
-	XMFLOAT3 m_scaleReduction;
-	XMFLOAT3 m_killScale;
+	XMFLOAT3 initialPosition;
+	XMFLOAT3 initialScale;
+	XMFLOAT3 scaleReduction;
+	XMFLOAT3 killScale;
 
-	bool m_emitterType;
+	bool emitterType;
 
-	float m_spawnRate;
-	float m_elapsedTime;
-	float m_lifeCycle;
+	float spawnRate;
+	float elapsedTime;
+	float lifeCycle;
 
-	float m_velocity;
+	float velocity;
 
-	float m_particleSpread;
+	float particleSpread;
 
 };
 

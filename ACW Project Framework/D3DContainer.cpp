@@ -3,29 +3,29 @@
 #include <minwinbase.h>
 
 D3DContainer::D3DContainer(int const screenWidth, int const screenHeight, HWND const hwnd, bool const fullScreen, bool const vSyncEnabled, float const screenDepth, float const screenNear) : 
-m_initializationFailed(false), m_vSyncEnabled(vSyncEnabled), m_videoCardMemory(0), m_videoCardDescription{}, m_swapChain(nullptr), m_device(nullptr), m_deviceContext(nullptr), m_renderTargetView(nullptr), m_depthStencilBuffer(nullptr),
-m_depthStencilStateEnabled(nullptr), m_depthStencilStateDisabled(nullptr), m_depthStencilView(nullptr), m_rasterStateNormal(nullptr), m_rasterStateWireFrame(nullptr), m_alphaEnabledBlendState(nullptr), m_alphaDisableBlendState(nullptr), m_projectionMatrix(XMFLOAT4X4()), m_orthographicMatrix(XMFLOAT4X4()){
+initializationFailed(false), vSyncEnabled(vSyncEnabled), videoCardMemory(0), videoCardDescription{}, swapChain(nullptr), device(nullptr), deviceContext(nullptr), renderTargetView(nullptr), depthStencilBuffer(nullptr),
+depthStencilStateEnabled(nullptr), depthStencilStateDisabled(nullptr), depthStencilView(nullptr), rasterStateNormal(nullptr), rasterStateWireFrame(nullptr), alphaEnabledBlendState(nullptr), alphaDisableBlendState(nullptr), projectionMatrix(XMFLOAT4X4()), orthographicMatrix(XMFLOAT4X4()){
 
 	unsigned int numerator = 0;
 	unsigned int denominator = 0;
 
 	InitializeFactoryAdapter(screenWidth, screenHeight, numerator, denominator);
 
-	if (m_initializationFailed)
+	if (initializationFailed)
 	{
 		return;
 	}
 
 	InitializeDeviceAndSwapChain(screenWidth, screenHeight, numerator, denominator, fullScreen, hwnd);
 
-	if (m_initializationFailed)
+	if (initializationFailed)
 	{
 		return;
 	}
 
 	InitializeBuffers(screenWidth, screenHeight);
 
-	if (m_initializationFailed)
+	if (initializationFailed)
 	{
 		return;
 	}
@@ -50,15 +50,15 @@ m_depthStencilStateEnabled(nullptr), m_depthStencilStateDisabled(nullptr), m_dep
 		false //AntialiasedLineEnable
 	};
 
-	auto result = m_device->CreateRasterizerState(&rasterDescription, &m_rasterStateNormal);
+	auto result = device->CreateRasterizerState(&rasterDescription, &rasterStateNormal);
 
 	if (FAILED(result))
 	{
-		m_initializationFailed = true;
+		initializationFailed = true;
 		return;
 	}
 
-	m_deviceContext->RSSetState(m_rasterStateNormal);
+	deviceContext->RSSetState(rasterStateNormal);
 
 	ZeroMemory(&rasterDescription, sizeof(rasterDescription));
 
@@ -77,11 +77,11 @@ m_depthStencilStateEnabled(nullptr), m_depthStencilStateDisabled(nullptr), m_dep
 		false //AntialiasedLineEnable
 	};
 
-	result = m_device->CreateRasterizerState(&rasterDescription, &m_rasterStateWireFrame);
+	result = device->CreateRasterizerState(&rasterDescription, &rasterStateWireFrame);
 
 	if (FAILED(result))
 	{
-		m_initializationFailed = true;
+		initializationFailed = true;
 		return;
 	}
 
@@ -101,16 +101,16 @@ m_depthStencilStateEnabled(nullptr), m_depthStencilStateDisabled(nullptr), m_dep
 		1.0f //MaxDepth
 	};
 
-	m_deviceContext->RSSetViewports(1, &viewport);
+	deviceContext->RSSetViewports(1, &viewport);
 
 	//Initialize and create projection matrix
-	auto const fieldOfView = static_cast<float>(XM_PI / 4.0f);
+	auto const fieldOfView = static_cast<float>(XPI / 4.0f);
 	auto const screenAspect = static_cast<float>(screenWidth) / static_cast<float>(screenHeight);
 
-	XMStoreFloat4x4(&m_projectionMatrix, XMMatrixPerspectiveFovLH(fieldOfView, screenAspect, screenNear, screenDepth));
+	XMStoreFloat4x4(&projectionMatrix, XMMatrixPerspectiveFovLH(fieldOfView, screenAspect, screenNear, screenDepth));
 
 	//Initialize and create orthographic matrix
-	XMStoreFloat4x4(&m_orthographicMatrix, XMMatrixOrthographicLH(static_cast<float>(screenWidth), static_cast<float>(screenHeight), screenNear, screenDepth));
+	XMStoreFloat4x4(&orthographicMatrix, XMMatrixOrthographicLH(static_cast<float>(screenWidth), static_cast<float>(screenHeight), screenNear, screenDepth));
 };
 
 D3DContainer::D3DContainer(const D3DContainer& other) = default;
@@ -122,81 +122,81 @@ D3DContainer::~D3DContainer()
 	try
 	{
 		//Before shutdown we need to set our swap chain to windowed mode or an exception is thrown
-		if (m_swapChain)
+		if (swapChain)
 		{
-			m_swapChain->SetFullscreenState(false, nullptr);
+			swapChain->SetFullscreenState(false, nullptr);
 		}
 
-		if (m_alphaDisableBlendState)
+		if (alphaDisableBlendState)
 		{
-			m_alphaDisableBlendState->Release();
-			m_alphaDisableBlendState = nullptr;
+			alphaDisableBlendState->Release();
+			alphaDisableBlendState = nullptr;
 		}
 
-		if (m_alphaEnabledBlendState)
+		if (alphaEnabledBlendState)
 		{
-			m_alphaEnabledBlendState->Release();
-			m_alphaEnabledBlendState = nullptr;
+			alphaEnabledBlendState->Release();
+			alphaEnabledBlendState = nullptr;
 		}
 
-		if (m_rasterStateWireFrame)
+		if (rasterStateWireFrame)
 		{
-			m_rasterStateWireFrame->Release();
-			m_rasterStateWireFrame = nullptr;
+			rasterStateWireFrame->Release();
+			rasterStateWireFrame = nullptr;
 		}
 
-		if (m_rasterStateNormal)
+		if (rasterStateNormal)
 		{
-			m_rasterStateNormal->Release();
-			m_rasterStateNormal = nullptr;
+			rasterStateNormal->Release();
+			rasterStateNormal = nullptr;
 		}
 
-		if (m_depthStencilView)
+		if (depthStencilView)
 		{
-			m_depthStencilView->Release();
-			m_depthStencilView = nullptr;
+			depthStencilView->Release();
+			depthStencilView = nullptr;
 		}
 
-		if (m_depthStencilStateDisabled)
+		if (depthStencilStateDisabled)
 		{
-			m_depthStencilStateDisabled->Release();
-			m_depthStencilStateDisabled = nullptr;
+			depthStencilStateDisabled->Release();
+			depthStencilStateDisabled = nullptr;
 		}
 
-		if (m_depthStencilStateEnabled)
+		if (depthStencilStateEnabled)
 		{
-			m_depthStencilStateEnabled->Release();
-			m_depthStencilStateEnabled = nullptr;
+			depthStencilStateEnabled->Release();
+			depthStencilStateEnabled = nullptr;
 		}
 
-		if (m_depthStencilBuffer)
+		if (depthStencilBuffer)
 		{
-			m_depthStencilBuffer->Release();
-			m_depthStencilBuffer = nullptr;
+			depthStencilBuffer->Release();
+			depthStencilBuffer = nullptr;
 		}
 
-		if (m_renderTargetView)
+		if (renderTargetView)
 		{
-			m_renderTargetView->Release();
-			m_renderTargetView = nullptr;
+			renderTargetView->Release();
+			renderTargetView = nullptr;
 		}
 
-		if (m_deviceContext)
+		if (deviceContext)
 		{
-			m_deviceContext->Release();
-			m_deviceContext = nullptr;
+			deviceContext->Release();
+			deviceContext = nullptr;
 		}
 
-		if (m_device)
+		if (device)
 		{
-			m_device->Release();
-			m_device = nullptr;
+			device->Release();
+			device = nullptr;
 		}
 
-		if (m_swapChain)
+		if (swapChain)
 		{
-			m_swapChain->Release();
-			m_swapChain = nullptr;
+			swapChain->Release();
+			swapChain = nullptr;
 		}
 	}
 	catch (exception& e)
@@ -224,7 +224,7 @@ void D3DContainer::InitializeFactoryAdapter(unsigned int const screenWidth, unsi
 
 	if (FAILED(result))
 	{
-		m_initializationFailed = true;
+		initializationFailed = true;
 		return;
 	}
 
@@ -233,7 +233,7 @@ void D3DContainer::InitializeFactoryAdapter(unsigned int const screenWidth, unsi
 
 	if (FAILED(result))
 	{
-		m_initializationFailed = true;
+		initializationFailed = true;
 		return;
 	}
 
@@ -242,16 +242,16 @@ void D3DContainer::InitializeFactoryAdapter(unsigned int const screenWidth, unsi
 
 	if (FAILED(result))
 	{
-		m_initializationFailed = true;
+		initializationFailed = true;
 		return;
 	}
 
 	//Get the number of modes that fit the display format for our adapter output (monitor)
-	result = adapterOutput->GetDisplayModeList(DXGI_FORMAT_R8G8B8A8_UNORM, DXGI_ENUM_MODES_INTERLACED, &numOfModes, nullptr);
+	result = adapterOutput->GetDisplayModeList(DXGI_FORMAT_R8G8B8A8_UNORM, DXGI_ENUMODES_INTERLACED, &numOfModes, nullptr);
 
 	if (FAILED(result))
 	{
-		m_initializationFailed = true;
+		initializationFailed = true;
 		return;
 	}
 
@@ -260,16 +260,16 @@ void D3DContainer::InitializeFactoryAdapter(unsigned int const screenWidth, unsi
 
 	if (!displayModeList)
 	{
-		m_initializationFailed = true;
+		initializationFailed = true;
 		return;
 	}
 
 	//Now we fill the list
-	result = adapterOutput->GetDisplayModeList(DXGI_FORMAT_R8G8B8A8_UNORM, DXGI_ENUM_MODES_INTERLACED, &numOfModes, displayModeList);
+	result = adapterOutput->GetDisplayModeList(DXGI_FORMAT_R8G8B8A8_UNORM, DXGI_ENUMODES_INTERLACED, &numOfModes, displayModeList);
 
 	if (FAILED(result))
 	{
-		m_initializationFailed = true;
+		initializationFailed = true;
 		return;
 	}
 
@@ -293,19 +293,19 @@ void D3DContainer::InitializeFactoryAdapter(unsigned int const screenWidth, unsi
 
 	if (FAILED(result))
 	{
-		m_initializationFailed = true;
+		initializationFailed = true;
 		return;
 	}
 
 	//Store video card memory in megabytes
-	m_videoCardMemory = static_cast<int>(adapterDescription.DedicatedVideoMemory / 1024 / 1024);
+	videoCardMemory = static_cast<int>(adapterDescription.DedicatedVideoMemory / 1024 / 1024);
 
 	//Convert video card name to a character array and store it
-	auto const error = wcstombs_s(&stringLength, m_videoCardDescription, 128, adapterDescription.Description, 128);
+	auto const error = wcstombs_s(&stringLength, videoCardDescription, 128, adapterDescription.Description, 128);
 
 	if (error != 0)
 	{
-		m_initializationFailed = true;
+		initializationFailed = true;
 		return;
 	}
 
@@ -340,8 +340,8 @@ void D3DContainer::InitializeDeviceAndSwapChain(unsigned int const screenWidth, 
 			screenWidth, //Width
 			screenHeight, //Height
 			DXGI_RATIONAL { //Refresh rate of swapchain
-				m_vSyncEnabled ? numerator : 0,
-				m_vSyncEnabled ? denominator : 1
+				vSyncEnabled ? numerator : 0,
+				vSyncEnabled ? denominator : 1
 			},
 			DXGI_FORMAT_R8G8B8A8_UNORM, //Format
 			DXGI_MODE_SCANLINE_ORDER_UNSPECIFIED, //ScanlineOrdering
@@ -363,13 +363,13 @@ void D3DContainer::InitializeDeviceAndSwapChain(unsigned int const screenWidth, 
 	};
 
 	//Create swap chain, device and device context
-	auto const result = D3D11CreateDeviceAndSwapChain(nullptr, D3D_DRIVER_TYPE_HARDWARE, nullptr, 0, &featureLevel, 1, D3D11_SDK_VERSION, &swapChainDescription, &m_swapChain, &m_device, nullptr, &m_deviceContext);
-	//auto const result = D3D11CreateDeviceAndSwapChain(nullptr, D3D_DRIVER_TYPE_HARDWARE, nullptr, D3D11_CREATE_DEVICE_DEBUG, &featureLevel, 1, D3D11_SDK_VERSION, &swapChainDescription, &m_swapChain, &m_device, nullptr, &m_deviceContext);
+	auto const result = D3D11CreateDeviceAndSwapChain(nullptr, D3D_DRIVER_TYPE_HARDWARE, nullptr, 0, &featureLevel, 1, D3D11_SDK_VERSION, &swapChainDescription, &swapChain, &device, nullptr, &deviceContext);
+	//auto const result = D3D11CreateDeviceAndSwapChain(nullptr, D3D_DRIVER_TYPE_HARDWARE, nullptr, D3D11_CREATE_DEVICE_DEBUG, &featureLevel, 1, D3D11_SDK_VERSION, &swapChainDescription, &swapChain, &device, nullptr, &deviceContext);
 
 
 	if (FAILED(result))
 	{
-		m_initializationFailed = true;
+		initializationFailed = true;
 	}
 }
 
@@ -378,20 +378,20 @@ void D3DContainer::InitializeBuffers(unsigned int const screenWidth, unsigned in
 	ID3D11Texture2D* backBuffer;
 
 	//Attach back buffer to swap chain
-	auto result = m_swapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), reinterpret_cast<LPVOID*>(&backBuffer));
+	auto result = swapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), reinterpret_cast<LPVOID*>(&backBuffer));
 
 	if (FAILED(result))
 	{
-		m_initializationFailed = true;
+		initializationFailed = true;
 		return;
 	}
 
 	//Create render target view
-	result = m_device->CreateRenderTargetView(backBuffer, nullptr, &m_renderTargetView);
+	result = device->CreateRenderTargetView(backBuffer, nullptr, &renderTargetView);
 
 	if (FAILED(result))
 	{
-		m_initializationFailed = true;
+		initializationFailed = true;
 		return;
 	}
 
@@ -409,7 +409,7 @@ void D3DContainer::InitializeBuffers(unsigned int const screenWidth, unsigned in
 		screenHeight, //Height
 		1, //MipLevels
 		1, //ArraySize
-		DXGI_FORMAT_D24_UNORM_S8_UINT, //Format
+		DXGI_FORMAT_D24_UNORS8_UINT, //Format
 		DXGI_SAMPLE_DESC {
 			1, //Count
 			0 //Quality
@@ -421,11 +421,11 @@ void D3DContainer::InitializeBuffers(unsigned int const screenWidth, unsigned in
 	};
 
 	//Create 2D texture for our buffer
-	result = m_device->CreateTexture2D(&depthBufferDescription, nullptr, &m_depthStencilBuffer);
+	result = device->CreateTexture2D(&depthBufferDescription, nullptr, &depthStencilBuffer);
 
 	if (FAILED(result))
 	{
-		m_initializationFailed = true;
+		initializationFailed = true;
 		return;
 	}
 
@@ -454,11 +454,11 @@ void D3DContainer::InitializeBuffers(unsigned int const screenWidth, unsigned in
 		}
 	};
 
-	result = m_device->CreateDepthStencilState(&depthStencilDescription, &m_depthStencilStateEnabled);
+	result = device->CreateDepthStencilState(&depthStencilDescription, &depthStencilStateEnabled);
 
 	if (FAILED(result))
 	{
-		m_initializationFailed = true;
+		initializationFailed = true;
 		return;
 	}
 
@@ -485,16 +485,16 @@ void D3DContainer::InitializeBuffers(unsigned int const screenWidth, unsigned in
 		}
 	};
 
-	result = m_device->CreateDepthStencilState(&depthStencilDescription, &m_depthStencilStateDisabled);
+	result = device->CreateDepthStencilState(&depthStencilDescription, &depthStencilStateDisabled);
 
 	if (FAILED(result))
 	{
-		m_initializationFailed = true;
+		initializationFailed = true;
 		return;
 	}
 
 	//Set the depth stencil state
-	m_deviceContext->OMSetDepthStencilState(m_depthStencilStateEnabled, 1);
+	deviceContext->OMSetDepthStencilState(depthStencilStateEnabled, 1);
 
 	D3D11_DEPTH_STENCIL_VIEW_DESC depthStencilViewDescription;
 
@@ -502,18 +502,18 @@ void D3DContainer::InitializeBuffers(unsigned int const screenWidth, unsigned in
 	ZeroMemory(&depthStencilViewDescription, sizeof(depthStencilViewDescription));
 
 	depthStencilViewDescription = {
-		DXGI_FORMAT_D24_UNORM_S8_UINT, //Format
+		DXGI_FORMAT_D24_UNORS8_UINT, //Format
 		D3D11_DSV_DIMENSION_TEXTURE2D, //ViewDimension
 		0 //Flags
 	};
 
 	depthStencilViewDescription.Texture2D.MipSlice = 0;
 
-	result = m_device->CreateDepthStencilView(m_depthStencilBuffer, &depthStencilViewDescription, &m_depthStencilView);
+	result = device->CreateDepthStencilView(depthStencilBuffer, &depthStencilViewDescription, &depthStencilView);
 
 	if (FAILED(result))
 	{
-		m_initializationFailed = true;
+		initializationFailed = true;
 		return;
 	}
 
@@ -543,21 +543,21 @@ void D3DContainer::InitializeBuffers(unsigned int const screenWidth, unsigned in
 	blendStateDescription.RenderTarget[0].BlendOpAlpha = D3D11_BLEND_OP_ADD;
 	blendStateDescription.RenderTarget[0].RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_ALL;
 
-	result = m_device->CreateBlendState(&blendStateDescription, &m_alphaEnabledBlendState);
+	result = device->CreateBlendState(&blendStateDescription, &alphaEnabledBlendState);
 
 	if (FAILED(result))
 	{
-		m_initializationFailed = true;
+		initializationFailed = true;
 		return;
 	}
 
 	blendStateDescription.RenderTarget[0].BlendEnable = false;
 
-	result = m_device->CreateBlendState(&blendStateDescription, &m_alphaDisableBlendState);
+	result = device->CreateBlendState(&blendStateDescription, &alphaDisableBlendState);
 
 	if (FAILED(result))
 	{
-		m_initializationFailed = true;
+		initializationFailed = true;
 		return;
 	}
 
@@ -574,95 +574,95 @@ void D3DContainer::BeginScene(float const red, float const green, float const bl
 	colour[3] = alpha;
 
 	//Clear back buffer
-	m_deviceContext->ClearRenderTargetView(m_renderTargetView, colour);
+	deviceContext->ClearRenderTargetView(renderTargetView, colour);
 
 	//Clear depth buffer
-	m_deviceContext->ClearDepthStencilView(m_depthStencilView, D3D11_CLEAR_DEPTH, 1.0f, 0);
+	deviceContext->ClearDepthStencilView(depthStencilView, D3D11_CLEAR_DEPTH, 1.0f, 0);
 }
 
 
 void D3DContainer::EndScene()
 {
 	//Present back buffer to the front
-	if (m_vSyncEnabled)
+	if (vSyncEnabled)
 	{
 		//Locks to screen refresh rate
-		m_swapChain->Present(1, 0);
+		swapChain->Present(1, 0);
 	}
 	else
 	{
 		//Presents straight away
-		m_swapChain->Present(0, 0);
+		swapChain->Present(0, 0);
 	}
 }
 
 ID3D11Device* D3DContainer::GetDevice() const
 {
-	return m_device;
+	return device;
 }
 
 ID3D11DeviceContext* D3DContainer::GetDeviceContext() const
 {
-	return m_deviceContext;
+	return deviceContext;
 }
 
 ID3D11DepthStencilView* D3DContainer::GetDepthStencilView() const
 {
-	return m_depthStencilView;
+	return depthStencilView;
 }
 
 void D3DContainer::SetRenderTarget() const
 {
-	m_deviceContext->OMSetRenderTargets(1, &m_renderTargetView, m_depthStencilView);
+	deviceContext->OMSetRenderTargets(1, &renderTargetView, depthStencilView);
 }
 
 void D3DContainer::EnableWireFrame() const
 {
-	m_deviceContext->RSSetState(m_rasterStateWireFrame);
+	deviceContext->RSSetState(rasterStateWireFrame);
 }
 
 void D3DContainer::DisableWireFrame() const
 {
-	m_deviceContext->RSSetState(m_rasterStateNormal);
+	deviceContext->RSSetState(rasterStateNormal);
 }
 
 void D3DContainer::EnabledDepthStencil() const
 {
-	m_deviceContext->OMSetDepthStencilState(m_depthStencilStateEnabled, 1);
+	deviceContext->OMSetDepthStencilState(depthStencilStateEnabled, 1);
 }
 
 void D3DContainer::DisableDepthStencil() const
 {
-	m_deviceContext->OMSetDepthStencilState(m_depthStencilStateDisabled, 1);
+	deviceContext->OMSetDepthStencilState(depthStencilStateDisabled, 1);
 }
 
 void D3DContainer::EnableAlphaBlending() const
 {
-	m_deviceContext->OMSetBlendState(m_alphaEnabledBlendState, nullptr, 0xffffffff);
+	deviceContext->OMSetBlendState(alphaEnabledBlendState, nullptr, 0xffffffff);
 }
 
 void D3DContainer::DisableAlphaBlending() const
 {
-	m_deviceContext->OMSetBlendState(m_alphaDisableBlendState, nullptr, 0xffffffff);
+	deviceContext->OMSetBlendState(alphaDisableBlendState, nullptr, 0xffffffff);
 }
 
 void D3DContainer::GetProjectionMatrix(XMMATRIX& projectionMatrix) const
 {
-	projectionMatrix = XMLoadFloat4x4(&m_projectionMatrix);
+	projectionMatrix = XMLoadFloat4x4(&projectionMatrix);
 }
 
 void D3DContainer::GetOrthogonalMatrix(XMMATRIX& orthographicMatrix) const
 {
-	orthographicMatrix = XMLoadFloat4x4(&m_orthographicMatrix);
+	orthographicMatrix = XMLoadFloat4x4(&orthographicMatrix);
 }
 
 void D3DContainer::GetVideoCardInfo(char* const cardName, int& memory) const
 {
-	strcpy_s(cardName, 128, m_videoCardDescription);
-	memory = m_videoCardMemory;
+	strcpy_s(cardName, 128, videoCardDescription);
+	memory = videoCardMemory;
 }
 
 bool D3DContainer::GetInitializationState() const
 {
-	return m_initializationFailed;
+	return initializationFailed;
 }

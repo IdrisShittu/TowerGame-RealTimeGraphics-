@@ -1,6 +1,6 @@
 #include "DepthShader.h"
 
-DepthShader::DepthShader(ID3D11Device* const device, HWND const hwnd) : Shader("DepthVertexShader", "DepthHullShader", "DepthDomainShader", "DepthPixelShader", device, hwnd), m_inputLayout(nullptr)
+DepthShader::DepthShader(ID3D11Device* const device, HWND const hwnd) : Shader("DepthVertexShader", "DepthHullShader", "DepthDomainShader", "DepthPixelShader", device, hwnd), inputLayout(nullptr)
 {
 	if (GetInitializationState())
 	{
@@ -69,7 +69,7 @@ DepthShader::DepthShader(ID3D11Device* const device, HWND const hwnd) : Shader("
 
 	//Create vertex input layout
 
-	auto result = device->CreateInputLayout(polygonLayout, numberOfElements, GetVertexShaderBuffer()->GetBufferPointer(), GetVertexShaderBuffer()->GetBufferSize(), &m_inputLayout);
+	auto result = device->CreateInputLayout(polygonLayout, numberOfElements, GetVertexShaderBuffer()->GetBufferPointer(), GetVertexShaderBuffer()->GetBufferSize(), &inputLayout);
 
 	if (FAILED(result))
 	{
@@ -100,7 +100,7 @@ DepthShader::DepthShader(ID3D11Device* const device, HWND const hwnd) : Shader("
 	samplerWrapDescription.MinLOD = 0.0f;
 	samplerWrapDescription.MaxLOD = D3D11_FLOAT32_MAX;
 
-	result = device->CreateSamplerState(&samplerWrapDescription, &m_sampleStateWrap);
+	result = device->CreateSamplerState(&samplerWrapDescription, &sampleStateWrap);
 
 	if (FAILED(result))
 	{
@@ -117,10 +117,10 @@ DepthShader::~DepthShader()
 {
 	try
 	{
-		if (m_inputLayout)
+		if (inputLayout)
 		{
-			m_inputLayout->Release();
-			m_inputLayout = nullptr;
+			inputLayout->Release();
+			inputLayout = nullptr;
 		}
 	}
 	catch (exception& e)
@@ -176,11 +176,11 @@ bool DepthShader::SetDepthShaderParameters(ID3D11DeviceContext* const deviceCont
 
 void DepthShader::RenderShader(ID3D11DeviceContext* const deviceContext, const int indexCount, const int instanceCount) const
 {
-	deviceContext->IASetInputLayout(m_inputLayout);
+	deviceContext->IASetInputLayout(inputLayout);
 
 	SetShader(deviceContext);
 
-	deviceContext->DSSetSamplers(0, 1, &m_sampleStateWrap);
+	deviceContext->DSSetSamplers(0, 1, &sampleStateWrap);
 
 	deviceContext->DrawInstanced(indexCount, instanceCount, 0, 0);
 }

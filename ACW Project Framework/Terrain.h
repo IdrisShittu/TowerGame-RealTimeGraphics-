@@ -23,8 +23,8 @@ public:
 	void AddComponents(ID3D11Device* const device, const shared_ptr<Shader>& shader, const shared_ptr<ResourceManager>& resourceManager, const vector<const WCHAR*>& textureNames);
 
 private:
-	bool m_initializationFailed;
+	bool initializationFailed;
 
-	vector<XMFLOAT3> m_initialTerrainPositions;
+	vector<XMFLOAT3> initialTerrainPositions;
 };
 

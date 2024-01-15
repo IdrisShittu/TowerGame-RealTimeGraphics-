@@ -1,6 +1,6 @@
 #include "TextureNormalSpecularShader.h"
 
-TextureNormalSpecularShader::TextureNormalSpecularShader(ID3D11Device* const device, HWND const hwnd) : Shader("TextureNormalSpecularVS", "TextureNormalSpecularHS", "TextureNormalSpecularDS", "TextureNormalSpecularPS", device, hwnd), m_inputLayout(nullptr), m_sampleStateWrap(nullptr), m_sampleStateClamp(nullptr), m_lightMatrixBuffer(nullptr), m_lightBuffer(nullptr)
+TextureNormalSpecularShader::TextureNormalSpecularShader(ID3D11Device* const device, HWND const hwnd) : Shader("TextureNormalSpecularVS", "TextureNormalSpecularHS", "TextureNormalSpecularDS", "TextureNormalSpecularPS", device, hwnd), inputLayout(nullptr), sampleStateWrap(nullptr), sampleStateClamp(nullptr), lightMatrixBuffer(nullptr), lightBuffer(nullptr)
 {
 	if (GetInitializationState())
 	{
@@ -87,7 +87,7 @@ TextureNormalSpecularShader::TextureNormalSpecularShader(ID3D11Device* const dev
 	numberOfElements = sizeof(polygonLayout) / sizeof(polygonLayout[0]);
 
 	//Create vertex input layout
-	auto result = device->CreateInputLayout(polygonLayout, numberOfElements, GetVertexShaderBuffer()->GetBufferPointer(), GetVertexShaderBuffer()->GetBufferSize(), &m_inputLayout);
+	auto result = device->CreateInputLayout(polygonLayout, numberOfElements, GetVertexShaderBuffer()->GetBufferPointer(), GetVertexShaderBuffer()->GetBufferSize(), &inputLayout);
 
 	if (FAILED(result))
 	{
@@ -118,7 +118,7 @@ TextureNormalSpecularShader::TextureNormalSpecularShader(ID3D11Device* const dev
 	samplerWrapDescription.MinLOD = 0.0f;
 	samplerWrapDescription.MaxLOD = D3D11_FLOAT32_MAX;
 
-	result = device->CreateSamplerState(&samplerWrapDescription, &m_sampleStateWrap);
+	result = device->CreateSamplerState(&samplerWrapDescription, &sampleStateWrap);
 
 	if (FAILED(result))
 	{
@@ -142,7 +142,7 @@ TextureNormalSpecularShader::TextureNormalSpecularShader(ID3D11Device* const dev
 	samplerClampDescription.MinLOD = 0.0f;
 	samplerClampDescription.MaxLOD = D3D11_FLOAT32_MAX;
 
-	result = device->CreateSamplerState(&samplerClampDescription, &m_sampleStateClamp);
+	result = device->CreateSamplerState(&samplerClampDescription, &sampleStateClamp);
 
 	if (FAILED(result))
 	{
@@ -159,7 +159,7 @@ TextureNormalSpecularShader::TextureNormalSpecularShader(ID3D11Device* const dev
 	lightMatrixBufferDescription.MiscFlags = 0;
 	lightMatrixBufferDescription.StructureByteStride = 0;
 
-	result = device->CreateBuffer(&lightMatrixBufferDescription, nullptr, &m_lightMatrixBuffer);
+	result = device->CreateBuffer(&lightMatrixBufferDescription, nullptr, &lightMatrixBuffer);
 
 	if (FAILED(result))
 	{
@@ -176,7 +176,7 @@ TextureNormalSpecularShader::TextureNormalSpecularShader(ID3D11Device* const dev
 	lightBufferDescription.MiscFlags = 0;
 	lightBufferDescription.StructureByteStride = 0;
 
-	result = device->CreateBuffer(&lightBufferDescription, nullptr, &m_lightBuffer);
+	result = device->CreateBuffer(&lightBufferDescription, nullptr, &lightBuffer);
 
 	if (FAILED(result))
 	{
@@ -193,34 +193,34 @@ TextureNormalSpecularShader::~TextureNormalSpecularShader()
 {
 	try
 	{
-		if (m_lightBuffer)
+		if (lightBuffer)
 		{
-			m_lightBuffer->Release();
-			m_lightBuffer = nullptr;
+			lightBuffer->Release();
+			lightBuffer = nullptr;
 		}
 
-		if (m_lightMatrixBuffer)
+		if (lightMatrixBuffer)
 		{
-			m_lightMatrixBuffer->Release();
-			m_lightMatrixBuffer = nullptr;
+			lightMatrixBuffer->Release();
+			lightMatrixBuffer = nullptr;
 		}
 
-		if (m_sampleStateClamp)
+		if (sampleStateClamp)
 		{
-			m_sampleStateClamp->Release();
-			m_sampleStateClamp = nullptr;
+			sampleStateClamp->Release();
+			sampleStateClamp = nullptr;
 		}
 
-		if (m_sampleStateWrap)
+		if (sampleStateWrap)
 		{
-			m_sampleStateWrap->Release();
-			m_sampleStateWrap = nullptr;
+			sampleStateWrap->Release();
+			sampleStateWrap = nullptr;
 		}
 
-		if (m_inputLayout)
+		if (inputLayout)
 		{
-			m_inputLayout->Release();
-			m_inputLayout = nullptr;
+			inputLayout->Release();
+			inputLayout = nullptr;
 		}
 	}
 	catch (exception& e)
@@ -273,7 +273,7 @@ bool TextureNormalSpecularShader::SetTextureNormalShaderParameters(ID3D11DeviceC
 	auto mappedResource = GetMappedSubResource();
 
 	//Lock light constant buffer
-	auto failed = deviceContext->Map(m_lightBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource);
+	auto failed = deviceContext->Map(lightBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource);
 
 	if (FAILED(failed))
 	{
@@ -303,15 +303,15 @@ bool TextureNormalSpecularShader::SetTextureNormalShaderParameters(ID3D11DeviceC
 	lightBufferDataPointer = nullptr;
 
 	//Unlock constant buffer
-	deviceContext->Unmap(m_lightBuffer, 0);
+	deviceContext->Unmap(lightBuffer, 0);
 
 	//Set light constant buffer in the pixel shader
-	deviceContext->PSSetConstantBuffers(GetPixelBufferResourceCount(), 1, &m_lightBuffer);
+	deviceContext->PSSetConstantBuffers(GetPixelBufferResourceCount(), 1, &lightBuffer);
 
 	IncrementPixelBufferResourceCount();
 
 	//Lock light constant buffer
-	failed = deviceContext->Map(m_lightMatrixBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource);
+	failed = deviceContext->Map(lightMatrixBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource);
 
 	if (FAILED(failed))
 	{
@@ -332,10 +332,10 @@ bool TextureNormalSpecularShader::SetTextureNormalShaderParameters(ID3D11DeviceC
 	lightMatrixBufferDataPointer = nullptr;
 
 	//Unlock constant buffer
-	deviceContext->Unmap(m_lightMatrixBuffer, 0);
+	deviceContext->Unmap(lightMatrixBuffer, 0);
 
 	//Set light matrix constant buffer to domain shader
-	deviceContext->DSSetConstantBuffers(GetDomainBufferResourceCount(), 1, &m_lightMatrixBuffer);
+	deviceContext->DSSetConstantBuffers(GetDomainBufferResourceCount(), 1, &lightMatrixBuffer);
 
 	IncrementDomainBufferResourceCount();
 
@@ -352,14 +352,14 @@ bool TextureNormalSpecularShader::SetTextureNormalShaderParameters(ID3D11DeviceC
 void TextureNormalSpecularShader::RenderShader(ID3D11DeviceContext* const deviceContext, const int indexCount, const int instanceCount) const
 {
 	//Set input layout
-	deviceContext->IASetInputLayout(m_inputLayout);
+	deviceContext->IASetInputLayout(inputLayout);
 
 	//Set our shaders
 	SetShader(deviceContext);
 
 	//Set pixel shaders sampler state
-	deviceContext->PSSetSamplers(0, 1, &m_sampleStateWrap);
-	deviceContext->PSSetSamplers(1, 1, &m_sampleStateClamp);
+	deviceContext->PSSetSamplers(0, 1, &sampleStateWrap);
+	deviceContext->PSSetSamplers(1, 1, &sampleStateClamp);
 
 	//Render model
 	//deviceContext->DrawIndexed(indexCount, 0, 0);

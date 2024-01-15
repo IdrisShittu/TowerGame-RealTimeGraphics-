@@ -38,14 +38,14 @@ private:
 		float transparency;
 	};
 
-	float m_transparency;
+	float transparency;
 
-	XMFLOAT3 m_colourTint;
+	XMFLOAT3 colourTint;
 
-	ID3D11InputLayout* m_inputLayout;
-	ID3D11SamplerState* m_sampleState;
+	ID3D11InputLayout* inputLayout;
+	ID3D11SamplerState* sampleState;
 
-	ID3D11Buffer* m_inverseViewMatrixBuffer;
-	ID3D11Buffer* m_particleParametersBuffer;
+	ID3D11Buffer* inverseViewMatrixBuffer;
+	ID3D11Buffer* particleParametersBuffer;
 };
 

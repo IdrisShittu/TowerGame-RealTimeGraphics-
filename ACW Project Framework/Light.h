@@ -57,21 +57,21 @@ private:
 	void UpdateLightDirection();
 	void UpdateLightViewMatrix(const float dt);
 
-	bool m_orbit;
-	bool m_directionalLight;
+	bool orbit;
+	bool directionalLight;
 
-	XMFLOAT3 m_lightPosition;
-	XMFLOAT3 m_lightRotation;
-	XMFLOAT3 m_lightPointPosition;
-	XMFLOAT3 m_lightOrbitDirection;
-	XMFLOAT3 m_lightDirection;
+	XMFLOAT3 lightPosition;
+	XMFLOAT3 lightRotation;
+	XMFLOAT3 lightPointPosition;
+	XMFLOAT3 lightOrbitDirection;
+	XMFLOAT3 lightDirection;
 
-	XMFLOAT4 m_ambientColour;
-	XMFLOAT4 m_diffuseColour;
-	XMFLOAT4 m_specularColour;
+	XMFLOAT4 ambientColour;
+	XMFLOAT4 diffuseColour;
+	XMFLOAT4 specularColour;
 
-	float m_specularPower;
+	float specularPower;
 
-	XMFLOAT4X4 m_lightViewMatrix;
-	XMFLOAT4X4 m_lightProjectionMatrix;
+	XMFLOAT4X4 lightViewMatrix;
+	XMFLOAT4X4 lightProjectionMatrix;
 };

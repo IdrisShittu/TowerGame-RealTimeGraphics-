@@ -21,9 +21,9 @@ public:
 	void SetAngularDrag(const float angularDrag);
 
 private:
-	bool m_useGravity;
-	float m_mass;
-	float m_drag;
-	float m_angularDrag;
+	bool useGravity;
+	float mass;
+	float drag;
+	float angularDrag;
 };
 

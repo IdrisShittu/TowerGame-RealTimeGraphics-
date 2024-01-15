@@ -46,28 +46,28 @@ public:
 private:
 	void UpdateLightPosition() const;
 
-	bool m_initializationFailed;
+	bool initializationFailed;
 
-	bool m_rocketLaunched;
-	bool m_changedParticleSystem;
-	bool m_particleSystemActive;
+	bool rocketLaunched;
+	bool changedParticleSystem;
+	bool particleSystemActive;
 
-	float m_blastRadius;
-	float m_initialVelocity;
-	float m_gravity;
-	XMFLOAT2 m_velocity;
-	XMFLOAT2 m_angularVelocity;
+	float blastRadius;
+	float initialVelocity;
+	float gravity;
+	XMFLOAT2 velocity;
+	XMFLOAT2 angularVelocity;
 
-	XMFLOAT3 m_initialLauncherPosition;
-	XMFLOAT3 m_initialLauncherRotation;
-	XMFLOAT3 m_lookAtRocketPosition;
-	XMFLOAT3 m_lookAtRocketConePosition;
+	XMFLOAT3 initialLauncherPosition;
+	XMFLOAT3 initialLauncherRotation;
+	XMFLOAT3 lookAtRocketPosition;
+	XMFLOAT3 lookAtRocketConePosition;
 
-	shared_ptr<GameObject> m_rocketCone;
-	shared_ptr<GameObject> m_rocketBody;
-	shared_ptr<GameObject> m_rocketCap;
-	shared_ptr<GameObject> m_rocketLauncher;
-	shared_ptr<Light> m_particleSystemLight;
-	shared_ptr<FireJetParticleSystem> m_fireJetParticleSystem;
-	shared_ptr<FireJetParticleSystem> m_coneFlameParticleSystem;
+	shared_ptr<GameObject> rocketCone;
+	shared_ptr<GameObject> rocketBody;
+	shared_ptr<GameObject> rocketCap;
+	shared_ptr<GameObject> rocketLauncher;
+	shared_ptr<Light> particleSystemLight;
+	shared_ptr<FireJetParticleSystem> fireJetParticleSystem;
+	shared_ptr<FireJetParticleSystem> coneFlameParticleSystem;
 };

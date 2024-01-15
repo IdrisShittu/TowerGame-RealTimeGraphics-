@@ -24,7 +24,7 @@ public:
 	bool GetInitializationState() const;
 
 private:
-	vector<ID3D11ShaderResourceView*> m_texture;
+	vector<ID3D11ShaderResourceView*> texture;
 
-	bool m_initializationFailed;
+	bool initializationFailed;
 };

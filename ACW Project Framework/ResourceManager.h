@@ -40,12 +40,12 @@ private:
 		XMFLOAT3 binormal;
 	};
 
-	map<const char*, int> m_indexCount;
-	map<const char*, int> m_instanceCount;
+	map<const char*, int> indexCount;
+	map<const char*, int> instanceCount;
 
-	map<const char*, ID3D11Buffer*> m_vertexBuffers;
-	map<const char*, ID3D11Buffer*> m_indexBuffers;
+	map<const char*, ID3D11Buffer*> vertexBuffers;
+	map<const char*, ID3D11Buffer*> indexBuffers;
 
-	map<const WCHAR*, ID3D11ShaderResourceView*> m_textures;
+	map<const WCHAR*, ID3D11ShaderResourceView*> textures;
 };
 

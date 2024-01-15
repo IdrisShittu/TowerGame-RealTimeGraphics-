@@ -45,6 +45,6 @@ public:
 
 
 private:
-	vector<XMFLOAT3> m_scales;
+	vector<XMFLOAT3> scales;
 };
 

@@ -1,6 +1,6 @@
 #include "Texture2DShader.h"
 
-Texture2DShader::Texture2DShader(ID3D11Device* const device, HWND const hwnd) : Shader("Texture2DVertexShader", "Texture2DHullShader", "Texture2DDomainShader", "Texture2DPixelShader", device, hwnd), m_inputLayout(nullptr), m_sampleState(nullptr)
+Texture2DShader::Texture2DShader(ID3D11Device* const device, HWND const hwnd) : Shader("Texture2DVertexShader", "Texture2DHullShader", "Texture2DDomainShader", "Texture2DPixelShader", device, hwnd), inputLayout(nullptr), sampleState(nullptr)
 {
 	D3D11_INPUT_ELEMENT_DESC polygonLayout[6];
 
@@ -61,7 +61,7 @@ Texture2DShader::Texture2DShader(ID3D11Device* const device, HWND const hwnd) : 
 	numberOfElements = sizeof(polygonLayout) / sizeof(polygonLayout[0]);
 
 	//Create vertex input layout
-	auto result = device->CreateInputLayout(polygonLayout, numberOfElements, GetVertexShaderBuffer()->GetBufferPointer(), GetVertexShaderBuffer()->GetBufferSize(), &m_inputLayout);
+	auto result = device->CreateInputLayout(polygonLayout, numberOfElements, GetVertexShaderBuffer()->GetBufferPointer(), GetVertexShaderBuffer()->GetBufferSize(), &inputLayout);
 
 	GetVertexShaderBuffer()->Release();
 	SetVertexShaderBuffer(nullptr);
@@ -91,7 +91,7 @@ Texture2DShader::Texture2DShader(ID3D11Device* const device, HWND const hwnd) : 
 	samplerDescription.MinLOD = 0.0f;
 	samplerDescription.MaxLOD = D3D11_FLOAT32_MAX;
 
-	result = device->CreateSamplerState(&samplerDescription, &m_sampleState);
+	result = device->CreateSamplerState(&samplerDescription, &sampleState);
 
 	if (FAILED(result))
 	{
@@ -108,16 +108,16 @@ Texture2DShader::~Texture2DShader()
 	try
 	{
 		//Release resources
-		if (m_sampleState)
+		if (sampleState)
 		{
-			m_sampleState->Release();
-			m_sampleState = nullptr;
+			sampleState->Release();
+			sampleState = nullptr;
 		}
 
-		if (m_inputLayout)
+		if (inputLayout)
 		{
-			m_inputLayout->Release();
-			m_inputLayout = nullptr;
+			inputLayout->Release();
+			inputLayout = nullptr;
 		}
 	}
 	catch (exception& e)
@@ -166,13 +166,13 @@ bool Texture2DShader::SetTextureShaderParameters(ID3D11DeviceContext* const devi
 
 void Texture2DShader::RenderShader(ID3D11DeviceContext* const deviceContext, const int indexCount, const int instanceCount) const {
 	//Set input layout
-	deviceContext->IASetInputLayout(m_inputLayout);
+	deviceContext->IASetInputLayout(inputLayout);
 
 	//Set our shaders
 	SetShader(deviceContext);
 
 	//Set pixel shaders sampler state
-	deviceContext->PSSetSamplers(0, 1, &m_sampleState);
+	deviceContext->PSSetSamplers(0, 1, &sampleState);
 
 	//Render triangle
 	//deviceContext->DrawIndexed(indexCount, 0, 0);

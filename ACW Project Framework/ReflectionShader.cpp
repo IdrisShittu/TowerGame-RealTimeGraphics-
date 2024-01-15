@@ -1,6 +1,6 @@
 #include "ReflectionShader.h"
 
-ReflectionShader::ReflectionShader(ID3D11Device* const device, HWND const hwnd) : Shader("ReflectionVertexShader", "ReflectionHullShader", "ReflectionDomainShader", "ReflectionPixelShader", device, hwnd), m_inputLayout(nullptr), m_sampleState(nullptr)
+ReflectionShader::ReflectionShader(ID3D11Device* const device, HWND const hwnd) : Shader("ReflectionVertexShader", "ReflectionHullShader", "ReflectionDomainShader", "ReflectionPixelShader", device, hwnd), inputLayout(nullptr), sampleState(nullptr)
 {
 	D3D11_INPUT_ELEMENT_DESC polygonLayout[7];
 
@@ -69,7 +69,7 @@ ReflectionShader::ReflectionShader(ID3D11Device* const device, HWND const hwnd) 
 	numberOfElements = sizeof(polygonLayout) / sizeof(polygonLayout[0]);
 
 	//Create vertex input layout
-	auto result = device->CreateInputLayout(polygonLayout, numberOfElements, GetVertexShaderBuffer()->GetBufferPointer(), GetVertexShaderBuffer()->GetBufferSize(), &m_inputLayout);
+	auto result = device->CreateInputLayout(polygonLayout, numberOfElements, GetVertexShaderBuffer()->GetBufferPointer(), GetVertexShaderBuffer()->GetBufferSize(), &inputLayout);
 
 	GetVertexShaderBuffer()->Release();
 	SetVertexShaderBuffer(nullptr);
@@ -99,7 +99,7 @@ ReflectionShader::ReflectionShader(ID3D11Device* const device, HWND const hwnd) 
 	samplerDescription.MinLOD = 0.0f;
 	samplerDescription.MaxLOD = D3D11_FLOAT32_MAX;
 
-	result = device->CreateSamplerState(&samplerDescription, &m_sampleState);
+	result = device->CreateSamplerState(&samplerDescription, &sampleState);
 
 	if (FAILED(result))
 	{
@@ -116,16 +116,16 @@ ReflectionShader::~ReflectionShader()
 	try
 	{
 		//Release resources
-		if (m_sampleState)
+		if (sampleState)
 		{
-			m_sampleState->Release();
-			m_sampleState = nullptr;
+			sampleState->Release();
+			sampleState = nullptr;
 		}
 
-		if (m_inputLayout)
+		if (inputLayout)
 		{
-			m_inputLayout->Release();
-			m_inputLayout = nullptr;
+			inputLayout->Release();
+			inputLayout = nullptr;
 		}
 	}
 	catch (exception& e)
@@ -181,13 +181,13 @@ bool ReflectionShader::SetReflectionShaderParameters(ID3D11DeviceContext* const 
 void ReflectionShader::RenderShader(ID3D11DeviceContext* const deviceContext, const int indexCount, const int instanceCount) const
 {
 	//Set input layout
-	deviceContext->IASetInputLayout(m_inputLayout);
+	deviceContext->IASetInputLayout(inputLayout);
 
 	//Set our shaders
 	SetShader(deviceContext);
 
 	//Set pixel shaders sampler state
-	deviceContext->PSSetSamplers(0, 1, &m_sampleState);
+	deviceContext->PSSetSamplers(0, 1, &sampleState);
 
 	//Render triangle
 	//deviceContext->DrawIndexed(indexCount, 0, 0);

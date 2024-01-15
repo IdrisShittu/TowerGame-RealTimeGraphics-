@@ -28,14 +28,14 @@ public:
 	bool Render(ID3D11DeviceContext* const deviceContext, const XMMATRIX& viewMatrix, const XMMATRIX& projectionMatrix, const XMFLOAT3& cameraPosition) const;
 
 private:
-	bool m_explosion;
+	bool explosion;
 
-	unsigned int m_smokeRenderCount;
-	unsigned int m_explosionRenderCount;
-	float m_timeSinceExplosion;
+	unsigned int smokeRenderCount;
+	unsigned int explosionRenderCount;
+	float timeSinceExplosion;
 
-	vector<shared_ptr<SmokeParticleSystem>> m_smokeParticleSystems;
-	vector<shared_ptr<FireJetParticleSystem>> m_fireJetParticleSystems;
-	vector<shared_ptr<Light>> m_explosionLights;
+	vector<shared_ptr<SmokeParticleSystem>> smokeParticleSystems;
+	vector<shared_ptr<FireJetParticleSystem>> fireJetParticleSystems;
+	vector<shared_ptr<Light>> explosionLights;
 };
 

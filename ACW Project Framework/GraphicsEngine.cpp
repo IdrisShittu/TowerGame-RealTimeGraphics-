@@ -30,11 +30,11 @@ bool GraphicsEngine::Initialize() {
 void GraphicsEngine::Execute() {
 	MSG msg = {};
 	while (true) {
-		if (PeekMessage(&msg, nullptr, 0, 0, PM_REMOVE)) {
+		if (PeekMessage(&msg, nullptr, 0, 0, PREMOVE)) {
 			TranslateMessage(&msg);
 			DispatchMessage(&msg);
 
-			if (msg.message == WM_QUIT) {
+			if (msg.message == WQUIT) {
 				break;
 			}
 		}
@@ -90,8 +90,8 @@ void GraphicsEngine::ProcessKeyAction(unsigned int key, std::function<void()> ac
 void GraphicsEngine::ProcessTimeScaleAndRocketRotation() {
 	if (input->IsKeyPressed(0x10)) {
 		ProcessKeyAction(0x54, [&]() { graphics->AddTimeScale(1); });
-		ProcessKeyAction(VK_OEM_COMMA, [&]() { graphics->RotateRocketLeft(); });
-		ProcessKeyAction(VK_OEM_PERIOD, [&]() { graphics->RotateRocketRight(); });
+		ProcessKeyAction(VK_OECOMMA, [&]() { graphics->RotateRocketLeft(); });
+		ProcessKeyAction(VK_OEPERIOD, [&]() { graphics->RotateRocketRight(); });
 	}
 	else {
 		ProcessKeyAction(0x54, [&]() { graphics->AddTimeScale(-1); });
@@ -139,11 +139,11 @@ void GraphicsEngine::RotateCamera() {
 
 LRESULT CALLBACK GraphicsEngine::MessageHandler(HWND const hwnd, UINT const umsg, WPARAM const wparam, LPARAM const lparam) {
 	switch (umsg) {
-	case WM_KEYDOWN:
+	case WKEYDOWN:
 		HandleKeyDown(static_cast<unsigned int>(wparam));
 		return 0;
 
-	case WM_KEYUP:
+	case WKEYUP:
 		HandleKeyUp(static_cast<unsigned int>(wparam));
 		return 0;
 
@@ -194,10 +194,10 @@ void GraphicsEngine::AdjustScreenSize(int& screenWidth, int& screenHeight) {
 	if (FULL_SCREEN) {
 		DEVMODE devMode = {};
 		devMode.dmSize = sizeof(devMode);
-		devMode.dmPelsWidth = static_cast<unsigned long>(GetSystemMetrics(SM_CXSCREEN));
-		devMode.dmPelsHeight = static_cast<unsigned long>(GetSystemMetrics(SM_CYSCREEN));
+		devMode.dmPelsWidth = static_cast<unsigned long>(GetSystemMetrics(SCXSCREEN));
+		devMode.dmPelsHeight = static_cast<unsigned long>(GetSystemMetrics(SCYSCREEN));
 		devMode.dmBitsPerPel = 32;
-		devMode.dmFields = DM_BITSPERPEL | DM_PELSWIDTH | DM_PELSHEIGHT;
+		devMode.dmFields = DBITSPERPEL | DPELSWIDTH | DPELSHEIGHT;
 
 		ChangeDisplaySettings(&devMode, CDS_FULLSCREEN);
 		screenWidth = devMode.dmPelsWidth;
@@ -210,8 +210,8 @@ void GraphicsEngine::AdjustScreenSize(int& screenWidth, int& screenHeight) {
 }
 
 void GraphicsEngine::CreateApplicationWindow(int screenWidth, int screenHeight) {
-	int posX = (GetSystemMetrics(SM_CXSCREEN) - screenWidth) / 2;
-	int posY = (GetSystemMetrics(SM_CYSCREEN) - screenHeight) / 2;
+	int posX = (GetSystemMetrics(SCXSCREEN) - screenWidth) / 2;
+	int posY = (GetSystemMetrics(SCYSCREEN) - screenHeight) / 2;
 
 	hwnd = CreateWindowEx(WS_EX_APPWINDOW, appName, appName,
 		WS_CLIPSIBLINGS | WS_CLIPCHILDREN | WS_POPUP,
@@ -244,13 +244,13 @@ void GraphicsEngine::ShutdownWindows() {
 
 LRESULT CALLBACK WndProc(HWND const hwnd, UINT const umsg, WPARAM const wparam, LPARAM const lparam) {
 	switch (umsg) {
-	case WM_DESTROY:
+	case WDESTROY:
 		{
 			PostQuitMessage(0);
 			return 0;
 		}
 
-	case WM_CLOSE:
+	case WCLOSE:
 		{
 			PostQuitMessage(0);
 			return 0;

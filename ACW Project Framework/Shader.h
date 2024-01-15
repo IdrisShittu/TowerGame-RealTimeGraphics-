@@ -98,40 +98,40 @@ private:
 		XMFLOAT2 padding;
 	};
 
-	bool m_initializationFailed;
+	bool initializationFailed;
 
-	int m_vertexBufferResourceCount;
-	int m_hullBufferResourceCount;
-	int m_domainBufferResourceCount;
-	int m_pixelBufferResourceCount;
+	int vertexBufferResourceCount;
+	int hullBufferResourceCount;
+	int domainBufferResourceCount;
+	int pixelBufferResourceCount;
 
-	int m_nonTextureRenderMode;
-	int m_textureDiffuseRenderMode;
-	int m_displacementRenderMode;
+	int nonTextureRenderMode;
+	int textureDiffuseRenderMode;
+	int displacementRenderMode;
 
-	float m_maxTessellationDistance;
-	float m_minTessellationDistance;
-	float m_maxTessellationFactor;
-	float m_minTessellationFactor;
+	float maxTessellationDistance;
+	float minTessellationDistance;
+	float maxTessellationFactor;
+	float minTessellationFactor;
 
-	float m_mipInterval;
-	float m_mipClampMinimum;
-	float m_mipClampMaximum;
-	float m_displacementPower;
+	float mipInterval;
+	float mipClampMinimum;
+	float mipClampMaximum;
+	float displacementPower;
 
-	ID3D10Blob* m_vertexShaderBuffer;
+	ID3D10Blob* vertexShaderBuffer;
 
-	D3D11_MAPPED_SUBRESOURCE m_mappedResource;
+	D3D11_MAPPED_SUBRESOURCE mappedResource;
 
-	ID3D11VertexShader* m_vertexShader;
-	ID3D11HullShader* m_hullShader;
-	ID3D11DomainShader* m_domainShader;
-	ID3D11PixelShader* m_pixelShader;
+	ID3D11VertexShader* vertexShader;
+	ID3D11HullShader* hullShader;
+	ID3D11DomainShader* domainShader;
+	ID3D11PixelShader* pixelShader;
 
-	ID3D11Buffer* m_matrixBuffer;
-	ID3D11Buffer* m_tessellationBuffer;
-	ID3D11Buffer* m_displacementBuffer;
-	ID3D11Buffer* m_cameraBuffer;
-	ID3D11Buffer* m_renderModeBuffer;
+	ID3D11Buffer* matrixBuffer;
+	ID3D11Buffer* tessellationBuffer;
+	ID3D11Buffer* displacementBuffer;
+	ID3D11Buffer* cameraBuffer;
+	ID3D11Buffer* renderModeBuffer;
 };
 

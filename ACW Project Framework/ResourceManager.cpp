@@ -13,19 +13,19 @@ ResourceManager::~ResourceManager()
 {
 	try
 	{
-		for (auto& shaderResource : m_textures)
+		for (auto& shaderResource : textures)
 		{
 			shaderResource.second->Release();
 			shaderResource.second = nullptr;
 		}
 
-		for (auto& buffer : m_indexBuffers)
+		for (auto& buffer : indexBuffers)
 		{
 			buffer.second->Release();
 			buffer.second = nullptr;
 		}
 
-		for (auto& buffer : m_vertexBuffers)
+		for (auto& buffer : vertexBuffers)
 		{
 			buffer.second->Release();
 			buffer.second = nullptr;
@@ -43,7 +43,7 @@ ResourceManager& ResourceManager::operator=(ResourceManager&& other) noexcept = 
 
 bool ResourceManager::GetModel(ID3D11Device* const device, const char* const modelFileName, ID3D11Buffer* &vertexBuffer, ID3D11Buffer* &indexBuffer)
 {
-	if (0 == m_vertexBuffers.count(modelFileName))
+	if (0 == vertexBuffers.count(modelFileName))
 	{
 		auto const result = LoadModel(device, modelFileName);
 
@@ -53,15 +53,15 @@ bool ResourceManager::GetModel(ID3D11Device* const device, const char* const mod
 		}
 	}
 
-	vertexBuffer = m_vertexBuffers.at(modelFileName);
-	indexBuffer = m_indexBuffers.at(modelFileName);
+	vertexBuffer = vertexBuffers.at(modelFileName);
+	indexBuffer = indexBuffers.at(modelFileName);
 
 	return true;
 }
 
 bool ResourceManager::GetTexture(ID3D11Device* const device, const WCHAR* const textureFileName, ID3D11ShaderResourceView* &texture)
 {
-	if (0 == m_textures.count(textureFileName))
+	if (0 == textures.count(textureFileName))
 	{
 		auto const result = LoadTexture(device, textureFileName);
 
@@ -71,7 +71,7 @@ bool ResourceManager::GetTexture(ID3D11Device* const device, const WCHAR* const 
 		}
 	}
 
-	texture = m_textures.at(textureFileName);
+	texture = textures.at(textureFileName);
 
 	return true;
 }
@@ -81,7 +81,7 @@ int ResourceManager::GetSizeOfVertexType() const {
 }
 
 int ResourceManager::GetIndexCount(const char* const modelFileName) const {
-	return m_indexCount.at(modelFileName);
+	return indexCount.at(modelFileName);
 }
 
 bool ResourceManager::LoadModel(ID3D11Device* const device, const char* const modelFileName)
@@ -322,10 +322,10 @@ bool ResourceManager::LoadModel(ID3D11Device* const device, const char* const mo
 		return false;
 	}
 
-	m_indexCount.insert(pair<const char*, int>(modelFileName, indexCount));
+	indexCount.insert(pair<const char*, int>(modelFileName, indexCount));
 
-	m_vertexBuffers.insert(pair<const char*, ID3D11Buffer*>(modelFileName, vertexBuffer));
-	m_indexBuffers.insert(pair<const char*, ID3D11Buffer*>(modelFileName, indexBuffer));
+	vertexBuffers.insert(pair<const char*, ID3D11Buffer*>(modelFileName, vertexBuffer));
+	indexBuffers.insert(pair<const char*, ID3D11Buffer*>(modelFileName, indexBuffer));
 
 	vertexBuffer = nullptr;
 	indexBuffer = nullptr;
@@ -347,7 +347,7 @@ bool ResourceManager::LoadTexture(ID3D11Device* const device, const WCHAR* textu
 
 	if (SUCCEEDED(result))
 	{
-		m_textures.insert(pair<const WCHAR*, ID3D11ShaderResourceView*>(textureFileName, texture));
+		textures.insert(pair<const WCHAR*, ID3D11ShaderResourceView*>(textureFileName, texture));
 		texture = nullptr;
 
 		return true;

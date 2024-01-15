@@ -41,6 +41,6 @@ public:
 	void TranslatePositionAt(const float x, const float y, const float z, const int index);
 
 private:
-	vector<XMFLOAT3> m_positions;
+	vector<XMFLOAT3> positions;
 };
 

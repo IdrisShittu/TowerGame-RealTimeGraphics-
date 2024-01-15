@@ -3,7 +3,7 @@
 
 #define _USE_MATH_DEFINES_
 
-Camera::Camera() : m_positionX(0), m_positionY(0), m_positionZ(0), m_rotationX(0), m_rotationY(0), m_rotationZ(0)
+Camera::Camera() : positionX(0), positionY(0), positionZ(0), rotationX(0), rotationY(0), rotationZ(0)
 {
 }
 
@@ -18,74 +18,74 @@ Camera& Camera::operator=(const Camera& other) = default;
 //CameraClass& CameraClass::operator=(CameraClass&& other) noexcept = default;
 
 XMFLOAT3 Camera::GetPosition() const {
-	return XMFLOAT3(m_positionX, m_positionY, m_positionZ);
+	return XMFLOAT3(positionX, positionY, positionZ);
 }
 
 XMFLOAT3 Camera::GetRotation() const {
-	return XMFLOAT3(m_rotationX, m_rotationY, m_rotationZ);
+	return XMFLOAT3(rotationX, rotationY, rotationZ);
 }
 
 void Camera::SetPosition(const XMFLOAT3& position)
 {
-	m_positionX = position.x;
-	m_positionY = position.y;
-	m_positionZ = position.z;
+	positionX = position.x;
+	positionY = position.y;
+	positionZ = position.z;
 }
 
 
 void Camera::SetPosition(const float x, const float y, const float z) {
-	m_positionX = x;
-	m_positionY = y;
-	m_positionZ = z;
+	positionX = x;
+	positionY = y;
+	positionZ = z;
 }
 
 void Camera::SetRotation(const float x, const float y, const float z) {
-	m_rotationX = x;
-	m_rotationY = y;
-	m_rotationZ = z;
+	rotationX = x;
+	rotationY = y;
+	rotationZ = z;
 }
 
 void Camera::AddPositionX(const float x)
 {
-	m_positionX += x;
+	positionX += x;
 }
 
 void Camera::AddPositionY(const float y)
 {
-	m_positionY += y;
+	positionY += y;
 }
 
 void Camera::AddPositionZ(const float z)
 {
-	m_positionZ += z;
+	positionZ += z;
 }
 
 void Camera::AddRotationX(const float x)
 {
-	m_rotationX += x;
+	rotationX += x;
 }
 
 void Camera::AddRotationY(const float y)
 {
-	m_rotationY += y;
+	rotationY += y;
 }
 
 void Camera::AddRotationZ(const float z)
 {
-	m_rotationZ += z;
+	rotationZ += z;
 }
 
 void Camera::GetViewMatrix(XMMATRIX& viewMatrix) const {
-	viewMatrix = XMLoadFloat4x4(&m_viewMatrix);
+	viewMatrix = XMLoadFloat4x4(&viewMatrix);
 }
 
 void Camera::Render() {
-	const auto positionVector = XMVectorSet(m_positionX, m_positionY, m_positionZ, 0.0f);
+	const auto positionVector = XMVectorSet(positionX, positionY, positionZ, 0.0f);
 
-	//const auto yaw = XMConvertToRadians(m_rotationX);
-	const auto yaw = XMConvertToRadians(m_rotationX);
-	const auto pitch = XMConvertToRadians(m_rotationY);
-	const auto roll = XMConvertToRadians(m_rotationZ);
+	//const auto yaw = XMConvertToRadians(rotationX);
+	const auto yaw = XMConvertToRadians(rotationX);
+	const auto pitch = XMConvertToRadians(rotationY);
+	const auto roll = XMConvertToRadians(rotationZ);
 
 	const auto rotationMatrix = XMMatrixRotationRollPitchYaw(pitch, yaw, roll);
 
@@ -98,5 +98,5 @@ void Camera::Render() {
 
 	//Create view matrix
 
-	XMStoreFloat4x4(&m_viewMatrix, XMMatrixLookAtLH(positionVector, lookAtVector, upVector));
+	XMStoreFloat4x4(&viewMatrix, XMMatrixLookAtLH(positionVector, lookAtVector, upVector));
 }

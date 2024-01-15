@@ -60,29 +60,29 @@ private:
 	void InitializeDeviceAndSwapChain(unsigned int const screenWidth, unsigned int const screenHeight, unsigned int const numerator, unsigned int const denominator, bool const fullScreen, HWND const hwnd);
 	void InitializeBuffers(unsigned int const screenWidth, unsigned int const screenHeight);
 
-	bool m_initializationFailed;
+	bool initializationFailed;
 
-	bool m_vSyncEnabled;
-	int m_videoCardMemory;
-	char m_videoCardDescription[128];
+	bool vSyncEnabled;
+	int videoCardMemory;
+	char videoCardDescription[128];
 
-	IDXGISwapChain* m_swapChain;
-	ID3D11Device* m_device;
-	ID3D11DeviceContext* m_deviceContext;
+	IDXGISwapChain* swapChain;
+	ID3D11Device* device;
+	ID3D11DeviceContext* deviceContext;
 
-	ID3D11RenderTargetView* m_renderTargetView;
+	ID3D11RenderTargetView* renderTargetView;
 
-	ID3D11Texture2D* m_depthStencilBuffer;
-	ID3D11DepthStencilState* m_depthStencilStateEnabled;
-	ID3D11DepthStencilState* m_depthStencilStateDisabled;;
-	ID3D11DepthStencilView* m_depthStencilView;
+	ID3D11Texture2D* depthStencilBuffer;
+	ID3D11DepthStencilState* depthStencilStateEnabled;
+	ID3D11DepthStencilState* depthStencilStateDisabled;;
+	ID3D11DepthStencilView* depthStencilView;
 
-	ID3D11RasterizerState* m_rasterStateNormal;
-	ID3D11RasterizerState* m_rasterStateWireFrame;
+	ID3D11RasterizerState* rasterStateNormal;
+	ID3D11RasterizerState* rasterStateWireFrame;
 
-	ID3D11BlendState* m_alphaEnabledBlendState;
-	ID3D11BlendState* m_alphaDisableBlendState;
+	ID3D11BlendState* alphaEnabledBlendState;
+	ID3D11BlendState* alphaDisableBlendState;
 
-	XMFLOAT4X4 m_projectionMatrix;
-	XMFLOAT4X4 m_orthographicMatrix;
+	XMFLOAT4X4 projectionMatrix;
+	XMFLOAT4X4 orthographicMatrix;
 };

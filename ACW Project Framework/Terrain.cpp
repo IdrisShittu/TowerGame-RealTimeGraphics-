@@ -1,7 +1,7 @@
 #include "Terrain.h"
 
 Terrain::Terrain(ID3D11Device* device, const XMFLOAT3& voxelArea, const XMFLOAT3& cubeScale, const shared_ptr<Shader>& shader, const shared_ptr<ResourceManager>& resourceManager) :
-    m_initializationFailed(false)
+    initializationFailed(false)
 {
     InitializeTerrainParameters(voxelArea, cubeScale);
 
@@ -13,7 +13,7 @@ Terrain::Terrain(ID3D11Device* device, const XMFLOAT3& voxelArea, const XMFLOAT3
     SetTessellationVariables(1.0f, 20.0f, 3.0f, 1.0f);
 
     if (GetInitializationState()) {
-        m_initializationFailed = true;
+        initializationFailed = true;
         MessageBox(nullptr, "Could not initialize model object.", "Error", MB_OK);
     }
 }
@@ -31,12 +31,12 @@ void Terrain::InitializeTerrainParameters(const XMFLOAT3& voxelArea, const XMFLO
     const int cubeScaleY = static_cast<int>(cubeScale.y);
     const int cubeScaleZ = static_cast<int>(cubeScale.z);
 
-    m_initialTerrainPositions.clear();
+    initialTerrainPositions.clear();
 
     for (int i = -x * cubeScaleX; i < x; i += cubeScaleX)
         for (int j = -y * cubeScaleY - cubeScaleY / 2; j < -(cubeScaleY / 2); j += cubeScaleY)
             for (int k = -z * cubeScaleZ; k < z; k += cubeScaleZ)
-                m_initialTerrainPositions.emplace_back(XMFLOAT3(i, j, k));
+                initialTerrainPositions.emplace_back(XMFLOAT3(i, j, k));
 }
 
 void Terrain::InitializeTerrainPositions(const XMFLOAT3& voxelArea, const XMFLOAT3& cubeScale)
@@ -51,13 +51,13 @@ void Terrain::InitializeTerrainPositions(const XMFLOAT3& voxelArea, const XMFLOA
     for (int i = -x * cubeScaleX; i < x; i += cubeScaleX)
         for (int j = -y * cubeScaleY - cubeScaleY / 2; j < -(cubeScaleY / 2); j += cubeScaleY)
             for (int k = -z * cubeScaleZ; k < z; k += cubeScaleZ)
-                m_initialTerrainPositions.emplace_back(XMFLOAT3(i, j, k));
+                initialTerrainPositions.emplace_back(XMFLOAT3(i, j, k));
 }
 
 void Terrain::AddComponents(ID3D11Device* device, const shared_ptr<Shader>& shader, const shared_ptr<ResourceManager>& resourceManager, const vector<const WCHAR*>& textureNames)
 {
     AddScaleComponent(XMFLOAT3(1.0f, 1.0f, 1.0f)); // Adjust the scale as needed
-    AddPositionComponent(m_initialTerrainPositions);
+    AddPositionComponent(initialTerrainPositions);
     AddRotationComponent(0.0f, 0.0f, 0.0f);
     AddRigidBodyComponent(true, 1.0f, 0.0f, 0.0f);
     AddModelComponent(device, ModelType::LowPolyCube, resourceManager);

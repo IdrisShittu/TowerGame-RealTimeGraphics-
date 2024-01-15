@@ -1,6 +1,6 @@
 #include "LightShader.h"
 
-LightShader::LightShader(ID3D11Device* const device, HWND const hwnd) : Shader("LightVertexShader", "LightHullShader", "LightDomainShader", "LightPixelShader", device, hwnd), m_inputLayout(nullptr), m_sampleState(nullptr), m_lightBuffer(nullptr)
+LightShader::LightShader(ID3D11Device* const device, HWND const hwnd) : Shader("LightVertexShader", "LightHullShader", "LightDomainShader", "LightPixelShader", device, hwnd), inputLayout(nullptr), sampleState(nullptr), lightBuffer(nullptr)
 {
 	if (GetInitializationState())
 	{
@@ -74,7 +74,7 @@ LightShader::LightShader(ID3D11Device* const device, HWND const hwnd) : Shader("
 	numberOfElements = sizeof(polygonLayout) / sizeof(polygonLayout[0]);
 
 	//Create vertex input layout
-	auto result = device->CreateInputLayout(polygonLayout, numberOfElements, GetVertexShaderBuffer()->GetBufferPointer(), GetVertexShaderBuffer()->GetBufferSize(), &m_inputLayout);
+	auto result = device->CreateInputLayout(polygonLayout, numberOfElements, GetVertexShaderBuffer()->GetBufferPointer(), GetVertexShaderBuffer()->GetBufferSize(), &inputLayout);
 
 	if (FAILED(result))
 	{
@@ -105,7 +105,7 @@ LightShader::LightShader(ID3D11Device* const device, HWND const hwnd) : Shader("
 	samplerDescription.MinLOD = 0.0f;
 	samplerDescription.MaxLOD = D3D11_FLOAT32_MAX;
 
-	result = device->CreateSamplerState(&samplerDescription, &m_sampleState);
+	result = device->CreateSamplerState(&samplerDescription, &sampleState);
 
 	if (FAILED(result))
 	{
@@ -122,7 +122,7 @@ LightShader::LightShader(ID3D11Device* const device, HWND const hwnd) : Shader("
 	lightBufferDescription.MiscFlags = 0;
 	lightBufferDescription.StructureByteStride = 0;
 
-	result = device->CreateBuffer(&lightBufferDescription, nullptr, &m_lightBuffer);
+	result = device->CreateBuffer(&lightBufferDescription, nullptr, &lightBuffer);
 
 	if (FAILED(result))
 	{
@@ -139,22 +139,22 @@ LightShader::~LightShader()
 	try
 	{
 		//Release resources
-		if (m_lightBuffer)
+		if (lightBuffer)
 		{
-			m_lightBuffer->Release();
-			m_lightBuffer = nullptr;
+			lightBuffer->Release();
+			lightBuffer = nullptr;
 		}
 
-		if (m_sampleState)
+		if (sampleState)
 		{
-			m_sampleState->Release();
-			m_sampleState = nullptr;
+			sampleState->Release();
+			sampleState = nullptr;
 		}
 
-		if (m_inputLayout)
+		if (inputLayout)
 		{
-			m_inputLayout->Release();
-			m_inputLayout = nullptr;
+			inputLayout->Release();
+			inputLayout = nullptr;
 		}
 	}
 	catch (exception& e)
@@ -200,7 +200,7 @@ bool LightShader::SetLightShaderParameters(ID3D11DeviceContext* const deviceCont
 	auto mappedResource = GetMappedSubResource();
 
 	//Lock light constant buffer
-	const auto failed = deviceContext->Map(m_lightBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource);
+	const auto failed = deviceContext->Map(lightBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource);
 
 	if (FAILED(failed))
 	{
@@ -225,9 +225,9 @@ bool LightShader::SetLightShaderParameters(ID3D11DeviceContext* const deviceCont
 	lightBufferDataPointer = nullptr;
 
 	//Unlock constant buffer
-	deviceContext->Unmap(m_lightBuffer, 0);
+	deviceContext->Unmap(lightBuffer, 0);
 
-	deviceContext->PSSetConstantBuffers(GetPixelBufferResourceCount(), 1, &m_lightBuffer);
+	deviceContext->PSSetConstantBuffers(GetPixelBufferResourceCount(), 1, &lightBuffer);
 
 	IncrementPixelBufferResourceCount();
 
@@ -236,13 +236,13 @@ bool LightShader::SetLightShaderParameters(ID3D11DeviceContext* const deviceCont
 
 void LightShader::RenderShader(ID3D11DeviceContext* const deviceContext, const int indexCount, const int instanceCount) const {
 	//Set input layout
-	deviceContext->IASetInputLayout(m_inputLayout);
+	deviceContext->IASetInputLayout(inputLayout);
 
 	//Set our shaders
 	SetShader(deviceContext);
 
 	//Set pixel shaders sampler state
-	deviceContext->PSSetSamplers(0, 1, &m_sampleState);
+	deviceContext->PSSetSamplers(0, 1, &sampleState);
 
 	//Render model
 	//deviceContext->DrawIndexed(indexCount, 0, 0);

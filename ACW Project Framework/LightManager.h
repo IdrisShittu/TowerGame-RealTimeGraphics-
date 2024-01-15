@@ -24,7 +24,7 @@ public:
 	const vector<shared_ptr<DirectionalLight>>& GetDirectionalLightList() const;
 
 private:
-	vector<shared_ptr<Light>> m_lights;
+	vector<shared_ptr<Light>> lights;
 
 };
 

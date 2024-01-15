@@ -1,6 +1,6 @@
 #include "ColourShader.h"
 
-ColourShader::ColourShader(ID3D11Device* const device, HWND const hwnd) : Shader("ColourVertexShader", "ColourHullShader", "ColourDomainShader", "ColourPixelShader", device, hwnd), m_inputLayout(nullptr) {
+ColourShader::ColourShader(ID3D11Device* const device, HWND const hwnd) : Shader("ColourVertexShader", "ColourHullShader", "ColourDomainShader", "ColourPixelShader", device, hwnd), inputLayout(nullptr) {
 	
 	D3D11_INPUT_ELEMENT_DESC polygonLayout[6];
 
@@ -61,7 +61,7 @@ ColourShader::ColourShader(ID3D11Device* const device, HWND const hwnd) : Shader
 	numberOfElements = sizeof(polygonLayout) / sizeof(polygonLayout[0]);
 
 	//Create vertex input layout
-	const auto result = device->CreateInputLayout(polygonLayout, numberOfElements, GetVertexShaderBuffer()->GetBufferPointer(), GetVertexShaderBuffer()->GetBufferSize(), &m_inputLayout);
+	const auto result = device->CreateInputLayout(polygonLayout, numberOfElements, GetVertexShaderBuffer()->GetBufferPointer(), GetVertexShaderBuffer()->GetBufferSize(), &inputLayout);
 
 	//Vertex shader buffer isn't need anymore, release it now
 	GetVertexShaderBuffer()->Release();
@@ -83,10 +83,10 @@ ColourShader::~ColourShader()
 	try
 	{
 		//Release resources
-		if (m_inputLayout)
+		if (inputLayout)
 		{
-			m_inputLayout->Release();
-			m_inputLayout = nullptr;
+			inputLayout->Release();
+			inputLayout = nullptr;
 		}
 	}
 	catch (exception& e)
@@ -123,7 +123,7 @@ bool ColourShader::SetColourShaderParameters(ID3D11DeviceContext* const deviceCo
 void ColourShader::RenderShader(ID3D11DeviceContext* const deviceContext, const int indexCount, const int instanceCount) const {
 	
 	//Set input layout
-	deviceContext->IASetInputLayout(m_inputLayout);
+	deviceContext->IASetInputLayout(inputLayout);
 
 	//Set our shaders
 	SetShader(deviceContext);

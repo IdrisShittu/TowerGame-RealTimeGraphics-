@@ -30,12 +30,12 @@ private:
 	void SetRenderTarget(ID3D11DeviceContext* const deviceContext, ID3D11DepthStencilView* const depthStencilView) const;
 	void ClearRenderTarget(ID3D11DeviceContext* const deviceContext, ID3D11DepthStencilView* const depthStencilView, const XMFLOAT4& RGBA) const;
 
-	bool m_initializationFailed;
+	bool initializationFailed;
 
-	ID3D11Texture2D* m_renderTargetTexture;
-	ID3D11RenderTargetView* m_renderTargetView;
-	ID3D11ShaderResourceView* m_shaderResourceView;
+	ID3D11Texture2D* renderTargetTexture;
+	ID3D11RenderTargetView* renderTargetView;
+	ID3D11ShaderResourceView* shaderResourceView;
 
-	shared_ptr<Shader> m_shader;
+	shared_ptr<Shader> shader;
 };
 

@@ -1,6 +1,6 @@
 #include "Shader.h"
 
-Shader::Shader(const string& vertexShaderFileName, const string& hullShaderFileName, const string& domainShaderFileName, const string& pixelShaderFileName, ID3D11Device* const device, HWND const hwnd) : m_initializationFailed(false), m_vertexBufferResourceCount(0), m_hullBufferResourceCount(0), m_domainBufferResourceCount(0), m_pixelBufferResourceCount(0), m_nonTextureRenderMode(0), m_textureDiffuseRenderMode(0), m_displacementRenderMode(0), m_maxTessellationDistance(1.0f), m_minTessellationDistance(1.0f), m_maxTessellationFactor(0.0f), m_minTessellationFactor(0.0f), m_mipInterval(0.0f), m_mipClampMinimum(0.0f), m_mipClampMaximum(0.0f), m_displacementPower(0.0f), m_vertexShaderBuffer(nullptr), m_vertexShader(nullptr), m_hullShader(nullptr), m_domainShader(nullptr), m_pixelShader(nullptr), m_matrixBuffer(nullptr), m_tessellationBuffer(nullptr), m_cameraBuffer(nullptr), m_renderModeBuffer(nullptr)
+Shader::Shader(const string& vertexShaderFileName, const string& hullShaderFileName, const string& domainShaderFileName, const string& pixelShaderFileName, ID3D11Device* const device, HWND const hwnd) : initializationFailed(false), vertexBufferResourceCount(0), hullBufferResourceCount(0), domainBufferResourceCount(0), pixelBufferResourceCount(0), nonTextureRenderMode(0), textureDiffuseRenderMode(0), displacementRenderMode(0), maxTessellationDistance(1.0f), minTessellationDistance(1.0f), maxTessellationFactor(0.0f), minTessellationFactor(0.0f), mipInterval(0.0f), mipClampMinimum(0.0f), mipClampMaximum(0.0f), displacementPower(0.0f), vertexShaderBuffer(nullptr), vertexShader(nullptr), hullShader(nullptr), domainShader(nullptr), pixelShader(nullptr), matrixBuffer(nullptr), tessellationBuffer(nullptr), cameraBuffer(nullptr), renderModeBuffer(nullptr)
 {
 	ID3D10Blob* errorMessage = nullptr;
 
@@ -10,11 +10,11 @@ Shader::Shader(const string& vertexShaderFileName, const string& hullShaderFileN
 
 	const auto hlslVertexFileName = vertexShaderFileName + ".hlsl";
 
-	auto result = D3DCompileFromFile(CA2W(hlslVertexFileName.c_str()), nullptr, nullptr, vertexShaderFileName.c_str(), "vs_5_0", D3D10_SHADER_ENABLE_STRICTNESS, /*D3DCOMPILE_DEBUG*/ 0, &m_vertexShaderBuffer, &errorMessage);
+	auto result = D3DCompileFromFile(CA2W(hlslVertexFileName.c_str()), nullptr, nullptr, vertexShaderFileName.c_str(), "vs_5_0", D3D10_SHADER_ENABLE_STRICTNESS, /*D3DCOMPILE_DEBUG*/ 0, &vertexShaderBuffer, &errorMessage);
 
 	if (FAILED(result))
 	{
-		m_initializationFailed = true;
+		initializationFailed = true;
 
 		if (errorMessage)
 		{
@@ -80,7 +80,7 @@ Shader::Shader(const string& vertexShaderFileName, const string& hullShaderFileN
 
 	if (FAILED(result))
 	{
-		m_initializationFailed = true;
+		initializationFailed = true;
 
 		if (errorMessage)
 		{
@@ -95,35 +95,35 @@ Shader::Shader(const string& vertexShaderFileName, const string& hullShaderFileN
 	}
 
 	//Create vertex, hull, domain and pixel shader from buffer
-	result = device->CreateVertexShader(m_vertexShaderBuffer->GetBufferPointer(), m_vertexShaderBuffer->GetBufferSize(), nullptr, &m_vertexShader);
+	result = device->CreateVertexShader(vertexShaderBuffer->GetBufferPointer(), vertexShaderBuffer->GetBufferSize(), nullptr, &vertexShader);
 
 	if (FAILED(result))
 	{
-		m_initializationFailed = true;
+		initializationFailed = true;
 		return;
 	}
 
-	result = device->CreateHullShader(hullShaderBuffer->GetBufferPointer(), hullShaderBuffer->GetBufferSize(), nullptr, &m_hullShader);
+	result = device->CreateHullShader(hullShaderBuffer->GetBufferPointer(), hullShaderBuffer->GetBufferSize(), nullptr, &hullShader);
 
 	if (FAILED(result))
 	{
-		m_initializationFailed = true;
+		initializationFailed = true;
 		return;
 	}
 
-	result = device->CreateDomainShader(domainShaderBuffer->GetBufferPointer(), domainShaderBuffer->GetBufferSize(), nullptr, &m_domainShader);
+	result = device->CreateDomainShader(domainShaderBuffer->GetBufferPointer(), domainShaderBuffer->GetBufferSize(), nullptr, &domainShader);
 
 	if (FAILED(result))
 	{
-		m_initializationFailed = true;
+		initializationFailed = true;
 		return;
 	}
 
-	result = device->CreatePixelShader(pixelShaderBuffer->GetBufferPointer(), pixelShaderBuffer->GetBufferSize(), nullptr, &m_pixelShader);
+	result = device->CreatePixelShader(pixelShaderBuffer->GetBufferPointer(), pixelShaderBuffer->GetBufferSize(), nullptr, &pixelShader);
 
 	if (FAILED(result))
 	{
-		m_initializationFailed = true;
+		initializationFailed = true;
 		return;
 	}
 
@@ -148,11 +148,11 @@ Shader::Shader(const string& vertexShaderFileName, const string& hullShaderFileN
 	matrixBufferDescription.StructureByteStride = 0;
 
 	//Create constant buffer pointer so we can access the vertex shaders constant buffer
-	result = device->CreateBuffer(&matrixBufferDescription, nullptr, &m_matrixBuffer);
+	result = device->CreateBuffer(&matrixBufferDescription, nullptr, &matrixBuffer);
 
 	if (FAILED(result))
 	{
-		m_initializationFailed = true;
+		initializationFailed = true;
 		return;
 	}
 
@@ -165,11 +165,11 @@ Shader::Shader(const string& vertexShaderFileName, const string& hullShaderFileN
 	tessellationBufferDescription.MiscFlags = 0;
 	tessellationBufferDescription.StructureByteStride = 0;
 
-	result = device->CreateBuffer(&tessellationBufferDescription, nullptr, &m_tessellationBuffer);
+	result = device->CreateBuffer(&tessellationBufferDescription, nullptr, &tessellationBuffer);
 
 	if (FAILED(result))
 	{
-		m_initializationFailed = true;
+		initializationFailed = true;
 		return;
 	}
 
@@ -182,11 +182,11 @@ Shader::Shader(const string& vertexShaderFileName, const string& hullShaderFileN
 	cameraBufferDescription.MiscFlags = 0;
 	cameraBufferDescription.StructureByteStride = 0;
 
-	result = device->CreateBuffer(&cameraBufferDescription, nullptr, &m_cameraBuffer);
+	result = device->CreateBuffer(&cameraBufferDescription, nullptr, &cameraBuffer);
 
 	if (FAILED(result))
 	{
-		m_initializationFailed = true;
+		initializationFailed = true;
 		return;
 	}
 
@@ -199,11 +199,11 @@ Shader::Shader(const string& vertexShaderFileName, const string& hullShaderFileN
 	displacementBufferDescription.MiscFlags = 0;
 	displacementBufferDescription.StructureByteStride = 0;
 
-	result = device->CreateBuffer(&displacementBufferDescription, nullptr, &m_displacementBuffer);
+	result = device->CreateBuffer(&displacementBufferDescription, nullptr, &displacementBuffer);
 
 	if (FAILED(result))
 	{
-		m_initializationFailed = true;
+		initializationFailed = true;
 		return;
 	}
 
@@ -216,11 +216,11 @@ Shader::Shader(const string& vertexShaderFileName, const string& hullShaderFileN
 	renderModeBufferDescription.MiscFlags = 0;
 	renderModeBufferDescription.StructureByteStride = 0;
 
-	result = device->CreateBuffer(&renderModeBufferDescription, nullptr, &m_renderModeBuffer);
+	result = device->CreateBuffer(&renderModeBufferDescription, nullptr, &renderModeBuffer);
 
 	if (FAILED(result))
 	{
-		m_initializationFailed = true;
+		initializationFailed = true;
 		return;
 	}
 }
@@ -233,58 +233,58 @@ Shader::~Shader() {
 
 	try
 	{
-		if (m_renderModeBuffer)
+		if (renderModeBuffer)
 		{
-			m_renderModeBuffer->Release();
-			m_renderModeBuffer = nullptr;
+			renderModeBuffer->Release();
+			renderModeBuffer = nullptr;
 		}
 
-		if (m_cameraBuffer)
+		if (cameraBuffer)
 		{
-			m_cameraBuffer->Release();
-			m_cameraBuffer = nullptr;
+			cameraBuffer->Release();
+			cameraBuffer = nullptr;
 		}
 
-		if (m_tessellationBuffer)
+		if (tessellationBuffer)
 		{
-			m_tessellationBuffer->Release();
-			m_tessellationBuffer = nullptr;
+			tessellationBuffer->Release();
+			tessellationBuffer = nullptr;
 		}
 
-		if (m_matrixBuffer)
+		if (matrixBuffer)
 		{
-			m_matrixBuffer->Release();
-			m_matrixBuffer = nullptr;
+			matrixBuffer->Release();
+			matrixBuffer = nullptr;
 		}
 
-		if (m_pixelShader)
+		if (pixelShader)
 		{
-			m_pixelShader->Release();
-			m_pixelShader = nullptr;
+			pixelShader->Release();
+			pixelShader = nullptr;
 		}
 
-		if (m_domainShader)
+		if (domainShader)
 		{
-			m_domainShader->Release();
-			m_domainShader = nullptr;
+			domainShader->Release();
+			domainShader = nullptr;
 		}
 
-		if (m_hullShader)
+		if (hullShader)
 		{
-			m_hullShader->Release();
-			m_hullShader = nullptr;
+			hullShader->Release();
+			hullShader = nullptr;
 		}
 
-		if (m_vertexShader)
+		if (vertexShader)
 		{
-			m_vertexShader->Release();
-			m_vertexShader = nullptr;
+			vertexShader->Release();
+			vertexShader = nullptr;
 		}
 
-		if (m_vertexShaderBuffer)
+		if (vertexShaderBuffer)
 		{
-			m_vertexShaderBuffer->Release();
-			m_vertexShaderBuffer = nullptr;
+			vertexShaderBuffer->Release();
+			vertexShaderBuffer = nullptr;
 		}
 	}
 	catch (exception& e)
@@ -299,126 +299,126 @@ Shader& Shader::operator=(Shader&& other) noexcept = default;
 
 
 bool Shader::GetInitializationState() const {
-	return m_initializationFailed;
+	return initializationFailed;
 }
 
 int Shader::GetVertexBufferResourceCount() const {
-	return m_vertexBufferResourceCount;
+	return vertexBufferResourceCount;
 }
 
 int Shader::GetHullBufferResourceCount() const {
-	return m_hullBufferResourceCount;
+	return hullBufferResourceCount;
 }
 
 int Shader::GetDomainBufferResourceCount() const {
-	return m_domainBufferResourceCount;
+	return domainBufferResourceCount;
 }
 
 int Shader::GetPixelBufferResourceCount() const {
-	return m_pixelBufferResourceCount;
+	return pixelBufferResourceCount;
 }
 
 void Shader::IncrementVertexBufferResourceCount() {
-	m_vertexBufferResourceCount++;
+	vertexBufferResourceCount++;
 }
 
 void Shader::IncrementHullBufferResourceCount() {
-	m_hullBufferResourceCount++;
+	hullBufferResourceCount++;
 }
 
 void Shader::IncrementDomainBufferResourceCount() {
-	m_domainBufferResourceCount++;
+	domainBufferResourceCount++;
 }
 
 void Shader::IncrementPixelBufferResourceCount() {
-	m_pixelBufferResourceCount++;
+	pixelBufferResourceCount++;
 }
 
 ID3D10Blob* Shader::GetVertexShaderBuffer() const
 {
-	return m_vertexShaderBuffer;
+	return vertexShaderBuffer;
 }
 
 ID3D11Buffer* Shader::GetMatrixBuffer() const
 {
-	return m_matrixBuffer;
+	return matrixBuffer;
 }
 
 ID3D11Buffer* Shader::GetCameraBuffer() const {
-	return m_cameraBuffer;
+	return cameraBuffer;
 }
 
 const D3D11_MAPPED_SUBRESOURCE& Shader::GetMappedSubResource() const
 {
-	return m_mappedResource;
+	return mappedResource;
 }
 
 void Shader::SetRenderModeStates(const int nonTextured, const int texturedDiffuse, const int displacementEnabled)
 {
-	m_nonTextureRenderMode = nonTextured;
-	m_textureDiffuseRenderMode = texturedDiffuse;
-	m_displacementRenderMode = displacementEnabled;
+	nonTextureRenderMode = nonTextured;
+	textureDiffuseRenderMode = texturedDiffuse;
+	displacementRenderMode = displacementEnabled;
 }
 
 void Shader::GetTessellationVariables(float& maxTessellationDistance, float& minTessellationDistance, float& maxTessellationFactor, float& minTessellationFactor) const
 {
-	maxTessellationDistance = m_maxTessellationDistance;
-	minTessellationDistance = m_minTessellationDistance;
-	maxTessellationFactor = m_maxTessellationFactor;
-	minTessellationFactor = m_minTessellationFactor;
+	maxTessellationDistance = maxTessellationDistance;
+	minTessellationDistance = minTessellationDistance;
+	maxTessellationFactor = maxTessellationFactor;
+	minTessellationFactor = minTessellationFactor;
 }
 
 void Shader::SetTessellationVariables(const float& maxTessellationDistance, const float& minTessellationDistance, const float& maxTessellationFactor, const float& minTessellationFactor)
 {
-	m_maxTessellationDistance = maxTessellationDistance;
-	m_minTessellationDistance = minTessellationDistance;
-	m_maxTessellationFactor = maxTessellationFactor;
-	m_minTessellationFactor = minTessellationFactor;
+	maxTessellationDistance = maxTessellationDistance;
+	minTessellationDistance = minTessellationDistance;
+	maxTessellationFactor = maxTessellationFactor;
+	minTessellationFactor = minTessellationFactor;
 }
 
 void Shader::GetDisplacementVariables(float& mipInterval, float& mipClampMinimum, float& mipClampMaximum, float& displacementPower) const
 {
-	mipInterval = m_mipInterval;
-	mipClampMinimum = m_mipClampMinimum;
-	mipClampMaximum = m_mipClampMaximum;
-	displacementPower = m_displacementPower;
+	mipInterval = mipInterval;
+	mipClampMinimum = mipClampMinimum;
+	mipClampMaximum = mipClampMaximum;
+	displacementPower = displacementPower;
 }
 
 void Shader::SetDisplacementVariables(const float& mipInterval, const float& mipClampMinimum, const float& mipClampMaximum, const float& displacementPower)
 {
-	m_mipInterval = mipInterval;
-	m_mipClampMinimum = mipClampMinimum;
-	m_mipClampMaximum = mipClampMaximum;
-	m_displacementPower = displacementPower;
+	mipInterval = mipInterval;
+	mipClampMinimum = mipClampMinimum;
+	mipClampMaximum = mipClampMaximum;
+	displacementPower = displacementPower;
 }
 
 void Shader::SetInitializationState(const bool state)
 {
-	m_initializationFailed = state;
+	initializationFailed = state;
 }
 
 void Shader::SetVertexShaderBuffer(ID3D10Blob* const vertexShaderBuffer)
 {
-	m_vertexShaderBuffer = vertexShaderBuffer;
+	vertexShaderBuffer = vertexShaderBuffer;
 }
 
 
 bool Shader::SetShaderParameters(ID3D11DeviceContext* const deviceContext, const XMMATRIX& viewMatrix, const XMMATRIX& projectionMatrix, const XMFLOAT3& cameraPosition) {
 	
-	m_vertexBufferResourceCount = 0;
-	m_hullBufferResourceCount = 0;
-	m_domainBufferResourceCount = 0;
-	m_pixelBufferResourceCount = 0;
+	vertexBufferResourceCount = 0;
+	hullBufferResourceCount = 0;
+	domainBufferResourceCount = 0;
+	pixelBufferResourceCount = 0;
 
 	//Lock matrix constant buffer and set the transposed matrices to it
-	auto result = deviceContext->Map(m_matrixBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &m_mappedResource);
+	auto result = deviceContext->Map(matrixBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource);
 
 	if (FAILED(result))
 	{
 		return false;
 	}
 
-	auto* matrixVertexBufferDataPointer = static_cast<MatrixBufferType*>(m_mappedResource.pData);
+	auto* matrixVertexBufferDataPointer = static_cast<MatrixBufferType*>(mappedResource.pData);
 
 	//This will be our world matrix inverse
 	matrixVertexBufferDataPointer->viewMatrix = XMMatrixTranspose(XMMATRIX());
@@ -428,48 +428,48 @@ bool Shader::SetShaderParameters(ID3D11DeviceContext* const deviceContext, const
 	matrixVertexBufferDataPointer = nullptr;
 
 	//Unlock constant buffer
-	deviceContext->Unmap(m_matrixBuffer, 0);
+	deviceContext->Unmap(matrixBuffer, 0);
 
 	//Set the updated constant buffer
-	deviceContext->VSSetConstantBuffers(m_vertexBufferResourceCount, 1, &m_matrixBuffer);
+	deviceContext->VSSetConstantBuffers(vertexBufferResourceCount, 1, &matrixBuffer);
 
-	m_vertexBufferResourceCount++;
+	vertexBufferResourceCount++;
 
 	//Lock matrix constant buffer and set the transposed matrices to it
-	result = deviceContext->Map(m_tessellationBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &m_mappedResource);
+	result = deviceContext->Map(tessellationBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource);
 
 	if (FAILED(result))
 	{
 		return false;
 	}
 
-	auto* tessellationBufferDataPointer = static_cast<TessellationBufferType*>(m_mappedResource.pData);
+	auto* tessellationBufferDataPointer = static_cast<TessellationBufferType*>(mappedResource.pData);
 
 
-	tessellationBufferDataPointer->maxTessellationDistance = m_maxTessellationDistance;
-	tessellationBufferDataPointer->minTessellationDistance = m_minTessellationDistance;
-	tessellationBufferDataPointer->maxTessellationFactor = m_maxTessellationFactor;
-	tessellationBufferDataPointer->minTessellationFactor = m_minTessellationFactor;
+	tessellationBufferDataPointer->maxTessellationDistance = maxTessellationDistance;
+	tessellationBufferDataPointer->minTessellationDistance = minTessellationDistance;
+	tessellationBufferDataPointer->maxTessellationFactor = maxTessellationFactor;
+	tessellationBufferDataPointer->minTessellationFactor = minTessellationFactor;
 
 	tessellationBufferDataPointer = nullptr;
 
 	//Unlock constant buffer
-	deviceContext->Unmap(m_tessellationBuffer, 0);
+	deviceContext->Unmap(tessellationBuffer, 0);
 
 	//Set the updated constant buffer
-	deviceContext->VSSetConstantBuffers(m_vertexBufferResourceCount, 1, &m_tessellationBuffer);
+	deviceContext->VSSetConstantBuffers(vertexBufferResourceCount, 1, &tessellationBuffer);
 
-	m_vertexBufferResourceCount++;
+	vertexBufferResourceCount++;
 
 	//Lock camera constant buffer
-	result = deviceContext->Map(m_cameraBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &m_mappedResource);
+	result = deviceContext->Map(cameraBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource);
 
 	if (FAILED(result))
 	{
 		return false;
 	}
 
-	auto* cameraBufferDataPointer = static_cast<CameraBufferType*>(m_mappedResource.pData);
+	auto* cameraBufferDataPointer = static_cast<CameraBufferType*>(mappedResource.pData);
 
 	cameraBufferDataPointer->cameraPosition = cameraPosition;
 	cameraBufferDataPointer->padding = 0.0f;
@@ -477,87 +477,87 @@ bool Shader::SetShaderParameters(ID3D11DeviceContext* const deviceContext, const
 	cameraBufferDataPointer = nullptr;
 
 	//Unlock constant buffer
-	deviceContext->Unmap(m_cameraBuffer, 0);
+	deviceContext->Unmap(cameraBuffer, 0);
 
 	//Set camera constant buffer in the vertex shader and DomainShader
-	deviceContext->VSSetConstantBuffers(m_vertexBufferResourceCount, 1, &m_cameraBuffer);
+	deviceContext->VSSetConstantBuffers(vertexBufferResourceCount, 1, &cameraBuffer);
 
-	m_vertexBufferResourceCount++;
+	vertexBufferResourceCount++;
 
-	result = deviceContext->Map(m_matrixBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &m_mappedResource);
+	result = deviceContext->Map(matrixBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource);
 
 	if (FAILED(result))
 	{
 		return false;
 	}
 
-	auto* matrixDomainBufferDataPointer = static_cast<MatrixBufferType*>(m_mappedResource.pData);
+	auto* matrixDomainBufferDataPointer = static_cast<MatrixBufferType*>(mappedResource.pData);
 
 	matrixDomainBufferDataPointer->viewMatrix = XMMatrixTranspose(viewMatrix);
 	matrixDomainBufferDataPointer->projectionMatrix = XMMatrixTranspose(projectionMatrix);
 
 	matrixDomainBufferDataPointer = nullptr;
 
-	deviceContext->Unmap(m_matrixBuffer, 0);
+	deviceContext->Unmap(matrixBuffer, 0);
 
-	deviceContext->DSSetConstantBuffers(m_domainBufferResourceCount, 1, &m_matrixBuffer);
+	deviceContext->DSSetConstantBuffers(domainBufferResourceCount, 1, &matrixBuffer);
 
-	m_domainBufferResourceCount++;
+	domainBufferResourceCount++;
 
 	//Lock matrix constant buffer and set the transposed matrices to it
-	result = deviceContext->Map(m_displacementBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &m_mappedResource);
+	result = deviceContext->Map(displacementBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource);
 
 	if (FAILED(result))
 	{
 		return false;
 	}
 
-	auto* displacementBufferDataPointer = static_cast<DisplacementBuffer*>(m_mappedResource.pData);
+	auto* displacementBufferDataPointer = static_cast<DisplacementBuffer*>(mappedResource.pData);
 
-	displacementBufferDataPointer->mipInterval = m_mipInterval;
-	displacementBufferDataPointer->mipMinimum = m_mipClampMinimum;
-	displacementBufferDataPointer->mipMaximum = m_mipClampMaximum;
-	displacementBufferDataPointer->displacementPower = m_displacementPower;
-	displacementBufferDataPointer->displacementEnabled = m_displacementRenderMode;
+	displacementBufferDataPointer->mipInterval = mipInterval;
+	displacementBufferDataPointer->mipMinimum = mipClampMinimum;
+	displacementBufferDataPointer->mipMaximum = mipClampMaximum;
+	displacementBufferDataPointer->displacementPower = displacementPower;
+	displacementBufferDataPointer->displacementEnabled = displacementRenderMode;
 	displacementBufferDataPointer->padding = XMFLOAT3();
 
 	displacementBufferDataPointer = nullptr;
 
-	deviceContext->Unmap(m_displacementBuffer, 0);
+	deviceContext->Unmap(displacementBuffer, 0);
 
-	deviceContext->DSSetConstantBuffers(m_domainBufferResourceCount, 1, &m_displacementBuffer);
+	deviceContext->DSSetConstantBuffers(domainBufferResourceCount, 1, &displacementBuffer);
 
-	m_domainBufferResourceCount++;
+	domainBufferResourceCount++;
 
-	result = deviceContext->Map(m_renderModeBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &m_mappedResource);
+	result = deviceContext->Map(renderModeBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource);
 
 	if (FAILED(result))
 	{
 		return false;
 	}
 
-	auto* renderModeBufferDataPointer = static_cast<RenderModeBufferType*>(m_mappedResource.pData);
+	auto* renderModeBufferDataPointer = static_cast<RenderModeBufferType*>(mappedResource.pData);
 
-	renderModeBufferDataPointer->nonTexture = m_nonTextureRenderMode;
-	renderModeBufferDataPointer->textureDiffuse = m_textureDiffuseRenderMode;
+	renderModeBufferDataPointer->nonTexture = nonTextureRenderMode;
+	renderModeBufferDataPointer->textureDiffuse = textureDiffuseRenderMode;
 	renderModeBufferDataPointer->padding = XMFLOAT2();
 
 	renderModeBufferDataPointer = nullptr;
 
-	deviceContext->Unmap(m_renderModeBuffer, 0);
+	deviceContext->Unmap(renderModeBuffer, 0);
 
-	deviceContext->PSSetConstantBuffers(m_pixelBufferResourceCount, 1, &m_renderModeBuffer);
+	deviceContext->PSSetConstantBuffers(pixelBufferResourceCount, 1, &renderModeBuffer);
 
-	m_pixelBufferResourceCount++;
+	pixelBufferResourceCount++;
 
 	return true;
 }
 
 void Shader::SetShader(ID3D11DeviceContext* const deviceContext) const {
-	deviceContext->VSSetShader(m_vertexShader, nullptr, 0);
-	deviceContext->HSSetShader(m_hullShader, nullptr, 0);
-	deviceContext->DSSetShader(m_domainShader, nullptr, 0);
-	deviceContext->PSSetShader(m_pixelShader, nullptr, 0);
+	deviceContext->VSSetShader(vertexShader, nullptr, 0);
+	deviceContext->HSSetShader(hullShader, nullptr, 0);
+	deviceContext->DSSetShader(domainShader, nullptr, 0);
+	deviceContext->PSSetShader(pixelShader, nullptr, 0);
 }
 
 void Shader::OutputShaderErrorMessage(ID3D10Blob* errorMessage, HWND const hwnd, const LPCSTR& shaderFileName) const {

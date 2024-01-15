@@ -1,6 +1,6 @@
 #include "RigidBody.h"
 
-RigidBody::RigidBody(const bool useGravity, const float mass, const float drag, const float angularDrag) : m_useGravity(useGravity), m_mass(mass), m_drag(drag), m_angularDrag(angularDrag) {
+RigidBody::RigidBody(const bool useGravity, const float mass, const float drag, const float angularDrag) : useGravity(useGravity), mass(mass), drag(drag), angularDrag(angularDrag) {
 	
 }
 
@@ -15,33 +15,33 @@ RigidBody& RigidBody::operator=(const RigidBody& other) = default;
 RigidBody& RigidBody::operator=(RigidBody&& other) noexcept = default;
 
 bool RigidBody::GetUseGravity() const {
-	return m_useGravity;
+	return useGravity;
 }
 
 float RigidBody::GetMass() const {
-	return m_mass;
+	return mass;
 }
 
 float RigidBody::GetDrag() const {
-	return m_drag;
+	return drag;
 }
 
 float RigidBody::GetAngularDrag() const {
-	return m_angularDrag;
+	return angularDrag;
 }
 
 void RigidBody::SetUseGravity(const bool useGravity) {
-	m_useGravity = useGravity;
+	useGravity = useGravity;
 }
 
 void RigidBody::SetMass(const float mass) {
-	m_mass = mass;
+	mass = mass;
 }
 
 void RigidBody::SetDrag(const float drag) {
-	m_drag = drag;
+	drag = drag;
 }
 
 void RigidBody::SetAngularDrag(const float angularDrag) {
-	m_angularDrag = angularDrag;
+	angularDrag = angularDrag;
 }

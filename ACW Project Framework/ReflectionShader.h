@@ -26,7 +26,7 @@ private:
 	bool SetReflectionShaderParameters(ID3D11DeviceContext* const deviceContext, const XMMATRIX& viewMatrix, const XMMATRIX& projectionMatrix, const vector<ID3D11ShaderResourceView*>& textures, const XMFLOAT3& cameraPosition);
 	void RenderShader(ID3D11DeviceContext* const deviceContext, const int indexCount, const int instanceCount) const;
 
-	ID3D11InputLayout* m_inputLayout;
-	ID3D11SamplerState* m_sampleState;
+	ID3D11InputLayout* inputLayout;
+	ID3D11SamplerState* sampleState;
 };
 

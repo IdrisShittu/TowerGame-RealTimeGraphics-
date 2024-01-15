@@ -38,21 +38,21 @@ private:
 		XMMATRIX worldMatrix;
 	};
 
-	bool m_initializationFailed;
-	bool m_bufferDescriptionSizeChange = false;
-	bool m_updateInstanceBuffer;
+	bool initializationFailed;
+	bool bufferDescriptionSizeChange = false;
+	bool updateInstanceBuffer;
 
-	int m_sizeOfVertexType = 0;
+	int sizeOfVertexType = 0;
 
-	int m_indexCount = 0;
-	int m_instanceCount;
+	int indexCount = 0;
+	int instanceCount;
 
-	ID3D11Buffer* m_vertexBuffer = nullptr;
-	ID3D11Buffer* m_indexBuffer = nullptr;
-	ID3D11Buffer* m_instanceBuffer = nullptr;
+	ID3D11Buffer* vertexBuffer = nullptr;
+	ID3D11Buffer* indexBuffer = nullptr;
+	ID3D11Buffer* instanceBuffer = nullptr;
 
-	InstanceType* m_instances = nullptr;
+	InstanceType* instances = nullptr;
 
-	shared_ptr<D3D11_BUFFER_DESC> m_instanceBufferDescription;
-	shared_ptr<D3D11_SUBRESOURCE_DATA> m_instanceData;
+	shared_ptr<D3D11_BUFFER_DESC> instanceBufferDescription;
+	shared_ptr<D3D11_SUBRESOURCE_DATA> instanceData;
 };
