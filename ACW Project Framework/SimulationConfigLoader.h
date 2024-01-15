@@ -11,12 +11,17 @@ class SimulationConfigLoader
 {
 public:
 	explicit SimulationConfigLoader(const char* const configurationFileName);
+	void LoadConfiguration(const char* const configurationFile);
+	XMFLOAT3 ReadXMFLOAT3(std::ifstream& fileStream);
+	XMFLOAT4 ReadXMFLOAT4(std::ifstream& fileStream);
+	void InitializeAntTweakBar();
+	void AddAntTweakBarVars();
 	SimulationConfigLoader(const SimulationConfigLoader& other); // Copy Constructor
 	SimulationConfigLoader(SimulationConfigLoader&& other) noexcept; // Move Constructor
 	~SimulationConfigLoader();
 
-	SimulationConfigLoader& operator = (const SimulationConfigLoader& other) = default; // Copy Assignment Operator
-	SimulationConfigLoader& operator = (SimulationConfigLoader&& other) noexcept = default; // Move Assignment Operator
+	SimulationConfigLoader& operator = (const SimulationConfigLoader& other) = default;
+	SimulationConfigLoader& operator = (SimulationConfigLoader&& other) noexcept = default; 
 
 	const XMFLOAT3& GetCameraPosition() const;
 
@@ -40,6 +45,7 @@ public:
 	const XMFLOAT3& GetLaunchPadScale() const;
 	const XMFLOAT4& GetLaunchPadTessellationValues() const;
 	const XMFLOAT4& GetLaunchPadDisplacementValues() const;
+
 private:
 
 	XMFLOAT3  rocketPosition;
@@ -68,4 +74,3 @@ private:
 	TwBar* antTweakBarConfigData;
 
 };
-
