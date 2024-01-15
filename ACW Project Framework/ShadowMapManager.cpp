@@ -1,8 +1,8 @@
 #include "ShadowMapManager.h"
 
-ShadowMapManager::ShadowMapManager(HWND const hwnd, ID3D11Device* const device, const shared_ptr<Shader>& depthShader, const int lightCount, const int shadowMapWidth, const int shadowMapHeight) : initializationFailed(false), depthShader(nullptr), renderToTextures(), shadowMapShaderResources()
+ShadowMapManager::ShadowMapManager(HWND const hwnd, ID3D11Device* const device, const shared_ptr<Shader>& depthShadr, const int lightCount, const int shadowMapWidth, const int shadowMapHeight) : initializationFailed(false), depthShader(nullptr), renderToTextures(), shadowMapShaderResources()
 {
-	depthShader = depthShader;
+	depthShader = depthShadr;
 
 	//Generate the number of shadow maps depending on the light count
 	for (auto i = 0; i < lightCount; i++)

@@ -164,7 +164,7 @@ void Rocket::AdjustRotationLeft() const
 	{
 		auto launchAngle = rocketBody->GetRotationComponent()->GetRotationAt(0);
 
-		launchAngle.z -= -XPIDIV4 / 30.0f;
+		launchAngle.z -= -XM_PIDIV4 / 30.0f;
 
 		if (launchAngle.z > 0.0f)
 		{
@@ -182,11 +182,11 @@ void Rocket::AdjustRotationRight() const
 	{
 		auto launchAngle = rocketBody->GetRotationComponent()->GetRotationAt(0);
 
-		launchAngle.z += -XPIDIV4 / 30.0f;
+		launchAngle.z += -XM_PIDIV4 / 30.0f;
 
-		if (launchAngle.z < -XPIDIV2 + (XPIDIV4 / 10.0f))
+		if (launchAngle.z < -XM_PIDIV2 + (XM_PIDIV4 / 10.0f))
 		{
-			launchAngle.z = -XPIDIV2 + (XPIDIV4 / 10.0f);
+			launchAngle.z = -XM_PIDIV2 + (XM_PIDIV4 / 10.0f);
 		}
 
 		rocketBody->SetRotation(launchAngle);
@@ -201,12 +201,12 @@ void Rocket::LaunchRocket()
 		const auto launchAngle = rocketBody->GetRotationComponent()->GetRotationAt(0);
 
 		//Turn the rocket angle to the launch angle we need
-		const auto angle = XPIDIV2 + launchAngle.z;
+		const auto angle = XM_PIDIV2 + launchAngle.z;
 
 		velocity = XMFLOAT2(initialVelocity * cos(angle), initialVelocity * sin(angle));
 		angularVelocity = XMFLOAT2(cos(-angle), sin(-angle));
 
-		const auto totalAngularMovement = angle + XPIDIV2;
+		const auto totalAngularMovement = angle + XM_PIDIV2;
 
 		const auto v = velocity.x * velocity.x + velocity.y * velocity.y;
 
@@ -273,13 +273,13 @@ const XMFLOAT3& Rocket::GetLookAtRocketConePosition()
 
 	auto lookAtRocketConeScale = XMVECTOR();
 	auto lookAtRocketConeRotation = XMVECTOR();
-	auto lookAtRocketConePosition = XMVECTOR();
+	auto lookAtRocketConePos = XMVECTOR();
 
-	XMMatrixDecompose(&lookAtRocketConeScale, &lookAtRocketConeRotation, &lookAtRocketConePosition, posMatrix);
+	XMMatrixDecompose(&lookAtRocketConeScale, &lookAtRocketConeRotation, &lookAtRocketConePos, posMatrix);
 
 	auto conePositionFloat = XMFLOAT3();
 
-	XMStoreFloat3(&conePositionFloat, lookAtRocketConePosition);
+	XMStoreFloat3(&conePositionFloat, lookAtRocketConePos);
 
 	lookAtRocketConePosition = XMFLOAT3(conePositionFloat.x, conePositionFloat.y, conePositionFloat.z - rocketBodyScale.x);
 

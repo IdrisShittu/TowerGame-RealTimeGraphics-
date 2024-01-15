@@ -30,18 +30,18 @@ float RigidBody::GetAngularDrag() const {
 	return angularDrag;
 }
 
-void RigidBody::SetUseGravity(const bool useGravity) {
-	useGravity = useGravity;
+void RigidBody::SetUseGravity(const bool useGrav) {
+	useGravity = useGrav;
 }
 
-void RigidBody::SetMass(const float mass) {
-	mass = mass;
+void RigidBody::SetMass(const float ma) {
+	mass = ma;
 }
 
-void RigidBody::SetDrag(const float drag) {
-	drag = drag;
+void RigidBody::SetDrag(const float dg) {
+	drag = dg;
 }
 
-void RigidBody::SetAngularDrag(const float angularDrag) {
-	angularDrag = angularDrag;
+void RigidBody::SetAngularDrag(const float angularDg) {
+	angularDrag = angularDg;
 }

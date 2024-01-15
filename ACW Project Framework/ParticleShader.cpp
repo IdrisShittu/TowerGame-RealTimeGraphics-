@@ -161,14 +161,10 @@ ParticleShader::~ParticleShader()
 	}
 }
 
-//ParticleShader& ParticleShader::operator=(const ParticleShader& other) = default;
-
-//ParticleShader& ParticleShader::operator=(ParticleShader&& other) noexcept = default;
-
-void ParticleShader::SetParticleParameters(const XMFLOAT3& colourTint, const float transparency)
+void ParticleShader::SetParticleParameters(const XMFLOAT3& clTint, const float tr)
 {
-	colourTint = colourTint;
-	transparency = transparency;
+	colourTint = clTint;
+	transparency = tr;
 }
 
 

@@ -98,9 +98,9 @@ RenderToTexture& RenderToTexture::operator=(const RenderToTexture& other) = defa
 
 RenderToTexture& RenderToTexture::operator=(RenderToTexture&& other) noexcept = default;
 
-void RenderToTexture::SetShader(const shared_ptr<Shader>& shader)
+void RenderToTexture::SetShader(const shared_ptr<Shader>& sh)
 {
-	shader = shader;
+	shader = sh;
 }
 
 bool RenderToTexture::RenderObjectsToTexture(ID3D11DeviceContext* const deviceContext, ID3D11DepthStencilView* const depthStencilView, const XMMATRIX& viewMatrix, const XMMATRIX& projectionMatrix, const vector<shared_ptr<Light>>& pointLightList, const vector<shared_ptr<GameObject>>& gameObjects, const XMFLOAT3& cameraPosition) const

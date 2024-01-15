@@ -4,18 +4,18 @@ Texture::Texture(ID3D11Device* const device, const vector<const WCHAR*>& texture
 {
 	for (unsigned int i = 0; i < textureFileNames.size(); i++)
 	{
-		ID3D11ShaderResourceView* texture = nullptr;
+		ID3D11ShaderResourceView* tex = nullptr;
 
-		const auto result = resourceManager->GetTexture(device, textureFileNames[i], texture);
+		const auto result = resourceManager->GetTexture(device, textureFileNames[i], tex);
 
 		if (!result)
 		{
 			initializationFailed = true;
 		}
 
-		texture.push_back(texture);
+		texture.push_back(tex);
 
-		texture = nullptr;
+		tex = nullptr;
 	}
 }
 
@@ -31,8 +31,6 @@ Texture::~Texture()
 		{
 			if (texture)
 			{
-				//Don't release, resource manager does this
-				//texture->Release();
 				texture = nullptr;
 			}
 		}

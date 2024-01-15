@@ -23,8 +23,8 @@ void GameObject::AddPositionComponent() {
 	position = make_shared<Position>();
 }
 
-void GameObject::AddPositionComponent(const XMFLOAT3& position) {
-	position = make_shared<Position>(position);
+void GameObject::AddPositionComponent(const XMFLOAT3& pos) {
+	position = make_shared<Position>(pos);
 }
 
 void GameObject::AddPositionComponent(const float x, const float y, const float z) {
@@ -35,9 +35,9 @@ void GameObject::AddPositionComponent(const vector<XMFLOAT3>& positions) {
 	position = make_shared<Position>(positions);
 }
 
-void GameObject::SetPosition(const XMFLOAT3& position)
+void GameObject::SetPosition(const XMFLOAT3& pos)
 {
-	position->SetPositionAt(position, 0);
+	position->SetPositionAt(pos, 0);
 
 	updateInstanceData = true;
 
@@ -69,8 +69,8 @@ void GameObject::AddRotationComponent() {
 	rotation = make_shared<Rotation>();
 }
 
-void GameObject::AddRotationComponent(const XMFLOAT3& rotation) {
-	rotation = make_shared<Rotation>(rotation);
+void GameObject::AddRotationComponent(const XMFLOAT3& rot) {
+	rotation = make_shared<Rotation>(rot);
 }
 
 void GameObject::AddRotationComponent(const float x, const float y, const float z) {
@@ -82,9 +82,9 @@ void GameObject::AddRotationComponent(const vector<XMFLOAT3>& rotations)
 	rotation = make_shared<Rotation>(rotations);
 }
 
-void GameObject::SetRotation(const XMFLOAT3& rotation)
+void GameObject::SetRotation(const XMFLOAT3& rot)
 {
-	rotation->SetRotationAt(rotation, 0);
+	rotation->SetRotationAt(rot, 0);
 
 	updateInstanceData = true;
 }
@@ -110,8 +110,8 @@ void GameObject::AddScaleComponent() {
 	scale = make_shared<Scale>();
 }
 
-void GameObject::AddScaleComponent(const XMFLOAT3& scale) {
-	scale = make_shared<Scale>(scale);
+void GameObject::AddScaleComponent(const XMFLOAT3& sc) {
+	scale = make_shared<Scale>(sc);
 }
 
 void GameObject::AddScaleComponent(const float x, const float y, const float z) {
@@ -123,9 +123,9 @@ void GameObject::AddScaleComponent(const vector<XMFLOAT3>& scales)
 	scale = make_shared<Scale>(scales);
 }
 
-void GameObject::SetScale(const XMFLOAT3& scale)
+void GameObject::SetScale(const XMFLOAT3& sc)
 {
-	scale->SetScaleAt(scale, 0);
+	scale->SetScaleAt(sc, 0);
 
 	updateInstanceData = true;
 }
@@ -210,32 +210,32 @@ void GameObject::AddTextureComponent(ID3D11Device* const device, const vector<co
 	}
 }
 
-void GameObject::SetShaderComponent(const shared_ptr<Shader>& shader) {
-	shader = shader;
+void GameObject::SetShaderComponent(const shared_ptr<Shader>& sh) {
+	shader = sh;
 }
 
-void GameObject::AddParentGameObject(const shared_ptr<GameObject>& parentObject)
+void GameObject::AddParentGameObject(const shared_ptr<GameObject>& ptObject)
 {
-	parentObject = parentObject;
+	parentObject = ptObject;
 
 	updateInstanceData = true;
 }
 
-void GameObject::SetTessellationVariables(const float& maxTessellationDistance, const float& minTessellationDistance, const float& maxTessellationFactor, const float& minTessellationFactor)
+void GameObject::SetTessellationVariables(const float& mxTessellationDistance, const float& mnTessellationDistance, const float& mxTessellationFactor, const float& mnTessellationFactor)
 {
-	maxTessellationDistance = maxTessellationDistance;
-	minTessellationDistance = minTessellationDistance;
-	maxTessellationFactor = maxTessellationFactor;
-	minTessellationFactor = minTessellationFactor;
+	maxTessellationDistance = mxTessellationDistance;
+	minTessellationDistance = mnTessellationDistance;
+	maxTessellationFactor = mxTessellationFactor;
+	minTessellationFactor = mnTessellationFactor;
 }
 
 
-void GameObject::SetDisplacementVariables(const float& mipInterval, const float& mipClampMinimum, const float& mipClampMaximum, const float& displacementPower)
+void GameObject::SetDisplacementVariables(const float& mipInterv, const float& mipClampMin, const float& mipClampMax, const float& displacementPow)
 {
-	mipInterval = mipInterval;
-	mipClampMinimum = mipClampMinimum;
-	mipClampMaximum = mipClampMaximum;
-	displacementPower = displacementPower;
+	mipInterval = mipInterv;
+	mipClampMinimum = mipClampMin;
+	mipClampMaximum = mipClampMax;
+	displacementPower = displacementPow;
 }
 
 const shared_ptr<Position>& GameObject::GetPositionComponent() const {

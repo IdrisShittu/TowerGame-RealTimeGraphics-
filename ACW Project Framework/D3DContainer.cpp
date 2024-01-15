@@ -104,7 +104,7 @@ depthStencilStateEnabled(nullptr), depthStencilStateDisabled(nullptr), depthSten
 	deviceContext->RSSetViewports(1, &viewport);
 
 	//Initialize and create projection matrix
-	auto const fieldOfView = static_cast<float>(XPI / 4.0f);
+	auto const fieldOfView = static_cast<float>(XM_PI / 4.0f);
 	auto const screenAspect = static_cast<float>(screenWidth) / static_cast<float>(screenHeight);
 
 	XMStoreFloat4x4(&projectionMatrix, XMMatrixPerspectiveFovLH(fieldOfView, screenAspect, screenNear, screenDepth));
@@ -247,7 +247,7 @@ void D3DContainer::InitializeFactoryAdapter(unsigned int const screenWidth, unsi
 	}
 
 	//Get the number of modes that fit the display format for our adapter output (monitor)
-	result = adapterOutput->GetDisplayModeList(DXGI_FORMAT_R8G8B8A8_UNORM, DXGI_ENUMODES_INTERLACED, &numOfModes, nullptr);
+	result = adapterOutput->GetDisplayModeList(DXGI_FORMAT_R8G8B8A8_UNORM, DXGI_ENUM_MODES_INTERLACED, &numOfModes, nullptr);
 
 	if (FAILED(result))
 	{
@@ -265,7 +265,7 @@ void D3DContainer::InitializeFactoryAdapter(unsigned int const screenWidth, unsi
 	}
 
 	//Now we fill the list
-	result = adapterOutput->GetDisplayModeList(DXGI_FORMAT_R8G8B8A8_UNORM, DXGI_ENUMODES_INTERLACED, &numOfModes, displayModeList);
+	result = adapterOutput->GetDisplayModeList(DXGI_FORMAT_R8G8B8A8_UNORM, DXGI_ENUM_MODES_INTERLACED, &numOfModes, displayModeList);
 
 	if (FAILED(result))
 	{
@@ -409,7 +409,7 @@ void D3DContainer::InitializeBuffers(unsigned int const screenWidth, unsigned in
 		screenHeight, //Height
 		1, //MipLevels
 		1, //ArraySize
-		DXGI_FORMAT_D24_UNORS8_UINT, //Format
+		DXGI_FORMAT_D24_UNORM_S8_UINT, //Format
 		DXGI_SAMPLE_DESC {
 			1, //Count
 			0 //Quality
@@ -502,7 +502,7 @@ void D3DContainer::InitializeBuffers(unsigned int const screenWidth, unsigned in
 	ZeroMemory(&depthStencilViewDescription, sizeof(depthStencilViewDescription));
 
 	depthStencilViewDescription = {
-		DXGI_FORMAT_D24_UNORS8_UINT, //Format
+		DXGI_FORMAT_D24_UNORM_S8_UINT, //Format
 		D3D11_DSV_DIMENSION_TEXTURE2D, //ViewDimension
 		0 //Flags
 	};
@@ -646,14 +646,14 @@ void D3DContainer::DisableAlphaBlending() const
 	deviceContext->OMSetBlendState(alphaDisableBlendState, nullptr, 0xffffffff);
 }
 
-void D3DContainer::GetProjectionMatrix(XMMATRIX& projectionMatrix) const
+void D3DContainer::GetProjectionMatrix(XMMATRIX& projectionMat) const
 {
-	projectionMatrix = XMLoadFloat4x4(&projectionMatrix);
+	projectionMat = XMLoadFloat4x4(&projectionMatrix);
 }
 
-void D3DContainer::GetOrthogonalMatrix(XMMATRIX& orthographicMatrix) const
+void D3DContainer::GetOrthogonalMatrix(XMMATRIX& orthographicMat) const
 {
-	orthographicMatrix = XMLoadFloat4x4(&orthographicMatrix);
+	orthographicMat = XMLoadFloat4x4(&orthographicMatrix);
 }
 
 void D3DContainer::GetVideoCardInfo(char* const cardName, int& memory) const

@@ -15,14 +15,14 @@ Light::~Light() = default;
 
 //Light& Light::operator=(Light&& other) noexcept = default;
 
-void Light::SetLightOrbit(const bool orbit)
+void Light::SetLightOrbit(const bool orb)
 {
-	orbit = orbit;
+	orbit = orb;
 }
 
-void Light::SetDirectionalLight(const bool directionalLight)
+void Light::SetDirectionalLight(const bool dLight)
 {
-	directionalLight = directionalLight;
+	directionalLight = dLight;
 }
 
 
@@ -30,32 +30,32 @@ void Light::SetLightPosition(const float x, const float y, const float z) {
 	lightPosition = XMFLOAT3(x, y, z);
 }
 
-void Light::SetLightPosition(const XMFLOAT3& lightPosition) {
-	lightPosition = lightPosition;
+void Light::SetLightPosition(const XMFLOAT3& lPosition) {
+	lightPosition = lPosition;
 }
 
 void Light::SetLightPointPosition(const float x, const float y, const float z) {
 	lightPointPosition = XMFLOAT3(x, y, z);
 }
 
-void Light::SetLightPointPosition(const XMFLOAT3& lightPointPosition) {
-	lightPointPosition = lightPointPosition;
+void Light::SetLightPointPosition(const XMFLOAT3& lPPosition) {
+	lightPointPosition = lPPosition;
 }
 
 void Light::SetAmbientColour(const float red, const float green, const float blue, const float alpha) {
 	ambientColour = XMFLOAT4(red, green, blue, alpha);
 }
 
-void Light::SetAmbientColour(const XMFLOAT4& ambientColour) {
-	ambientColour = ambientColour;
+void Light::SetAmbientColour(const XMFLOAT4& ambColour) {
+	ambientColour = ambColour;
 }
 
 void Light::SetDiffuseColour(const float red, const float green, const float blue, const float alpha) {
 	diffuseColour = XMFLOAT4(red, green, blue, alpha);
 }
 
-void Light::SetDiffuseColour(const XMFLOAT4& diffuseColour) {
-	diffuseColour = diffuseColour;
+void Light::SetDiffuseColour(const XMFLOAT4& diffColour) {
+	diffuseColour = diffColour;
 }
 
 void Light::SetSpecularColour(const float red, const float green, const float blue, const float alpha)
@@ -63,13 +63,13 @@ void Light::SetSpecularColour(const float red, const float green, const float bl
 	specularColour = XMFLOAT4(red, green, blue, alpha);
 }
 
-void Light::SetSpecularColour(const XMFLOAT4& specularColour) {
-	specularColour = specularColour;
+void Light::SetSpecularColour(const XMFLOAT4& spColour) {
+	specularColour = spColour;
 }
 
-void Light::SetSpecularPower(const float specularPower)
+void Light::SetSpecularPower(const float spPower)
 {
-	specularPower = specularPower;
+	specularPower = spPower;
 }
 
 void Light::GenerateLightProjectionMatrix(const float width, const float length, const float screenNear, const float screenDepth) {
@@ -146,9 +146,9 @@ void Light::UpdateLightViewMatrix(const float dt)
 {
 	auto parentMatrix = XMMatrixIdentity();
 
-	const float pitch = lightOrbitDirection.z * (XPIDIV4 * dt);
-	//const float yaw = lightDirection.y * (XPIDIV4 * dt);
-	const float roll = lightOrbitDirection.x * (XPIDIV4 * dt);
+	const float pitch = lightOrbitDirection.z * (XM_PIDIV4 * dt);
+	//const float yaw = lightDirection.y * (XM_PIDIV4 * dt);
+	const float roll = lightOrbitDirection.x * (XM_PIDIV4 * dt);
 
 	if (orbit)
 	{

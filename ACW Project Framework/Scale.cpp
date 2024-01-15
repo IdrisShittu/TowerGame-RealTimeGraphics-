@@ -15,9 +15,9 @@ Scale::Scale(const float x, const float y, const float z) {
 	scales.emplace_back(XMFLOAT3(x, y, z));
 }
 
-Scale::Scale(const vector<XMFLOAT3>& scales)
+Scale::Scale(const vector<XMFLOAT3>& sc)
 {
-	scales = scales;
+	scales = sc;
 }
 
 Scale::Scale(const Scale& other) = default;

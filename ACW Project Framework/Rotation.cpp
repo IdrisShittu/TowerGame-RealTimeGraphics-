@@ -15,9 +15,9 @@ Rotation::Rotation(const float x, const float y, const float z) {
 	rotations.emplace_back(XMFLOAT3(x, y, z));
 }
 
-Rotation::Rotation(const vector<XMFLOAT3>& rotations)
+Rotation::Rotation(const vector<XMFLOAT3>& rot)
 {
-	rotations = rotations;
+	rotations = rot;
 }
 
 Rotation::Rotation(const Rotation& other) = default;

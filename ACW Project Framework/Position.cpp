@@ -12,9 +12,9 @@ Position::Position(const float x, const float y, const float z) {
 	positions.emplace_back(XMFLOAT3(x, y, z));
 }
 
-Position::Position(const vector<XMFLOAT3>& positions)
+Position::Position(const vector<XMFLOAT3>& pos)
 {
-	positions = positions;
+	positions = pos;
 }
 
 Position::Position(const Position& other) = default;

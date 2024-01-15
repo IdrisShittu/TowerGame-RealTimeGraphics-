@@ -75,8 +75,8 @@ void Camera::AddRotationZ(const float z)
 	rotationZ += z;
 }
 
-void Camera::GetViewMatrix(XMMATRIX& viewMatrix) const {
-	viewMatrix = XMLoadFloat4x4(&viewMatrix);
+void Camera::GetViewMatrix(XMMATRIX& viewMat) const {
+	viewMat = XMLoadFloat4x4(&viewMatrix);
 }
 
 void Camera::Render() {

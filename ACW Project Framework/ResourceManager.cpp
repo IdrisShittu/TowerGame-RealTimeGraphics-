@@ -108,7 +108,7 @@ bool ResourceManager::LoadModel(ID3D11Device* const device, const char* const mo
 
 	auto faceCount = 0;
 	auto vertexCount = 0;
-	auto indexCount = 0;
+	auto indCount = 0;
 
 	VertexType* vertices = nullptr;
 	unsigned long* indices = nullptr;
@@ -138,7 +138,7 @@ bool ResourceManager::LoadModel(ID3D11Device* const device, const char* const mo
 				return false;
 			}
 
-			indexCount = faceCount * 3;
+			indCount = faceCount * 3;
 		}
 
 		if (0 == strcmp(cmd, "v"))
@@ -303,7 +303,7 @@ bool ResourceManager::LoadModel(ID3D11Device* const device, const char* const mo
 	D3D11_BUFFER_DESC indexBufferDescription;
 
 	indexBufferDescription.Usage = D3D11_USAGE_DEFAULT;
-	indexBufferDescription.ByteWidth = sizeof(unsigned long) * indexCount;
+	indexBufferDescription.ByteWidth = sizeof(unsigned long) * indCount;
 	indexBufferDescription.BindFlags = D3D11_BIND_INDEX_BUFFER;
 	indexBufferDescription.CPUAccessFlags = 0;
 	indexBufferDescription.MiscFlags = 0;
@@ -322,7 +322,7 @@ bool ResourceManager::LoadModel(ID3D11Device* const device, const char* const mo
 		return false;
 	}
 
-	indexCount.insert(pair<const char*, int>(modelFileName, indexCount));
+	indexCount.insert(pair<const char*, int>(modelFileName, indCount));
 
 	vertexBuffers.insert(pair<const char*, ID3D11Buffer*>(modelFileName, vertexBuffer));
 	indexBuffers.insert(pair<const char*, ID3D11Buffer*>(modelFileName, indexBuffer));

@@ -368,12 +368,12 @@ void Shader::GetTessellationVariables(float& maxTessellationDistance, float& min
 	minTessellationFactor = minTessellationFactor;
 }
 
-void Shader::SetTessellationVariables(const float& maxTessellationDistance, const float& minTessellationDistance, const float& maxTessellationFactor, const float& minTessellationFactor)
+void Shader::SetTessellationVariables(const float& mxTessellationDistance, const float& mnTessellationDistance, const float& mxTessellationFactor, const float& mnTessellationFactor)
 {
-	maxTessellationDistance = maxTessellationDistance;
-	minTessellationDistance = minTessellationDistance;
-	maxTessellationFactor = maxTessellationFactor;
-	minTessellationFactor = minTessellationFactor;
+	maxTessellationDistance = mxTessellationDistance;
+	minTessellationDistance = mnTessellationDistance;
+	maxTessellationFactor = mxTessellationFactor;
+	minTessellationFactor = mnTessellationFactor;
 }
 
 void Shader::GetDisplacementVariables(float& mipInterval, float& mipClampMinimum, float& mipClampMaximum, float& displacementPower) const
@@ -384,12 +384,12 @@ void Shader::GetDisplacementVariables(float& mipInterval, float& mipClampMinimum
 	displacementPower = displacementPower;
 }
 
-void Shader::SetDisplacementVariables(const float& mipInterval, const float& mipClampMinimum, const float& mipClampMaximum, const float& displacementPower)
+void Shader::SetDisplacementVariables(const float& mipInterv, const float& mipClampMin, const float& mipClampMax, const float& displacementPow)
 {
-	mipInterval = mipInterval;
-	mipClampMinimum = mipClampMinimum;
-	mipClampMaximum = mipClampMaximum;
-	displacementPower = displacementPower;
+	mipInterval = mipInterv;
+	mipClampMinimum = mipClampMin;
+	mipClampMaximum = mipClampMax;
+	displacementPower = displacementPow;
 }
 
 void Shader::SetInitializationState(const bool state)
@@ -397,11 +397,10 @@ void Shader::SetInitializationState(const bool state)
 	initializationFailed = state;
 }
 
-void Shader::SetVertexShaderBuffer(ID3D10Blob* const vertexShaderBuffer)
+void Shader::SetVertexShaderBuffer(ID3D10Blob* const vtShaderBuffer)
 {
-	vertexShaderBuffer = vertexShaderBuffer;
+	vertexShaderBuffer = vtShaderBuffer;
 }
-
 
 bool Shader::SetShaderParameters(ID3D11DeviceContext* const deviceContext, const XMMATRIX& viewMatrix, const XMMATRIX& projectionMatrix, const XMFLOAT3& cameraPosition) {
 	
