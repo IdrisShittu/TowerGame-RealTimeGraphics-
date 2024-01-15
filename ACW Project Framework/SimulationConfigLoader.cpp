@@ -1,5 +1,5 @@
 #include "SimulationConfigLoader.h"
-
+//
 
 SimulationConfigLoader::SimulationConfigLoader(const char* const configurationFileName): 
     cameraPosition(XMFLOAT3()),
