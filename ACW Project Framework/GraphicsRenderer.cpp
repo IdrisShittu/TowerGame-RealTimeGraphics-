@@ -432,7 +432,7 @@ bool GraphicsRenderer::RenderFrame() {
 		}
 	}
 
-	//gameObjects.emplace_back(make_shared<GameObject>(* terrain));
+	
 	gameObjects.emplace_back(static_pointer_cast<GameObject>( terrain));
 	gameObjects.emplace_back( displacedFloor);
 	gameObjects.emplace_back( skyBox);
