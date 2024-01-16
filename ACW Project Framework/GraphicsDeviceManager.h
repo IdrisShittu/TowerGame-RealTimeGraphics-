@@ -22,6 +22,10 @@ class GraphicsDeviceManager
 {
 public:
 	GraphicsDeviceManager(int const screenWidth, int const screenHeight, HWND const hwnd, bool const fullScreen, bool const vSyncEnabled, float const screenDepth, float const screenNear);
+	void InitializeRasterizerState(D3D11_RASTERIZER_DESC& desc, ID3D11RasterizerState* state);
+	//void InitializeRasterizerState(D3D11_RASTERIZER_DESC& desc, ID3D11RasterizerState*& state);
+	void InitializeViewport(int screenWidth, int screenHeight);
+	void InitializeProjectionMatrix(int screenWidth, int screenHeight, float screenDepth, float screenNear);
 	GraphicsDeviceManager(const GraphicsDeviceManager& other); // Copy Constructor
 	GraphicsDeviceManager(GraphicsDeviceManager && other) noexcept; // Move Constructor
 	~GraphicsDeviceManager(); // Destructor
@@ -90,8 +94,8 @@ private:
 	ID3D11BlendState* alphaEnabledBlendState;
 	ID3D11BlendState* alphaDisableBlendState;
 
-	XMFLOAT4X4 projectionMatrix;
-	XMFLOAT4X4 orthographicMatrix;
+	XMMATRIX projectionMatrix;
+	XMMATRIX orthographicMatrix;
 	template<typename T>
 	void ReleaseComObject(T*& ptr);
 };
