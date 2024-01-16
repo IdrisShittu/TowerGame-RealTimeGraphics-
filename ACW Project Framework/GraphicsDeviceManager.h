@@ -18,17 +18,16 @@
 using namespace DirectX;
 using namespace std;
 
-class D3DContainer
+class GraphicsDeviceManager
 {
 public:
-	D3DContainer(int const screenWidth, int const screenHeight, HWND const hwnd, bool const fullScreen, bool const vSyncEnabled, float const screenDepth, float const screenNear); // Default Constructor
-	D3DContainer(const D3DContainer& other); // Copy Constructor
-	D3DContainer(D3DContainer && other) noexcept; // Move Constructor
-	~D3DContainer(); // Destructor
+	GraphicsDeviceManager(int const screenWidth, int const screenHeight, HWND const hwnd, bool const fullScreen, bool const vSyncEnabled, float const screenDepth, float const screenNear);
+	GraphicsDeviceManager(const GraphicsDeviceManager& other); // Copy Constructor
+	GraphicsDeviceManager(GraphicsDeviceManager && other) noexcept; // Move Constructor
+	~GraphicsDeviceManager(); // Destructor
 
-	D3DContainer& operator = (const D3DContainer& other); // Copy Assignment Operator
-	//D3DContainer& operator = (D3DContainer&& other) noexcept; // Move Assignment Operator
-
+	GraphicsDeviceManager& operator = (const GraphicsDeviceManager& other); // Copy Assignment Operator
+	
 	void BeginScene(float red, float green, float blue, float alpha);
 	void EndScene();
 
@@ -60,6 +59,14 @@ private:
 	void InitializeDeviceAndSwapChain(unsigned int const screenWidth, unsigned int const screenHeight, unsigned int const numerator, unsigned int const denominator, bool const fullScreen, HWND const hwnd);
 	void InitializeBuffers(unsigned int const screenWidth, unsigned int const screenHeight);
 
+	bool CreateBackBufferAndView();
+
+	bool CreateDepthStencilBufferAndView(unsigned int screenWidth, unsigned int screenHeight);
+
+	bool CreateDepthStencilStates();
+
+	bool CreateBlendStates();
+
 	bool initializationFailed;
 
 	bool vSyncEnabled;
@@ -85,4 +92,6 @@ private:
 
 	XMFLOAT4X4 projectionMatrix;
 	XMFLOAT4X4 orthographicMatrix;
+	template<typename T>
+	void ReleaseComObject(T*& ptr);
 };

@@ -2,7 +2,7 @@
 
 GraphicsRenderer::GraphicsRenderer(int screenWidth, int screenHeight, HWND const hwnd) :  initializationFailed(false),  d3D(nullptr), antTweakBarStatistics(nullptr), camera(nullptr), lightManager(nullptr),  terrain(nullptr),  rocket(nullptr),  displacedFloor(nullptr),   skyBox(nullptr),   gameObjects(),  shaderManager(nullptr),  resourceManager(nullptr),   shadowMapManager(nullptr),  renderToggle(0),  renderOptionalGameObjects(false),  timeScale(1),  updateCamera(false),  cameraMode(0),  dt(0.0f),  fps(0.0f),  start({0}),  end({0}),  frequency({0}) {
 	//Create D3D object
-	 d3D = make_shared<D3DContainer>(screenWidth, screenHeight, hwnd, FULL_SCREEN, VSYNC_ENABLED, SCREEN_DEPTH, SCREEN_NEAR);
+	 d3D = make_shared<GraphicsDeviceManager>(screenWidth, screenHeight, hwnd, FULL_SCREEN, VSYNC_ENABLED, SCREEN_DEPTH, SCREEN_NEAR);
 
 	 windowWidth = screenWidth;
 	 windowHeight = screenHeight;

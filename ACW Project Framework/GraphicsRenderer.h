@@ -2,7 +2,7 @@
 
 #include <Windows.h>
 
-#include "D3DContainer.h"
+#include "GraphicsDeviceManager.h"
 
 #include "Camera.h"
 #include "GameObject.h"
@@ -62,7 +62,7 @@ private:
 
 	shared_ptr<SimulationConfigLoader>  configuration;
 
-	shared_ptr<D3DContainer>  d3D;
+	shared_ptr<GraphicsDeviceManager>  d3D;
 
 	TwBar*  antTweakBarStatistics;
 

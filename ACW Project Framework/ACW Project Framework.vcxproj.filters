@@ -72,7 +72,7 @@
     <ClCompile Include="WinMain.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D3DContainer.cpp">
+    <ClCompile Include="GraphicsDeviceManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="ColourShader.cpp">
@@ -191,7 +191,7 @@
     <ClInclude Include="Camera.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="D3DContainer.h">
+    <ClInclude Include="GraphicsDeviceManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="GraphicsRenderer.h">

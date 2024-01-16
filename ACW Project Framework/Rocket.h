@@ -2,7 +2,7 @@
 
 #include "FireJetParticleSystem.h"
 #include "ShaderManager.h"
-#include "D3DContainer.h"
+#include "GraphicsDeviceManager.h"
 #include "Terrain.h"
 
 using namespace std;
@@ -41,7 +41,7 @@ public:
 	void ResetRocketState();
 
 	void UpdateRocket(const float dt);
-	bool RenderRocket(const shared_ptr<D3DContainer>& d3dContainer, const XMMATRIX& viewMatrix, const XMMATRIX& projectionMatrix, const vector<ID3D11ShaderResourceView*>& depthTextures, const vector<shared_ptr<Light>>& pointLightList, const XMFLOAT3& cameraPosition) const;
+	bool RenderRocket(const shared_ptr<GraphicsDeviceManager>& d3dContainer, const XMMATRIX& viewMatrix, const XMMATRIX& projectionMatrix, const vector<ID3D11ShaderResourceView*>& depthTextures, const vector<shared_ptr<Light>>& pointLightList, const XMFLOAT3& cameraPosition) const;
 
 private:
 	void UpdateLightPosition() const;
