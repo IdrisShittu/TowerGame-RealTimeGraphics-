@@ -22,10 +22,6 @@ class GraphicsDeviceManager
 {
 public:
 	GraphicsDeviceManager(int const screenWidth, int const screenHeight, HWND const hwnd, bool const fullScreen, bool const vSyncEnabled, float const screenDepth, float const screenNear);
-	void InitializeRasterizerState(D3D11_RASTERIZER_DESC& desc, ID3D11RasterizerState* state);
-	//void InitializeRasterizerState(D3D11_RASTERIZER_DESC& desc, ID3D11RasterizerState*& state);
-	void InitializeViewport(int screenWidth, int screenHeight);
-	void InitializeProjectionMatrix(int screenWidth, int screenHeight, float screenDepth, float screenNear);
 	GraphicsDeviceManager(const GraphicsDeviceManager& other); // Copy Constructor
 	GraphicsDeviceManager(GraphicsDeviceManager && other) noexcept; // Move Constructor
 	~GraphicsDeviceManager(); // Destructor

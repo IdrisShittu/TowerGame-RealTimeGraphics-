@@ -2,116 +2,92 @@
 #include <vector>
 #include <minwinbase.h>
 
-GraphicsDeviceManager::GraphicsDeviceManager(int const screenWidth, int const screenHeight, HWND const hwnd, bool const fullScreen, bool const vSyncEnabled, float const screenDepth, float const screenNear)
-	: initializationFailed(false), vSyncEnabled(vSyncEnabled), videoCardMemory(0), videoCardDescription{}, swapChain(nullptr), device(nullptr), deviceContext(nullptr), renderTargetView(nullptr), depthStencilBuffer(nullptr),
-	depthStencilStateEnabled(nullptr), depthStencilStateDisabled(nullptr), depthStencilView(nullptr), rasterStateNormal(nullptr), rasterStateWireFrame(nullptr), alphaEnabledBlendState(nullptr), alphaDisableBlendState(nullptr), projectionMatrix(XMMATRIX()), orthographicMatrix(XMMATRIX())
+GraphicsDeviceManager::GraphicsDeviceManager(int screenWidth, int screenHeight, HWND hwnd, bool fullScreen, bool vSyncEnabled, float screenDepth, float screenNear)
+	: initializationFailed(false), vSyncEnabled(vSyncEnabled), videoCardMemory(0), videoCardDescription{},
+	swapChain(nullptr), device(nullptr), deviceContext(nullptr), renderTargetView(nullptr),
+	depthStencilBuffer(nullptr), depthStencilStateEnabled(nullptr), depthStencilStateDisabled(nullptr),
+	depthStencilView(nullptr), rasterStateNormal(nullptr), rasterStateWireFrame(nullptr),
+	alphaEnabledBlendState(nullptr), alphaDisableBlendState(nullptr), projectionMatrix(XMMATRIX()), orthographicMatrix(XMMATRIX())
 {
 	unsigned int numerator = 0;
 	unsigned int denominator = 0;
 
 	InitializeFactoryAdapter(screenWidth, screenHeight, numerator, denominator);
 
-	if (initializationFailed)
+	if (!initializationFailed)
 	{
-		return;
+		InitializeDeviceAndSwapChain(screenWidth, screenHeight, numerator, denominator, fullScreen, hwnd);
+
+		if (!initializationFailed)
+		{
+			InitializeBuffers(screenWidth, screenHeight);
+
+			if (!initializationFailed)
+			{
+				D3D11_RASTERIZER_DESC rasterDescription{};
+				ZeroMemory(&rasterDescription, sizeof(rasterDescription));
+
+				rasterDescription.FillMode = D3D11_FILL_SOLID;
+				rasterDescription.CullMode = D3D11_CULL_BACK;
+				rasterDescription.FrontCounterClockwise = false;
+				rasterDescription.DepthBias = 0;
+				rasterDescription.DepthBiasClamp = 0.0f;
+				rasterDescription.SlopeScaledDepthBias = 0.0f;
+				rasterDescription.DepthClipEnable = true;
+				rasterDescription.ScissorEnable = false;
+				rasterDescription.MultisampleEnable = false;
+				rasterDescription.AntialiasedLineEnable = false;
+
+				if (FAILED(device->CreateRasterizerState(&rasterDescription, &rasterStateNormal)))
+				{
+					initializationFailed = true;
+				}
+				else
+				{
+					deviceContext->RSSetState(rasterStateNormal);
+
+					ZeroMemory(&rasterDescription, sizeof(rasterDescription));
+					rasterDescription.FillMode = D3D11_FILL_WIREFRAME;
+					rasterDescription.CullMode = D3D11_CULL_BACK;
+					rasterDescription.FrontCounterClockwise = false;
+					rasterDescription.DepthBias = 0;
+					rasterDescription.DepthBiasClamp = 0.0f;
+					rasterDescription.SlopeScaledDepthBias = 0.0f;
+					rasterDescription.DepthClipEnable = true;
+					rasterDescription.ScissorEnable = false;
+					rasterDescription.MultisampleEnable = false;
+					rasterDescription.AntialiasedLineEnable = false;
+
+					if (FAILED(device->CreateRasterizerState(&rasterDescription, &rasterStateWireFrame)))
+					{
+						initializationFailed = true;
+					}
+					else
+					{
+						D3D11_VIEWPORT viewport;
+						ZeroMemory(&viewport, sizeof(viewport));
+
+						viewport.TopLeftX = 0.0f;
+						viewport.TopLeftY = 0.0f;
+						viewport.Width = static_cast<float>(screenWidth);
+						viewport.Height = static_cast<float>(screenHeight);
+						viewport.MinDepth = 0.0f;
+						viewport.MaxDepth = 1.0f;
+
+						deviceContext->RSSetViewports(1, &viewport);
+
+						auto const fieldOfView = static_cast<float>(XM_PI / 4.0f);
+						auto const screenAspect = static_cast<float>(screenWidth) / static_cast<float>(screenHeight);
+
+						projectionMatrix = XMMatrixPerspectiveFovLH(fieldOfView, screenAspect, screenNear, screenDepth);
+
+						orthographicMatrix = XMMatrixOrthographicLH(static_cast<float>(screenWidth), static_cast<float>(screenHeight), screenNear, screenDepth);
+					}
+				}
+			}
+		}
 	}
-
-	InitializeDeviceAndSwapChain(screenWidth, screenHeight, numerator, denominator, fullScreen, hwnd);
-
-	if (initializationFailed)
-	{
-		return;
-	}
-
-	InitializeBuffers(screenWidth, screenHeight);
-
-	if (initializationFailed)
-	{
-		return;
-	}
-
-	D3D11_RASTERIZER_DESC rasterDescription;
-
-	// Initialize raster description
-	ZeroMemory(&rasterDescription, sizeof(rasterDescription));
-
-	// Initialize and create our rasterizer so we can control how the polygons can be drawn and then bind it to our context
-	rasterDescription = {
-		D3D11_FILL_SOLID, // FillMode
-		D3D11_CULL_BACK,  // CullMode
-		false,            // FrontCounterClockwise
-		0,                // DepthBias
-		0.0f,             // DepthBiasClamp
-		0.0f,             // SlopeScaledDepthBias
-		true,             // DepthClipEnable
-		false,            // ScissorEnable
-		false,            // MultisampleEnable
-		false             // AntialiasedLineEnable
-	};
-
-	auto result = device->CreateRasterizerState(&rasterDescription, &rasterStateNormal);
-
-	if (FAILED(result))
-	{
-		initializationFailed = true;
-		return;
-	}
-
-	deviceContext->RSSetState(rasterStateNormal);
-
-	ZeroMemory(&rasterDescription, sizeof(rasterDescription));
-
-	// Initialize and create our rasterizer so we can control how the polygons can be drawn and then bind it to our context
-	rasterDescription = {
-		D3D11_FILL_WIREFRAME, // FillMode
-		D3D11_CULL_BACK,      // CullMode
-		false,                // FrontCounterClockwise
-		0,                    // DepthBias
-		0.0f,                 // DepthBiasClamp
-		0.0f,                 // SlopeScaledDepthBias
-		true,                 // DepthClipEnable
-		false,                // ScissorEnable
-		false,                // MultisampleEnable
-		false                 // AntialiasedLineEnable
-	};
-
-	result = device->CreateRasterizerState(&rasterDescription, &rasterStateWireFrame);
-
-	if (FAILED(result))
-	{
-		initializationFailed = true;
-		return;
-	}
-
-	// Initialize D3D11_VIEWPORT
-	D3D11_VIEWPORT viewport;
-
-	ZeroMemory(&viewport, sizeof(viewport));
-
-	// Initialize and create our viewport
-	viewport = {
-		0.0f,                            // TopLeftX
-		0.0f,                            // TopLeftY
-		static_cast<float>(screenWidth), // Width
-		static_cast<float>(screenHeight),// Height
-		0.0f,                            // MinDepth
-		1.0f                             // MaxDepth
-	};
-
-	deviceContext->RSSetViewports(1, &viewport);
-
-	// Initialize and create projection matrix
-	auto const fieldOfView = static_cast<float>(XM_PI / 4.0f);
-	auto const screenAspect = static_cast<float>(screenWidth) / static_cast<float>(screenHeight);
-
-	projectionMatrix = XMMatrixPerspectiveFovLH(fieldOfView, screenAspect, screenNear, screenDepth);
-
-	// Initialize and create orthographic matrix
-	orthographicMatrix = XMMatrixOrthographicLH(static_cast<float>(screenWidth), static_cast<float>(screenHeight), screenNear, screenDepth);
 }
-
-
-
 
 GraphicsDeviceManager::GraphicsDeviceManager(const GraphicsDeviceManager& other) = default;
 
