@@ -53,6 +53,10 @@ public:
 
 	bool UpdateFrame();
 
+	void UpdateGameObjects();
+
+	void UpdateCameraAndLights();
+
 	bool GetInitializationState() const;
 
 private:

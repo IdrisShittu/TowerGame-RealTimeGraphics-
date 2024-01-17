@@ -1,4 +1,5 @@
 #include "GraphicsRenderer.h"
+#include <algorithm>
 
 GraphicsRenderer::GraphicsRenderer(int screenWidth, int screenHeight, HWND const hwnd) :  initializationFailed(false),  d3D(nullptr), antTweakBarStatistics(nullptr), camera(nullptr), lightManager(nullptr),  terrain(nullptr),  rocket(nullptr),  displacedFloor(nullptr),   skyBox(nullptr),   gameObjects(),  shaderManager(nullptr),  resourceManager(nullptr),   shadowMapManager(nullptr),  renderToggle(0),  renderOptionalGameObjects(false),  timeScale(1),  updateCamera(false),  cameraMode(0),  dt(0.0f),  fps(0.0f),  start({0}),  end({0}),  frequency({0}) {
 	//Create D3D object
@@ -236,292 +237,206 @@ const shared_ptr<Camera>& GraphicsRenderer::GetCamera() const
 	return  camera;
 }
 
-void GraphicsRenderer::ToggleRenderOption()
-{
-	 renderToggle++;
+void GraphicsRenderer::ToggleRenderOption() {
+	renderToggle = (renderToggle + 1) % 5;
 
-	if ( renderToggle == 5)
-	{
-		 renderToggle = 0;
-	}
-
-	switch ( renderToggle)
-	{
-		case 0:
-			 shaderManager->GetTextureDisplacementShader()->SetRenderModeStates(0, 0, 0);
-			break;
-		case 1:
-			 d3D->EnableWireFrame();
-			break;
-		case 2:
-			 shaderManager->GetTextureDisplacementShader()->SetRenderModeStates(1, 0, 1);
-			 d3D->DisableWireFrame();
-			break;
-		case 3:
-			 shaderManager->GetTextureDisplacementShader()->SetRenderModeStates(0, 1, 1);
-			break;
-		case 4:
-			 shaderManager->GetTextureDisplacementShader()->SetRenderModeStates(0, 1, 0);
-			break;
-		default: return;
-	}
-}
-
-void GraphicsRenderer::ToggleOptionalGameObjects()
-{
-	 renderOptionalGameObjects = ! renderOptionalGameObjects;
-}
-
-
-void GraphicsRenderer::ResetToInitialState() const
-{
-	 rocket->ResetRocketState();
-	 terrain->ResetTerrainState();
-	 particleSystemManager->ResetParticleSystems();
-}
-
-void GraphicsRenderer::AddTimeScale(const int number)
-{
-	 timeScale += number;
-
-	if ( timeScale < 1)
-	{
-		 timeScale = 1;
-	}
-}
-
-void GraphicsRenderer::RotateRocketLeft() const
-{
-	 rocket->AdjustRotationLeft();
-}
-
-void GraphicsRenderer::RotateRocketRight() const
-{
-	 rocket->AdjustRotationRight();
-}
-
-void GraphicsRenderer::LaunchRocket() const
-{
-	 rocket->LaunchRocket();
-}
-
-void GraphicsRenderer::ChangeCameraMode(const int camMode)
-{
-	 cameraMode = camMode;
-
-	switch ( cameraMode)
-	{
+	switch (renderToggle) {
 	case 0:
-		const auto position =  rocket->GetLauncherPosition();
-		 camera->SetPosition(position.x, position.y, position.z - 10.0f);
-		 camera->SetRotation(0.0f, 0.0f, 0.0f);
-		 updateCamera = false;
+		shaderManager->GetTextureDisplacementShader()->SetRenderModeStates(0, 0, 0);
+		d3D->DisableWireFrame();
 		break;
 	case 1:
-		 camera->SetPosition(0.0f, 10.0f, -30.0f);
-		 camera->SetRotation(0.0f, 45.0f, 0.0f);
-		 updateCamera = false;
+		d3D->EnableWireFrame();
 		break;
 	case 2:
-		 camera->SetRotation(0.0f, 0.0f, 0.0f);
-		 updateCamera = true;
+		shaderManager->GetTextureDisplacementShader()->SetRenderModeStates(1, 0, 1);
 		break;
 	case 3:
-		 camera->SetRotation(0.0f, 0.0f, 0.0f);
-		 updateCamera = true;
+		shaderManager->GetTextureDisplacementShader()->SetRenderModeStates(0, 1, 1);
 		break;
 	case 4:
-		 camera->SetRotation(0.0f, 0.0f, 0.0f);
-		 updateCamera = true;
+		shaderManager->GetTextureDisplacementShader()->SetRenderModeStates(0, 1, 0);
 		break;
 	default:
 		break;
 	}
 }
 
-void GraphicsRenderer::UpdateCameraPosition() const
+void GraphicsRenderer::ToggleOptionalGameObjects() {
+	renderOptionalGameObjects = !renderOptionalGameObjects;
+}
+
+void GraphicsRenderer::ResetToInitialState() const {
+	rocket->ResetRocketState();
+	terrain->ResetTerrainState();
+	particleSystemManager->ResetParticleSystems();
+}
+
+void GraphicsRenderer::AddTimeScale(const int number)
 {
-	if ( updateCamera)
-	{
-		switch ( cameraMode)
-		{
-		case 2:
-			const auto rocketPosition =  rocket->GetLookAtRocketPosition();
-			 camera->SetPosition(rocketPosition.x, rocketPosition.y, rocketPosition.z - 20.0f);
-			break;
-		case 3:
-			const auto rocketConePosition =  rocket->GetLookAtRocketConePosition();
-			 camera->SetPosition(rocketConePosition.x, rocketConePosition.y, rocketConePosition.z - 3.0f);
-			break;
-		case 4:
-			const auto rocketBodyPosition =  rocket->GetLookAtRocketPosition();
-			 camera->SetPosition(rocketBodyPosition.x, rocketBodyPosition.y, rocketBodyPosition.z - 3.0f);
-			break;
-		default:
-			break;
-		}
+	timeScale = (timeScale + number < 1) ? 1 : timeScale + number;
+}
+
+void GraphicsRenderer::RotateRocketLeft() const {
+	rocket->AdjustRotationLeft();
+}
+
+void GraphicsRenderer::RotateRocketRight() const {
+	rocket->AdjustRotationRight();
+}
+
+void GraphicsRenderer::LaunchRocket() const {
+	rocket->LaunchRocket();
+}
+
+void GraphicsRenderer::ChangeCameraMode(const int camMode) {
+	cameraMode = camMode;
+	updateCamera = (cameraMode >= 2 && cameraMode <= 4);
+
+	switch (cameraMode) {
+	case 0: {
+		const auto position = rocket->GetLauncherPosition();
+		camera->SetPosition(position.x, position.y, position.z - 10.0f);
+		camera->SetRotation(0.0f, 0.0f, 0.0f);
+		break;
+	}
+	case 1:
+		camera->SetPosition(0.0f, 10.0f, -30.0f);
+		camera->SetRotation(0.0f, 45.0f, 0.0f);
+		break;
+	default:
+		camera->SetRotation(0.0f, 0.0f, 0.0f);
+		break;
 	}
 }
 
+void GraphicsRenderer::UpdateCameraPosition() const {
+	if (!updateCamera) return;
+
+	XMFLOAT3 cameraPosition;
+	switch (cameraMode) {
+	case 2:
+		cameraPosition = rocket->GetLookAtRocketPosition();
+		cameraPosition.z -= 20.0f;
+		break;
+	case 3:
+		cameraPosition = rocket->GetLookAtRocketConePosition();
+		cameraPosition.z -= 3.0f;
+		break;
+	case 4:
+		cameraPosition = rocket->GetLookAtRocketPosition();
+		cameraPosition.z -= 3.0f;
+		break;
+	default:
+		return;
+	}
+
+	camera->SetPosition(cameraPosition.x, cameraPosition.y, cameraPosition.z);
+}
 
 bool GraphicsRenderer::UpdateFrame() {
+	QueryPerformanceCounter(&end);
+	dt = static_cast<float>((end.QuadPart - start.QuadPart) / static_cast<double>(frequency.QuadPart));
+	start = end;
 
-	//Calculate delta
-	QueryPerformanceCounter(& end);
-	 dt = static_cast<float>(( end.QuadPart -  start.QuadPart) / static_cast<double>( frequency.QuadPart));
-	 start =  end;
+	dt *= timeScale;
+	fps = static_cast<int>(1.0 / dt);
+	XMFLOAT3 collisionPosition;
+	float blastRadius = 0.0f;
 
-	//Apply timescale
-	 dt *=  timeScale;
+	UpdateGameObjects();
 
-	//Calculate fps
-	 fps = static_cast<int>(1.0 /  dt);
+	if (rocket->CheckForTerrainCollision(terrain, collisionPosition, blastRadius)) {
+		particleSystemManager->GenerateExplosion(d3D->GetDevice(), collisionPosition, blastRadius, resourceManager);
+	}
 
-	 displacedFloor->Update();
+	terrain->UpdateTerrain();
+	rocket->UpdateRocket(dt);
+	UpdateCameraAndLights();
+	particleSystemManager->Update(dt);
 
-	 skyBox->Update();
+	return RenderFrame();
+}
 
-	for (const auto& gameObject :  gameObjects)
-	{
+void GraphicsRenderer::UpdateGameObjects() {
+	displacedFloor->Update();
+	skyBox->Update();
+	for (const auto& gameObject : gameObjects) {
 		gameObject->Update();
 	}
+}
 
-	auto collisionPosition = XMFLOAT3();
-	auto blastRadius = 0.0f;
-
-	const auto rocketCollisionState =  rocket->CheckForTerrainCollision( terrain, collisionPosition, blastRadius);
-
-	if (rocketCollisionState)
-	{
-		 particleSystemManager->GenerateExplosion( d3D->GetDevice(), collisionPosition, blastRadius,  resourceManager);
-	}
-
-	 terrain->UpdateTerrain();
-	 rocket->UpdateRocket( dt);
-
+void GraphicsRenderer::UpdateCameraAndLights() {
 	UpdateCameraPosition();
-
-	for (const auto& light :  lightManager->GetLightList())
-	{
-		light->UpdateLightVariables( dt);
+	for (const auto& light : lightManager->GetLightList()) {
+		light->UpdateLightVariables(dt);
 	}
-
-	 particleSystemManager->Update( dt);
-
-	//Render the graphics scene
-	auto const result = RenderFrame();
-
-	return result;
 }
 
 bool GraphicsRenderer::RenderFrame() {
+	camera->Render();
 
-	auto result = true;
+	std::vector<shared_ptr<GameObject>> gameObjects;
 
-	//Clear the buffer and render the scene
+	if (renderOptionalGameObjects) {
+		gameObjects.insert(gameObjects.end(), gameObjects.begin(), gameObjects.end());
+	}
 
-	 camera->Render();
+	gameObjects.insert(gameObjects.end(), {
+		static_pointer_cast<GameObject>(terrain),
+		displacedFloor,
+		skyBox,
+		rocket->GetRocketBody(),
+		rocket->GetRocketCone(),
+		rocket->GetRocketCap(),
+		rocket->GetRocketLauncher()
+		});
 
-	vector<shared_ptr<GameObject>> gameObjects;
+	shadowMapManager->GenerateShadowMapResources(d3D->GetDeviceContext(), d3D->GetDepthStencilView(), lightManager->GetLightList(), gameObjects, camera->GetPosition());
 
-	if ( renderOptionalGameObjects)
-	{
-		for (auto gameObject :  gameObjects)
-		{
-			gameObjects.emplace_back(gameObject);
+	d3D->SetRenderTarget();
+
+	XMMATRIX viewMatrix, projectionMatrix;
+	d3D->BeginScene(1.0f, 0.0f, 0.0f, 1.0f);
+	camera->GetViewMatrix(viewMatrix);
+	d3D->GetProjectionMatrix(projectionMatrix);
+
+	std::vector<shared_ptr<Light>> lightList = lightManager->GetLightList();
+
+	if (rocket->RocketLaunched() && rocket->ParticleSystemActive()) {
+		lightList.emplace_back(rocket->GetParticleSystemLight());
+	}
+
+	const auto explosionLights = particleSystemManager->GetLights();
+
+	if (!explosionLights.empty()) {
+		lightList.insert(lightList.end(), explosionLights.begin(), explosionLights.end());
+	}
+
+	for (const auto& gameObject : gameObjects) {
+		if (!gameObject->Render(d3D->GetDeviceContext(), viewMatrix, projectionMatrix, shadowMapManager->GetShadowMapResources(), lightList, camera->GetPosition())) {
+			return false;
 		}
 	}
 
-	
-	gameObjects.emplace_back(static_pointer_cast<GameObject>( terrain));
-	gameObjects.emplace_back( displacedFloor);
-	gameObjects.emplace_back( skyBox);
-	gameObjects.emplace_back( rocket->GetRocketBody());
-	gameObjects.emplace_back( rocket->GetRocketCone());
-	gameObjects.emplace_back( rocket->GetRocketCap());
-	gameObjects.emplace_back( rocket->GetRocketLauncher());
-
-	//gameObjects.emplace_back(static_cast<shared_ptr<Terrain>>( terrain));
-
-	//Generate shadow maps
-	 shadowMapManager->GenerateShadowMapResources( d3D->GetDeviceContext(),  d3D->GetDepthStencilView(),  lightManager->GetLightList(), gameObjects,  camera->GetPosition());
-
-	 d3D->SetRenderTarget();
-
-	XMMATRIX viewMatrix = {};
-	XMMATRIX projectionMatrix = {};
-
-	//Clear the buffer and render the scene
-	 d3D->BeginScene(1.0f, 0.0f, 0.0f, 1.0f);
-
-	 camera->GetViewMatrix(viewMatrix);
-	 d3D->GetProjectionMatrix(projectionMatrix);
-
-	vector<shared_ptr<Light>> lightList =  lightManager->GetLightList();
-
-	if ( rocket->RocketLaunched() &&  rocket->ParticleSystemActive())
-	{
-		lightList.emplace_back( rocket->GetParticleSystemLight());
-	}
-
-	const auto explosionLights =  particleSystemManager->GetLights();
-
-	if (!explosionLights.empty())
-	{
-		for (auto& light : explosionLights)
-		{
-			lightList.emplace_back(light);
-		}
-	}
-
-	result =  displacedFloor->Render( d3D->GetDeviceContext(), viewMatrix, projectionMatrix,  shadowMapManager->GetShadowMapResources(), lightList,  camera->GetPosition());
-
-	if (!result)
-	{
+	if (!terrain->RenderTerrain(d3D->GetDeviceContext(), viewMatrix, projectionMatrix, shadowMapManager->GetShadowMapResources(), lightList, camera->GetPosition()) ||
+		!rocket->RenderRocket(d3D, viewMatrix, projectionMatrix, shadowMapManager->GetShadowMapResources(), lightList, camera->GetPosition())) {
 		return false;
 	}
 
-	result =  skyBox->Render( d3D->GetDeviceContext(), viewMatrix, projectionMatrix,  shadowMapManager->GetShadowMapResources(), lightList,  camera->GetPosition());
+	d3D->DisableDepthStencil();
+	d3D->EnableAlphaBlending();
 
-	if (!result)
-	{
+	if (!particleSystemManager->Render(d3D->GetDeviceContext(), viewMatrix, projectionMatrix, camera->GetPosition())) {
 		return false;
 	}
 
-	if ( renderOptionalGameObjects)
-	{
-		for (const auto& gameObject :  gameObjects)
-		{
-			result = gameObject->Render( d3D->GetDeviceContext(), viewMatrix, projectionMatrix,  shadowMapManager->GetShadowMapResources(), lightList,  camera->GetPosition());
-			//result = gameObject->Render( d3D->GetDeviceContext(),  lightManager->GetPointLightList()[0]->GetLightViewMatrix(), projectionMatrix,  shadowMapManager->GetShadowMapResources(),  lightManager->GetPointLightList(),  camera->GetPosition());
-
-			if (!result)
-			{
-				return false;
-			}
-		}
-	}
-
-	result =  terrain->RenderTerrain( d3D->GetDeviceContext(), viewMatrix, projectionMatrix,  shadowMapManager->GetShadowMapResources(), lightList,  camera->GetPosition());
-	result =  rocket->RenderRocket( d3D, viewMatrix, projectionMatrix,  shadowMapManager->GetShadowMapResources(), lightList,  camera->GetPosition());
-
-	 d3D->DisableDepthStencil();
-	 d3D->EnableAlphaBlending();
-
-	result =  particleSystemManager->Render( d3D->GetDeviceContext(), viewMatrix, projectionMatrix,  camera->GetPosition());
-
-	if (!result)
-	{
-		return false;
-	}
-
-	 d3D->EnabledDepthStencil();
-	 d3D->DisableAlphaBlending();
+	d3D->EnabledDepthStencil();
+	d3D->DisableAlphaBlending();
 
 	TwDraw();
 
-	//Present the scene
-	 d3D->EndScene();
+	d3D->EndScene();
 
 	return true;
 }
