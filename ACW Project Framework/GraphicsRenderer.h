@@ -32,6 +32,17 @@ class GraphicsRenderer
 {
 public:
 	GraphicsRenderer(int screenWidth, int screenHeight, HWND const hwnd); // Default Constructor
+	bool InitializeD3D(int screenWidth, int screenHeight, HWND const hwnd);
+	bool InitializeAntTweakBar(HWND const hwnd);
+	bool LoadConfiguration();
+	bool CreateShaderManager(HWND const hwnd);
+	bool CreateResourceManager();
+	bool CreateParticleSystemManager();
+	bool CreateCamera();
+	bool CreateLightManager();
+	bool CreateTerrainAndRocket();
+	bool CreateGameObjects();
+	bool CreateShadowMapManager(HWND const hwnd);
 	GraphicsRenderer(const GraphicsRenderer& other); // Copy Constructor
 	GraphicsRenderer(GraphicsRenderer&& other) noexcept; // Move Constructor
 	~GraphicsRenderer(); // Destructor

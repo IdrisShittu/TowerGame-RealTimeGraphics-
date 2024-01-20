@@ -93,57 +93,50 @@ GraphicsRenderer::GraphicsRenderer(int screenWidth, int screenHeight, HWND const
 
 	 shadowMapManager = make_shared<ShadowMapManager>(hwnd,  d3D->GetDevice(),  shaderManager->GetDepthShader(),  lightManager->GetLightList().size(), SHADOW_MAP_WIDTH, SHADOW_MAP_HEIGHT);
 
-	vector<const WCHAR*> textureNames;
-	textureNames.push_back(L"BaseColour.dds");
-	textureNames.push_back(L"BaseNormal.dds");
-	textureNames.push_back(L"BaseSpecular.dds");
-	textureNames.push_back(L"BaseDisplacement.dds");
+	 vector<const WCHAR*> textureNames = { L"BaseColour.dds", L"BaseNormal.dds", L"BaseSpecular.dds", L"BaseDisplacement.dds"
+	 };
 
-	 gameObjects.push_back(make_shared<GameObject>());
-	 gameObjects.back()->AddPositionComponent(XMFLOAT3(8.0f, 0.0f, 0.0f));
-	 gameObjects.back()->AddRotationComponent(0.0f, 0.0f, 0.0f);
-	 gameObjects.back()->AddScaleComponent(1.0f, 1.0f, 1.0f);
-	 gameObjects.back()->AddRigidBodyComponent(true, 1.0f, 0.0f, 0.0f);
-	 gameObjects.back()->AddModelComponent( d3D->GetDevice(), ModelType::Sphere,  resourceManager);
-	 gameObjects.back()->AddTextureComponent( d3D->GetDevice(), textureNames,  resourceManager);
-	 gameObjects.back()->SetShaderComponent( shaderManager->GetTextureDisplacementShader());
-	 gameObjects.back()->SetDisplacementVariables(20.0f, 0.0f, 6.0f, 0.15f);
+	 auto gameObject = make_shared<GameObject>();
+	 gameObject->AddPositionComponent(XMFLOAT3(8.0f, 0.0f, 0.0f));
+	 gameObject->AddRotationComponent(0.0f, 0.0f, 0.0f);
+	 gameObject->AddScaleComponent(1.0f, 1.0f, 1.0f);
+	 gameObject->AddRigidBodyComponent(true, 1.0f, 0.0f, 0.0f);
+	 gameObject->AddModelComponent(d3D->GetDevice(), ModelType::Sphere, resourceManager);
+	 gameObject->AddTextureComponent(d3D->GetDevice(), textureNames, resourceManager);
+	 gameObject->SetShaderComponent(shaderManager->GetTextureDisplacementShader());
+	 gameObject->SetDisplacementVariables(20.0f, 0.0f, 6.0f, 0.15f);
 
-	if ( gameObjects.back()->GetInitializationState())
-	{
+	 // Add the GameObject to the gameObjects vector and check initialization
+	 gameObjects.push_back(gameObject);
+	 if (gameObject->GetInitializationState()) {
 		 initializationFailed = true;
-		MessageBox(hwnd, "Could not initialize the model object.", "Error", MB_OK);
-		return;
-	}
+		 MessageBox(hwnd, "Could not initialize the model object.", "Error", MB_OK);
+		 return;
+	 }
 
-	textureNames.clear();
-	/*textureNames.push_back(L"BodyColour.dds");
-	textureNames.push_back(L"BodyNormal.dds");
-	textureNames.push_back(L"BodySpecular.dds");
-	textureNames.push_back(L"BodyDisplacement.dds");*/
+	 // Initialize textureNames with required textures
+	 textureNames = { L"BaseColour.dds", L"BaseNormal.dds", L"BaseSpecular.dds", L"BaseDisplacement.dds" };
 
-	textureNames.push_back(L"BaseColour.dds");
-	textureNames.push_back(L"BaseNormal.dds");
-	textureNames.push_back(L"BaseSpecular.dds");
-	textureNames.push_back(L"BaseDisplacement.dds");
+	 // Create and set up a new GameObject
+	 auto newGameObject = make_shared<GameObject>();
+	 newGameObject->AddPositionComponent(XMFLOAT3(5.0f, 2.0f, 0.0f));
+	 newGameObject->AddRotationComponent(0.0f, 0.0f, 0.0f);
+	 newGameObject->AddScaleComponent(1.0f, 6.0f, 1.0f);
+	 newGameObject->AddRigidBodyComponent(true, 1.0f, 0.0f, 0.0f);
+	 newGameObject->AddModelComponent(d3D->GetDevice(), ModelType::HighPolyCylinder, resourceManager);
+	 newGameObject->AddTextureComponent(d3D->GetDevice(), textureNames, resourceManager);
+	 newGameObject->SetShaderComponent(shaderManager->GetTextureDisplacementShader());
+	 newGameObject->SetTessellationVariables(5.0f, 20.0f, 8.0f, 1.0f);
+	 newGameObject->SetDisplacementVariables(20.0f, 0.0f, 6.0f, 0.15f);
 
-	 gameObjects.push_back(make_shared<GameObject>());
-	 gameObjects.back()->AddPositionComponent(XMFLOAT3(5.0f, 2.0f, 0.0f));
-	 gameObjects.back()->AddRotationComponent(0.0f, 0.0f, 0.0f);
-	 gameObjects.back()->AddScaleComponent(1.0f, 6.0f, 1.0f);
-	 gameObjects.back()->AddRigidBodyComponent(true, 1.0f, 0.0f, 0.0f);
-	 gameObjects.back()->AddModelComponent( d3D->GetDevice(), ModelType::HighPolyCylinder,  resourceManager);
-	 gameObjects.back()->AddTextureComponent( d3D->GetDevice(), textureNames,  resourceManager);
-	 gameObjects.back()->SetShaderComponent( shaderManager->GetTextureDisplacementShader());
-	 gameObjects.back()->SetTessellationVariables(5.0f, 20.0f, 8.0f, 1.0f);
-	 gameObjects.back()->SetDisplacementVariables(20.0f, 0.0f, 6.0f, 0.15f);
-
-	if ( gameObjects.back()->GetInitializationState())
-	{
+	 // Add the GameObject to the gameObjects vector and check initialization
+	 gameObjects.push_back(newGameObject);
+	 if (newGameObject->GetInitializationState()) {
 		 initializationFailed = true;
-		MessageBox(hwnd, "Could not initialize the model object.", "Error", MB_OK);
-		return;
-	}
+		 MessageBox(hwnd, "Could not initialize the model object.", "Error", MB_OK);
+		 return;
+	 }
+
 
 	textureNames.clear();
 	textureNames.push_back(L"BaseColour.dds");
