@@ -91,7 +91,7 @@ bool GraphicsRenderer::InitializeSceneObjects(HWND hwnd) {
 bool GraphicsRenderer::InitializeCamera(HWND hwnd) {
 	camera = make_shared<Camera>();
 	if (!camera) {
-		MessageBox(hwnd, "Camera failed to Initialize", "Error", MB_OK);
+		//MessageBox(hwnd, "Camera failed to Initialize", "Error", MB_OK);
 		return false;
 	}
 

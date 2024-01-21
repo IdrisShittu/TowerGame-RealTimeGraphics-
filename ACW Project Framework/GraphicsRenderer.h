@@ -32,6 +32,16 @@ class GraphicsRenderer
 {
 public:
 	GraphicsRenderer(int screenWidth, int screenHeight, HWND const hwnd); // Default Constructor
+	bool InitializeGraphicsDevice(int screenWidth, int screenHeight, HWND hwnd);
+	bool InitializeAntTweakBar(HWND hwnd, int screenWidth, int screenHeight);
+	void SetupAntTweakBar();
+	bool InitializeResources(HWND hwnd);
+	bool InitializeSceneObjects(HWND hwnd);
+	bool InitializeCamera(HWND hwnd);
+	bool InitializeLightManager(HWND hwnd);
+	bool InitializeTerrain(HWND hwnd);
+	bool InitializeGameObjects(HWND hwnd);
+	bool InitializeTerrain();
 	bool InitializeD3D(int screenWidth, int screenHeight, HWND const hwnd);
 	bool InitializeAntTweakBar(HWND const hwnd);
 	bool LoadConfiguration();
