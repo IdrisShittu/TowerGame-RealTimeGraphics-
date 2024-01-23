@@ -36,11 +36,6 @@ public:
 	const shared_ptr<Shader>& GetTextureDisplacementShader() const;
 	const shared_ptr<Shader>& GetDepthShader() const;
 
-	//Example methods for current shaders, will need to make one for each new shader created or final ones used
-	//bool RenderColourShader(ID3D11DeviceContext* deviceContext, int indexCount, XMMATRIX worldMatrix, XMMATRIX viewMatrix, XMMATRIX projectionMatrix);
-	//bool RenderLightShader(ID3D11DeviceContext* deviceContext, int indexCount, XMMATRIX worldMatrix, XMMATRIX viewMatrix, XMMATRIX projectionMatrix, ID3D11ShaderResourceView* texture, XMFLOAT4 diffuseColour, XMFLOAT3 lightDirection);
-	//bool RenderTextureShader(ID3D11DeviceContext* deviceContext, int indexCount, XMMATRIX worldMatrix, XMMATRIX viewMatrix, XMMATRIX projectionMatrix, ID3D11ShaderResourceView* texture);
-
 	bool GetInitializationState() const;
 
 private:

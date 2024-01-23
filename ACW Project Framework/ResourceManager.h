@@ -30,6 +30,7 @@ public:
 
 private:
 	bool LoadModel(ID3D11Device* const device, const char* const modelFileName);
+	bool CreateBuffers(ID3D11Device* const device, const vector<VertexType>& vertices, const vector<unsigned long>& indices, const char* const modelFileName);
 	bool LoadTexture(ID3D11Device* const device, const WCHAR* textureFileName);
 
 	struct VertexType {

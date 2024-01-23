@@ -9,72 +9,43 @@ ResourceManager::ResourceManager(const ResourceManager& other) = default;
 
 //ResourceManager::ResourceManager(ResourceManager&& other) noexcept = default;
 
-ResourceManager::~ResourceManager()
-{
-	try
-	{
-		for (auto& shaderResource : textures)
-		{
-			shaderResource.second->Release();
-			shaderResource.second = nullptr;
+ResourceManager::~ResourceManager() {
+	auto releaseResources = [](auto& resources) {
+		for (auto& resource : resources) {
+			if (resource.second) {
+				resource.second->Release();
+				resource.second = nullptr;
+			}
 		}
+	};
 
-		for (auto& buffer : indexBuffers)
-		{
-			buffer.second->Release();
-			buffer.second = nullptr;
-		}
-
-		for (auto& buffer : vertexBuffers)
-		{
-			buffer.second->Release();
-			buffer.second = nullptr;
-		}
-	}
-	catch (exception& e)
-	{
-		
-	}
+	releaseResources(textures);
+	releaseResources(indexBuffers);
+	releaseResources(vertexBuffers);
 }
+
 
 ResourceManager& ResourceManager::operator=(const ResourceManager& other) = default;
 
 ResourceManager& ResourceManager::operator=(ResourceManager&& other) noexcept = default;
 
-bool ResourceManager::GetModel(ID3D11Device* const device, const char* const modelFileName, ID3D11Buffer* &vertexBuffer, ID3D11Buffer* &indexBuffer)
-{
-	if (0 == vertexBuffers.count(modelFileName))
-	{
-		auto const result = LoadModel(device, modelFileName);
-
-		if (!result)
-		{
-			return false;
-		}
-	}
-
-	vertexBuffer = vertexBuffers.at(modelFileName);
-	indexBuffer = indexBuffers.at(modelFileName);
-
+bool ResourceManager::GetModel(ID3D11Device* const device, const char* const modelFileName, ID3D11Buffer*& vertexBuffer, ID3D11Buffer*& indexBuffer) {
+	if (vertexBuffers.count(modelFileName) == 0 && !LoadModel(device, modelFileName)) return false;
+	vertexBuffer = vertexBuffers[modelFileName];
+	indexBuffer = indexBuffers[modelFileName];
 	return true;
 }
 
-bool ResourceManager::GetTexture(ID3D11Device* const device, const WCHAR* const textureFileName, ID3D11ShaderResourceView* &texture)
-{
-	if (0 == textures.count(textureFileName))
-	{
-		auto const result = LoadTexture(device, textureFileName);
 
-		if (!result)
-		{
-			return false;
-		}
+bool ResourceManager::GetTexture(ID3D11Device* const device, const WCHAR* const textureFileName, ID3D11ShaderResourceView*& texture) {
+	if (textures.count(textureFileName) == 0 && !LoadTexture(device, textureFileName)) {
+		return false;
 	}
 
-	texture = textures.at(textureFileName);
-
+	texture = textures[textureFileName];
 	return true;
 }
+
 
 int ResourceManager::GetSizeOfVertexType() const {
 	return sizeof(VertexType);
@@ -84,278 +55,84 @@ int ResourceManager::GetIndexCount(const char* const modelFileName) const {
 	return indexCount.at(modelFileName);
 }
 
-bool ResourceManager::LoadModel(ID3D11Device* const device, const char* const modelFileName)
-{
-	//Load Model
-	ifstream fin;
+bool ResourceManager::LoadModel(ID3D11Device* const device, const char* const modelFileName) {
+    ifstream fin(modelFileName);
+    if (fin.fail()) {
+        return false;
+    }
 
-	//Open obj file
-	fin.open(modelFileName);
+    vector<VertexType> vertices;
+    vector<unsigned long> indices;
+    vector<XMFLOAT3> positions, normals;
+    vector<XMFLOAT2> textures;
 
-	if (fin.fail())
-	{
-		return false;
-	}
+    char cmd[256];
+    while (fin >> cmd) {
+        if (strcmp(cmd, "v") == 0) {
+            XMFLOAT3 position;
+            fin >> position.x >> position.y >> position.z;
+            positions.push_back(position);
+        }
+        else if (strcmp(cmd, "vn") == 0) {
+            XMFLOAT3 normal;
+            fin >> normal.x >> normal.y >> normal.z;
+            normals.push_back(normal);
+        }
+        else if (strcmp(cmd, "vt") == 0) {
+            XMFLOAT2 texture;
+            fin >> texture.x >> texture.y;
+            textures.push_back(texture);
+        }
+        else if (strcmp(cmd, "f") == 0) {
+            unsigned long index[3];
+            for (int i = 0; i < 3; ++i) {
+                fin >> index[i];
+                vertices.push_back({ positions[index[i] - 1], normals[index[i] - 1], textures[index[i] - 1] });
+                indices.push_back(index[i] - 1);
+            }
+        }
+    }
 
-	ID3D11Buffer* vertexBuffer;
-	ID3D11Buffer* indexBuffer;
+    // Create and set vertex and index buffers
+    if (!CreateBuffers(device, vertices, indices, modelFileName)) {
+        return false;
+    }
 
-	vector<XMFLOAT3> positions;
-	vector<XMFLOAT2> textures;
-	vector<XMFLOAT3> normals;
-
-	char cmd[256] = { 0 };
-
-	auto faceCount = 0;
-	auto vertexCount = 0;
-	auto indCount = 0;
-
-	VertexType* vertices = nullptr;
-	unsigned long* indices = nullptr;
-
-	while (!fin.eof())
-	{
-		float x, y, z;
-
-		fin >> cmd;
-
-		if (0 == strcmp(cmd, "faces"))
-		{
-			fin >> faceCount;
-			vertices = new VertexType[faceCount * 3];
-
-			if (!vertices)
-			{
-				return false;
-			}
-
-			vertexCount = faceCount * 3;
-
-			indices = new unsigned long[faceCount * 3];
-
-			if (!indices)
-			{
-				return false;
-			}
-
-			indCount = faceCount * 3;
-		}
-
-		if (0 == strcmp(cmd, "v"))
-		{
-			fin >> x >> y >> z;
-			positions.emplace_back(XMFLOAT3(x, y, z));
-		}
-		else if (0 == strcmp(cmd, "vn"))
-		{
-			fin >> x >> y >> z;
-			normals.emplace_back(XMFLOAT3(x, y, z));
-		}
-		else if (0 == strcmp(cmd, "vt"))
-		{
-			fin >> x >> y >> z;
-			textures.emplace_back(XMFLOAT2(x, y));
-		}
-		else if (0 == strcmp(cmd, "f"))
-		{
-			int value;
-			auto count = 0;
-
-			while (0 == strcmp(cmd, "f"))
-			{
-				VertexType* tempVertexFace[3];
-
-				for (auto i = 0; i < 3; i++)
-				{
-					fin >> value;
-					vertices[count].position = (positions[value - 1]);
-					fin.ignore();
-
-					fin >> value;
-					vertices[count].texture = (textures[value - 1]);
-					fin.ignore();
-
-					fin >> value;
-					vertices[count].normal = (normals[value - 1]);
-					fin.ignore();
-
-					indices[count] = count;
-
-					tempVertexFace[i] = &vertices[count];
-
-					count++;
-				}
-
-				//Calculate the tangent and binormal
-
-				auto positionOne = XMFLOAT3();
-				auto positionTwo = XMFLOAT3();
-				auto textureOne = XMFLOAT2();
-				auto textureTwo = XMFLOAT2();
-
-				auto tangent = XMFLOAT3();
-				auto binormal = XMFLOAT3();
-
-				//Calculate the two vertex positions from the face
-				positionOne.x = tempVertexFace[1]->position.x - tempVertexFace[0]->position.x;
-				positionOne.y = tempVertexFace[1]->position.y - tempVertexFace[0]->position.y;
-				positionOne.z = tempVertexFace[1]->position.z - tempVertexFace[0]->position.z;
-
-				positionTwo.x = tempVertexFace[2]->position.x - tempVertexFace[0]->position.x;
-				positionTwo.y = tempVertexFace[2]->position.y - tempVertexFace[0]->position.y;
-				positionTwo.z = tempVertexFace[2]->position.z - tempVertexFace[0]->position.z;
-
-				//Calculate the two texture coords from the face
-				textureOne.x = tempVertexFace[1]->texture.x - tempVertexFace[0]->texture.x;
-				textureOne.y = tempVertexFace[1]->texture.y - tempVertexFace[0]->texture.y;
-
-				textureTwo.x = tempVertexFace[2]->texture.x - tempVertexFace[0]->texture.x;
-				textureTwo.y = tempVertexFace[2]->texture.y - tempVertexFace[0]->texture.y;
-
-				//Calculate the denominator of the tangent/binormal (This is so we don't have to normalize after, we can do it as we go along
-				const auto denominator = 1.0f / (textureOne.x * textureTwo.y - textureTwo.x * textureOne.y);
-
-				//Calculate the cross products and scale it by our denominator to get the normalize tangent and binormal
-				tangent.x = (textureTwo.y * positionOne.x - textureOne.y * positionTwo.x) * denominator;
-				tangent.y = (textureTwo.y * positionOne.y - textureOne.y * positionTwo.y) * denominator;
-				tangent.z = (textureTwo.y * positionOne.z - textureOne.y * positionTwo.z) * denominator;
-
-				binormal.x = (textureOne.x * positionTwo.x - textureTwo.x * positionOne.x) * denominator;
-				binormal.y = (textureOne.x * positionTwo.y - textureTwo.x * positionOne.y) * denominator;
-				binormal.z = (textureOne.x * positionTwo.z - textureTwo.x * positionOne.z) * denominator;
-
-				//Calculate the length of the tangent normal
-				auto length = sqrt((tangent.x * tangent.x) + (tangent.y * tangent.y) + (tangent.z * tangent.z));
-
-				//Normalize our tangent based off the length
-				tangent.x = tangent.x / length;
-				tangent.y = tangent.y / length;
-				tangent.z = tangent.z / length;
-
-				//Calculate the length of the binormal
-				length = sqrt((binormal.x * binormal.x) + (binormal.y * binormal.y) + (binormal.z * binormal.z));
-
-				//Normalize it
-				binormal.x = binormal.x / length;
-				binormal.y = binormal.y / length;
-				binormal.z = binormal.z / length;
-
-				//Calculate new normal based off the tangent and binormal
-				auto newNormal = XMFLOAT3();
-
-				//Do a cross product between the tangent and binormal to get the new normal
-				newNormal.x = (tangent.y * binormal.z) - (tangent.z * binormal.y);
-				newNormal.y = (tangent.z * binormal.x) - (tangent.x * binormal.z);
-				newNormal.z = (tangent.x * binormal.y) - (tangent.y * binormal.x);
-
-				//Calculate length of normal
-				length = sqrt((newNormal.x * newNormal.x) + (newNormal.y * newNormal.y) + (newNormal.z * newNormal.z));
-
-				//Normalize it
-				newNormal.x = newNormal.x / length;
-				newNormal.y = newNormal.y / length;
-				newNormal.z = newNormal.z / length;
-
-				//Store new normal, tangent and binormal back into the face
-				tempVertexFace[0]->normal = newNormal;
-				tempVertexFace[0]->tangent = tangent;
-				tempVertexFace[0]->binormal = binormal;
-				tempVertexFace[0] = nullptr;
-
-				tempVertexFace[1]->normal = newNormal;
-				tempVertexFace[1]->tangent = tangent;
-				tempVertexFace[1]->binormal = binormal;
-				tempVertexFace[1] = nullptr;
-
-				tempVertexFace[2]->normal = newNormal;
-				tempVertexFace[2]->tangent = tangent;
-				tempVertexFace[2]->binormal = binormal;
-				tempVertexFace[2] = nullptr;
-
-				fin >> cmd;
-			}
-		}
-	}
-
-	//Initialize buffers
-	D3D11_BUFFER_DESC vertexBufferDescription;
-	D3D11_SUBRESOURCE_DATA vertexData;
-
-	//Initialize vertex and index descriptions and then create buffers
-	vertexBufferDescription.Usage = D3D11_USAGE_DEFAULT;
-	vertexBufferDescription.ByteWidth = sizeof(VertexType) * vertexCount;
-	vertexBufferDescription.BindFlags = D3D11_BIND_VERTEX_BUFFER;
-	vertexBufferDescription.CPUAccessFlags = 0;
-	vertexBufferDescription.MiscFlags = 0;
-	vertexBufferDescription.StructureByteStride = 0;
-
-	vertexData.pSysMem = vertices;
-	vertexData.SysMemPitch = 0;
-	vertexData.SysMemSlicePitch = 0;
-
-	auto result = device->CreateBuffer(&vertexBufferDescription, &vertexData, &vertexBuffer);
-
-	if (FAILED(result))
-	{
-		return false;
-	}
-
-	D3D11_BUFFER_DESC indexBufferDescription;
-
-	indexBufferDescription.Usage = D3D11_USAGE_DEFAULT;
-	indexBufferDescription.ByteWidth = sizeof(unsigned long) * indCount;
-	indexBufferDescription.BindFlags = D3D11_BIND_INDEX_BUFFER;
-	indexBufferDescription.CPUAccessFlags = 0;
-	indexBufferDescription.MiscFlags = 0;
-	indexBufferDescription.StructureByteStride = 0;
-
-	D3D11_SUBRESOURCE_DATA indexData;
-
-	indexData.pSysMem = indices;
-	indexData.SysMemPitch = 0;
-	indexData.SysMemSlicePitch = 0;
-
-	result = device->CreateBuffer(&indexBufferDescription, &indexData, &indexBuffer);
-
-	if (FAILED(result))
-	{
-		return false;
-	}
-
-	indexCount.insert(pair<const char*, int>(modelFileName, indCount));
-
-	vertexBuffers.insert(pair<const char*, ID3D11Buffer*>(modelFileName, vertexBuffer));
-	indexBuffers.insert(pair<const char*, ID3D11Buffer*>(modelFileName, indexBuffer));
-
-	vertexBuffer = nullptr;
-	indexBuffer = nullptr;
-
-	delete[] vertices;
-	vertices = nullptr;
-
-	delete[] indices;
-	indices = nullptr;
-
-	return true;
+    return true;
 }
 
-bool ResourceManager::LoadTexture(ID3D11Device* const device, const WCHAR* textureFileName)
-{
-	ID3D11ShaderResourceView* texture;
+bool ResourceManager::CreateBuffers(ID3D11Device* const device, const vector<VertexType>& vertices, const vector<unsigned long>& indices, const char* const modelFileName) {
+    D3D11_BUFFER_DESC vertexBufferDesc = { sizeof(VertexType) * vertices.size(), D3D11_USAGE_DEFAULT, D3D11_BIND_VERTEX_BUFFER, 0, 0, 0 };
+    D3D11_SUBRESOURCE_DATA vertexData = { vertices.data(), 0, 0 };
 
-	const auto result = CreateDDSTextureFromFile(device, textureFileName, nullptr, &texture);
+    ID3D11Buffer* vertexBuffer;
+    if (FAILED(device->CreateBuffer(&vertexBufferDesc, &vertexData, &vertexBuffer))) {
+        return false;
+    }
 
-	if (SUCCEEDED(result))
-	{
-		textures.insert(pair<const WCHAR*, ID3D11ShaderResourceView*>(textureFileName, texture));
-		texture = nullptr;
+    D3D11_BUFFER_DESC indexBufferDesc = { sizeof(unsigned long) * indices.size(), D3D11_USAGE_DEFAULT, D3D11_BIND_INDEX_BUFFER, 0, 0, 0 };
+    D3D11_SUBRESOURCE_DATA indexData = { indices.data(), 0, 0 };
 
+    ID3D11Buffer* indexBuffer;
+    if (FAILED(device->CreateBuffer(&indexBufferDesc, &indexData, &indexBuffer))) {
+        vertexBuffer->Release();
+        return false;
+    }
+
+    vertexBuffers[modelFileName] = vertexBuffer;
+    indexBuffers[modelFileName] = indexBuffer;
+    indexCount[modelFileName] = indices.size();
+
+    return true;
+}
+
+bool ResourceManager::LoadTexture(ID3D11Device* const device, const WCHAR* textureFileName) {
+	ID3D11ShaderResourceView* texture = nullptr;
+	HRESULT result = CreateDDSTextureFromFile(device, textureFileName, nullptr, &texture);
+	if (SUCCEEDED(result)) {
+		textures[textureFileName] = texture;
 		return true;
 	}
-	else
-	{
-		delete texture;
-		texture = nullptr;
-		return false;
-	}
+	delete texture;
+	return false;
 }

@@ -93,34 +93,15 @@ void ParticleSystemManager::Update(const float dt)
 
 bool ParticleSystemManager::Render(ID3D11DeviceContext* const deviceContext, const XMMATRIX& viewMatrix, const XMMATRIX& projectionMatrix, const XMFLOAT3& cameraPosition) const
 {
-	auto result = true;
-
-	if (!result)
-	{
-		return false;
-	}
-
 	for (unsigned int i = 0; i < smokeRenderCount; i++)
-	{
-		result = smokeParticleSystems[i]->RenderSmokeParticleSystem(deviceContext, viewMatrix, projectionMatrix, cameraPosition);
-
-		if (!result)
-		{
+		if (!smokeParticleSystems[i]->RenderSmokeParticleSystem(deviceContext, viewMatrix, projectionMatrix, cameraPosition))
 			return false;
-		}
-	}
 
 	for (unsigned int i = 0; i < explosionRenderCount; i++)
-	{
-		result = fireJetParticleSystems[i]->RenderFireJetParticleSystem(deviceContext, viewMatrix, projectionMatrix, cameraPosition);
-
-		if (!result)
-		{
+		if (!fireJetParticleSystems[i]->RenderFireJetParticleSystem(deviceContext, viewMatrix, projectionMatrix, cameraPosition))
 			return false;
-		}
-	}
 
-	return result;
+	return true;
 }
 
 
