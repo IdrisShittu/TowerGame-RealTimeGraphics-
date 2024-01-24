@@ -1,24 +1,12 @@
 #include "SmokeParticleSystem.h"
 
-
-
 SmokeParticleSystem::SmokeParticleSystem(ID3D11Device* const device, HWND const hwnd, const XMFLOAT3& initialPosition, const XMFLOAT3& initialScale, const XMFLOAT3& scaleReduction, const XMFLOAT3& killScale, const float transparency, const float spawnRate, const float velocity, const shared_ptr<ResourceManager>& resourceManager) :
-ParticleSystem(device, hwnd, initialPosition, initialScale, scaleReduction, killScale, XMFLOAT3(0.7f, 0.7f, 0.7f), L"IceColour.dds", transparency, spawnRate, velocity, resourceManager)
-{
-
-}
-
-//SmokeParticleSystem::SmokeParticleSystem(const SmokeParticleSystem& other) = default;
-
-//SmokeParticleSystem::SmokeParticleSystem(SmokeParticleSystem&& other) noexcept = default;
+ParticleSystem(device, hwnd, initialPosition, initialScale, scaleReduction, killScale, XMFLOAT3(0.7f, 0.7f, 0.7f), L"BaseColour.dds", transparency, spawnRate, velocity, resourceManager)
+{}
 
 SmokeParticleSystem::~SmokeParticleSystem()
 {
 }
-
-//SmokeParticleSystem& SmokeParticleSystem::operator=(const SmokeParticleSystem& other) = default;
-//
-//SmokeParticleSystem& SmokeParticleSystem::operator=(SmokeParticleSystem&& other) noexcept = default;
 
 void SmokeParticleSystem::UpdateSmokeParticleSystem(const float dt)
 {

@@ -46,10 +46,10 @@ Rocket::Rocket(ID3D11Device* const device, const XMFLOAT3& position, const XMFLO
 	}
 
 	textureNames.clear();
-	textureNames.push_back(L"MetalMeshColour.dds");
-	textureNames.push_back(L"MetalMeshNormal.dds");
-	textureNames.push_back(L"MetalMeshSpecular.dds");
-	textureNames.push_back(L"MetalMeshDisplacement.dds");
+	textureNames.push_back(L"BaseColour.dds");
+	textureNames.push_back(L"BaseNormal.dds");
+	textureNames.push_back(L"BaseSpecular.dds");
+	textureNames.push_back(L"BaseDisplacement.dds");
 
 	rocketLauncher = make_shared<GameObject>();
 	rocketLauncher->AddPositionComponent((1.3f * scale.x), 0.0f, 0.0f);
