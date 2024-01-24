@@ -388,7 +388,7 @@ void ResourceManager::ProcessFace(ifstream& fin, const vector<XMFLOAT3>& positio
 
     fin >> cmd; // Move to the next line (or next face)
 }
-
+//Red Triangle
 void ResourceManager::CalculateTangentBinormal(VertexType* v0, VertexType* v1, VertexType* v2) {
     // Calculations for tangent and binormal as per your original logic
     XMFLOAT3 positionOne = XMFLOAT3(v1->position.x - v0->position.x, v1->position.y - v0->position.y, v1->position.z - v0->position.z);
