@@ -2,10 +2,9 @@
 #include <algorithm>
 
 GraphicsRenderer::GraphicsRenderer(int screenWidth, int screenHeight, HWND const hwnd)
-	: initializationFailed(false), d3D(nullptr), antTweakBarStatistics(nullptr),
-	camera(nullptr), lightManager(nullptr), terrain(nullptr), rocket(nullptr),
-	displacedFloor(nullptr), skyBox(nullptr), gameObjects(), shaderManager(nullptr),
-	resourceManager(nullptr), shadowMapManager(nullptr), renderToggle(0),
+	: initializationFailed(false), d3D(nullptr), camera(nullptr), lightManager(nullptr), 
+	terrain(nullptr), rocket(nullptr),displacedFloor(nullptr), skyBox(nullptr), gameObjects(), 
+	shaderManager(nullptr), resourceManager(nullptr), shadowMapManager(nullptr), renderToggle(0),
 	renderOptionalGameObjects(false), timeScale(1), updateCamera(false),
 	cameraMode(0), dt(0.0f), fps(0.0f), start({ 0 }), end({ 0 }), frequency({ 0 })
 {
@@ -15,7 +14,6 @@ GraphicsRenderer::GraphicsRenderer(int screenWidth, int screenHeight, HWND const
 	windowHeight = screenHeight;
 
 	if (!InitializeGraphicsDevice(screenWidth, screenHeight, hwnd) ||
-		!InitializeAntTweakBar(hwnd, screenWidth, screenHeight) ||
 		!InitializeResources(hwnd) ||
 		!InitializeSceneObjects(hwnd))
 	{
@@ -29,26 +27,6 @@ GraphicsRenderer::GraphicsRenderer(int screenWidth, int screenHeight, HWND const
 bool GraphicsRenderer::InitializeGraphicsDevice(int screenWidth, int screenHeight, HWND hwnd) {
 	d3D = make_shared<GraphicsDeviceManager>(screenWidth, screenHeight, hwnd, FULL_SCREEN, VSYNC_ENABLED, SCREEN_DEPTH, SCREEN_NEAR);
 	return d3D->GetInitializationState() == false;
-}
-
-bool GraphicsRenderer::InitializeAntTweakBar(HWND hwnd, int screenWidth, int screenHeight) {
-	TwInit(TW_DIRECT3D11, d3D->GetDevice());
-	TwWindowSize(screenWidth, screenHeight);
-	SetupAntTweakBar();
-	return true;
-}
-
-void GraphicsRenderer::SetupAntTweakBar() {
-	antTweakBarStatistics = TwNewBar("Statistics");
-	TwDefine(" Statistics label='Statistics' position='20 20' size='240 160' alpha=0");
-	TwAddVarRW(antTweakBarStatistics, "WindowWidth: ", TW_TYPE_FLOAT, &windowWidth, "");
-	TwAddVarRW(antTweakBarStatistics, "WindowHeight: ", TW_TYPE_FLOAT, &windowHeight, "");
-	TwAddVarRW(antTweakBarStatistics, "DT: ", TW_TYPE_FLOAT, &dt, "");
-	TwAddVarRW(antTweakBarStatistics, "FPS: ", TW_TYPE_FLOAT, &fps, "");
-	TwAddVarRW(antTweakBarStatistics, "Render Mode: ", TW_TYPE_INT32, &renderToggle, "");
-	TwAddVarRW(antTweakBarStatistics, "Camera Mode: ", TW_TYPE_INT32, &cameraMode, "");
-	TwAddVarRW(antTweakBarStatistics, "TimeScale: ", TW_TYPE_INT32, &timeScale, "");
-	TwAddVarRW(antTweakBarStatistics, "Optional GameObjects: ", TW_TYPE_BOOLCPP, &renderOptionalGameObjects, "");
 }
 
 bool GraphicsRenderer::InitializeResources(HWND hwnd) {
@@ -191,7 +169,6 @@ GraphicsRenderer::GraphicsRenderer(GraphicsRenderer&& other) noexcept = default;
 
 GraphicsRenderer::~GraphicsRenderer()
 {
-	TwTerminate();
 }
 
 GraphicsRenderer& GraphicsRenderer::operator=(const GraphicsRenderer&) = default;
@@ -394,7 +371,6 @@ bool GraphicsRenderer::RenderFrame() {
 	d3D->EnabledDepthStencil();
 	d3D->DisableAlphaBlending();
 
-	TwDraw();
 
 	d3D->EndScene();
 

@@ -7,17 +7,10 @@ ParticleSystem(device, hwnd, modelType, initialPosition, initialScale, finalScal
 
 }
 
-//FireJetParticleSystem::FireJetParticleSystem(const FireJetParticleSystem& other) = default;
-//
-//FireJetParticleSystem::FireJetParticleSystem(FireJetParticleSystem&& other) noexcept = default;
 
 FireJetParticleSystem::~FireJetParticleSystem()
 {
 }
-
-//FireJetParticleSystem& FireJetParticleSystem::operator=(const FireJetParticleSystem& other) = default;
-//
-//FireJetParticleSystem& FireJetParticleSystem::operator=(FireJetParticleSystem&& other) noexcept = default;
 
 void FireJetParticleSystem::UpdateFireJetParticleSystem(const float dt)
 {

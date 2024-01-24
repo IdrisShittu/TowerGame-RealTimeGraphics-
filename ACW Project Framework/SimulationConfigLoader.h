@@ -1,7 +1,6 @@
 #pragma once
 #include <DirectXMath.h>
 #include <fstream>
-#include <AntTweakBar.h>
 #include <d3d11.h>
 
 using namespace DirectX;
@@ -14,10 +13,6 @@ public:
 	void LoadConfiguration(const char* const configurationFile);
 	XMFLOAT3 ReadXMFLOAT3(std::ifstream& fileStream);
 	XMFLOAT4 ReadXMFLOAT4(std::ifstream& fileStream);
-	void InitializeAntTweakBar();
-	void AddAntTweakBarVars();
-	SimulationConfigLoader(const SimulationConfigLoader& other); // Copy Constructor
-	SimulationConfigLoader(SimulationConfigLoader&& other) noexcept; // Move Constructor
 	~SimulationConfigLoader();
 
 	SimulationConfigLoader& operator = (const SimulationConfigLoader& other) = default;
@@ -70,7 +65,5 @@ private:
 	XMFLOAT3  launchPadScale;
 	XMFLOAT4  launchPadTessellationSettings;
 	XMFLOAT4  launchPadDisplacementSettings;
-
-	TwBar* antTweakBarConfigData;
 
 };

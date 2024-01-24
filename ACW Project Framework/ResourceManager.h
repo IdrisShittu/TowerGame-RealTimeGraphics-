@@ -16,7 +16,7 @@ class ResourceManager
 public:
 	ResourceManager();
 	ResourceManager(const ResourceManager& other); // Copy Constructor
-	//ResourceManager(ResourceManager&& other) noexcept; // Move Constructor
+	
 	~ResourceManager();
 
 	ResourceManager& operator = (const ResourceManager& other); // Copy Assignment Operator
@@ -39,15 +39,12 @@ private:
 	};
 
 	bool LoadModel(ID3D11Device* const device, const char* const modelFileName);
-	void ProcessFace(ifstream& fin, const vector<XMFLOAT3>& positions, const vector<XMFLOAT2>& textures, const vector<XMFLOAT3>& normals, vector<VertexType>& vertices, vector<unsigned long>& indices);
-	void CalculateTangentBinormal(VertexType* v0, VertexType* v1, VertexType* v2);
+	void CalculateTangentBinormal(VertexType* tempVertexFace[3]);
+	XMFLOAT3 CrossProduct(const XMFLOAT3& a, const XMFLOAT3& b);
+	bool CreateBuffer(ID3D11Device* const device, const void* data, UINT dataSize, UINT bindFlags, ID3D11Buffer** buffer);
 	void NormalizeVector(XMFLOAT3& vector);
 	bool CreateBuffers(ID3D11Device* const device, VertexType* vertices, unsigned long* indices, int vertexCount, int indCount, ID3D11Buffer** vertexBuffer, ID3D11Buffer** indexBuffer);
-	bool CreateBuffers(ID3D11Device* const device, const vector<VertexType>& vertices, const vector<unsigned long>& indices, const char* const modelFileName);
-	bool CreateBuffers(ID3D11Device* const device, const vector<VertexType>& vertices, const vector<unsigned long>& indices, ID3D11Buffer** vertexBuffer, ID3D11Buffer** indexBuffer);
 	bool LoadTexture(ID3D11Device* const device, const WCHAR* textureFileName);
-
-	
 
 	map<const char*, int> indexCount;
 	map<const char*, int> instanceCount;

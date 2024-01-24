@@ -17,7 +17,6 @@
 #include "Terrain.h"
 #include "Rocket.h"
 #include "ParticleSystemManager.h"
-#include "AntTweakBar.h"
 #include "SimulationConfigLoader.h"
 
 auto const FULL_SCREEN = false;
@@ -33,26 +32,10 @@ class GraphicsRenderer
 public:
 	GraphicsRenderer(int screenWidth, int screenHeight, HWND const hwnd); // Default Constructor
 	bool InitializeGraphicsDevice(int screenWidth, int screenHeight, HWND hwnd);
-	bool InitializeAntTweakBar(HWND hwnd, int screenWidth, int screenHeight);
-	void SetupAntTweakBar();
 	bool InitializeResources(HWND hwnd);
 	bool InitializeSceneObjects(HWND hwnd);
-	bool InitializeCamera(HWND hwnd);
-	bool InitializeLightManager(HWND hwnd);
-	bool InitializeTerrain(HWND hwnd);
+	
 	bool InitializeGameObjects(HWND hwnd);
-	bool InitializeTerrain();
-	bool InitializeD3D(int screenWidth, int screenHeight, HWND const hwnd);
-	bool InitializeAntTweakBar(HWND const hwnd);
-	bool LoadConfiguration();
-	bool CreateShaderManager(HWND const hwnd);
-	bool CreateResourceManager();
-	bool CreateParticleSystemManager();
-	bool CreateCamera();
-	bool CreateLightManager();
-	bool CreateTerrainAndRocket();
-	bool CreateGameObjects();
-	bool CreateShadowMapManager(HWND const hwnd);
 	GraphicsRenderer(const GraphicsRenderer& other); // Copy Constructor
 	GraphicsRenderer(GraphicsRenderer&& other) noexcept; // Move Constructor
 	~GraphicsRenderer(); // Destructor
@@ -89,7 +72,6 @@ private:
 
 	shared_ptr<GraphicsDeviceManager>  d3D;
 
-	TwBar*  antTweakBarStatistics;
 
 	shared_ptr<Camera>  camera;
 	shared_ptr<LightManager>  lightManager;

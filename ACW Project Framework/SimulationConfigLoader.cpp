@@ -21,42 +21,40 @@ SimulationConfigLoader::SimulationConfigLoader(const char* const configurationFi
     moonlightSpecularIntensity(0.0f),
     launchPadScale(XMFLOAT3()),
     launchPadTessellationSettings(XMFLOAT4()),
-    launchPadDisplacementSettings(XMFLOAT4()),
-    antTweakBarConfigData(nullptr) {
+    launchPadDisplacementSettings(XMFLOAT4()) {
     LoadConfiguration(configurationFile);
-    InitializeAntTweakBar();
 }
 
 void SimulationConfigLoader::LoadConfiguration(const char* const configurationFile) {
-        std::ifstream fileStream(configurationFile);
-        if (fileStream.fail()) return;
+    std::ifstream fileStream(configurationFile);
+    if (fileStream.fail()) return;
 
-        std::unordered_map<std::string, std::function<void()>> commandActions = {
-            {"CameraInitialPosition", [&] { cameraPosition = ReadXMFLOAT3(fileStream); }},
-            {"TerrainSize", [&] { terrainSize = ReadXMFLOAT3(fileStream); }},
-            {"TerrainInitialScale", [&] { terrainScale = ReadXMFLOAT3(fileStream); }},
-            {"RocketInitialPosition", [&] { rocketPosition = ReadXMFLOAT3(fileStream); }},
-            {"RocketInitialRotation", [&] { rocketRotation = ReadXMFLOAT3(fileStream); }},
-            {"RocketInitialScale", [&] { rocketScale = ReadXMFLOAT3(fileStream); }},
-            {"SunlightAmbientColor", [&] { sunlightAmbientColor = ReadXMFLOAT4(fileStream); }},
-            {"SunlightDiffuseColor", [&] { sunlightDiffuseColor = ReadXMFLOAT4(fileStream); }},
-            {"SunlightSpecularColor", [&] { sunlightSpecularColor = ReadXMFLOAT4(fileStream); }},
-            {"SunlightSpecularIntensity", [&] { fileStream >> sunlightSpecularIntensity; }},
-            {"MoonlightAmbientColor", [&] { moonlightAmbientColor = ReadXMFLOAT4(fileStream); }},
-            {"MoonlightDiffuseColor", [&] { moonlightDiffuseColor = ReadXMFLOAT4(fileStream); }},
-            {"MoonlightSpecularColor", [&] { moonlightSpecularColor = ReadXMFLOAT4(fileStream); }},
-            {"MoonlightSpecularIntensity", [&] { fileStream >> moonlightSpecularIntensity; }},
-            {"LaunchPadInitialScale", [&] { launchPadScale = ReadXMFLOAT3(fileStream); }},
-            {"LaunchPadTessellationSettings", [&] { launchPadTessellationSettings = ReadXMFLOAT4(fileStream); }},
-            {"LaunchPadDisplacementSettings", [&] { launchPadDisplacementSettings = ReadXMFLOAT4(fileStream); }}
-       };
+    std::unordered_map<std::string, std::function<void()>> commandActions = {
+        {"CameraInitialPosition", [&] { cameraPosition = ReadXMFLOAT3(fileStream); }},
+        {"TerrainSize", [&] { terrainSize = ReadXMFLOAT3(fileStream); }},
+        {"TerrainInitialScale", [&] { terrainScale = ReadXMFLOAT3(fileStream); }},
+        {"RocketInitialPosition", [&] { rocketPosition = ReadXMFLOAT3(fileStream); }},
+        {"RocketInitialRotation", [&] { rocketRotation = ReadXMFLOAT3(fileStream); }},
+        {"RocketInitialScale", [&] { rocketScale = ReadXMFLOAT3(fileStream); }},
+        {"SunlightAmbientColor", [&] { sunlightAmbientColor = ReadXMFLOAT4(fileStream); }},
+        {"SunlightDiffuseColor", [&] { sunlightDiffuseColor = ReadXMFLOAT4(fileStream); }},
+        {"SunlightSpecularColor", [&] { sunlightSpecularColor = ReadXMFLOAT4(fileStream); }},
+        {"SunlightSpecularIntensity", [&] { fileStream >> sunlightSpecularIntensity; }},
+        {"MoonlightAmbientColor", [&] { moonlightAmbientColor = ReadXMFLOAT4(fileStream); }},
+        {"MoonlightDiffuseColor", [&] { moonlightDiffuseColor = ReadXMFLOAT4(fileStream); }},
+        {"MoonlightSpecularColor", [&] { moonlightSpecularColor = ReadXMFLOAT4(fileStream); }},
+        {"MoonlightSpecularIntensity", [&] { fileStream >> moonlightSpecularIntensity; }},
+        {"LaunchPadInitialScale", [&] { launchPadScale = ReadXMFLOAT3(fileStream); }},
+        {"LaunchPadTessellationSettings", [&] { launchPadTessellationSettings = ReadXMFLOAT4(fileStream); }},
+        {"LaunchPadDisplacementSettings", [&] { launchPadDisplacementSettings = ReadXMFLOAT4(fileStream); }}
+    };
 
-       std::string command;
-       while (fileStream >> command) {
-            if (commandActions.find(command) != commandActions.end()) {
-                commandActions[command]();
-            }
-       }
+    std::string command;
+    while (fileStream >> command) {
+        if (commandActions.find(command) != commandActions.end()) {
+            commandActions[command]();
+        }
+    }
 }
 
 XMFLOAT3 SimulationConfigLoader::ReadXMFLOAT3(std::ifstream& fileStream) {
@@ -71,115 +69,91 @@ XMFLOAT4 SimulationConfigLoader::ReadXMFLOAT4(std::ifstream& fileStream) {
     return XMFLOAT4(x, y, z, w);
 }
 
-
-void SimulationConfigLoader::InitializeAntTweakBar() {
-    antTweakBarConfigData = TwNewBar("Configs");
-    TwDefine(" Configuration label='Config File Data' position='1000 100' size='220 200'");
-    AddAntTweakBarVars();
-}
-
-void SimulationConfigLoader::AddAntTweakBarVars() {
-    TwAddVarRW(antTweakBarConfigData, "CameraPosition: ", TW_TYPE_DIR3F, &cameraPosition, "");
-    TwAddVarRW(antTweakBarConfigData, "TerrainDim: ", TW_TYPE_DIR3F, &terrainSize, "");
-    TwAddVarRW(antTweakBarConfigData, "TerrainScale: ", TW_TYPE_DIR3F, &terrainScale, "");
-    TwAddVarRW(antTweakBarConfigData, "RocketPosition: ", TW_TYPE_DIR3F, &rocketPosition, "");
-    TwAddVarRW(antTweakBarConfigData, "RocketRotation: ", TW_TYPE_DIR3F, &rocketRotation, "");
-    TwAddVarRW(antTweakBarConfigData, "RocketScale: ", TW_TYPE_DIR3F, &rocketScale, "");
-
-    TwAddVarRW(antTweakBarConfigData, "SunSpecularPower: ", TW_TYPE_FLOAT, &sunlightSpecularIntensity, "");
-   
-    TwAddVarRW(antTweakBarConfigData, "MoonSpecularPower: ", TW_TYPE_FLOAT, &moonlightSpecularIntensity, "");
-    TwAddVarRW(antTweakBarConfigData, "LaunchPadScale: ", TW_TYPE_DIR3F, &launchPadScale, "");
-    TwAddVarRW(antTweakBarConfigData, "LaunchPadTess: ", TW_TYPE_QUAT4F, &launchPadTessellationSettings, "");
-    TwAddVarRW(antTweakBarConfigData, "LaunchPadDisp: ", TW_TYPE_QUAT4F, &launchPadDisplacementSettings, "");
-}
-
 SimulationConfigLoader::~SimulationConfigLoader()
 {
-	TwTerminate();
 }
 
 const XMFLOAT3& SimulationConfigLoader::GetCameraPosition() const
 {
-	return  cameraPosition;
+    return  cameraPosition;
 }
 
 const XMFLOAT3& SimulationConfigLoader::GetTerrainDimensions() const
 {
-	return  terrainSize;
+    return  terrainSize;
 }
 
 const XMFLOAT3& SimulationConfigLoader::GetTerrainScale() const
 {
-	return  terrainScale;
+    return  terrainScale;
 }
 
 const XMFLOAT3& SimulationConfigLoader::GetRocketPosition() const
 {
-	return  rocketPosition;
+    return  rocketPosition;
 }
 
 const XMFLOAT3& SimulationConfigLoader::GetRocketRotation() const
 {
-	return  rocketRotation;
+    return  rocketRotation;
 }
 
 const XMFLOAT3& SimulationConfigLoader::GetRocketScale() const
 {
-	return  rocketScale;
+    return  rocketScale;
 }
 
 const XMFLOAT4& SimulationConfigLoader::GetSunAmbient() const
 {
-	return  sunlightAmbientColor;
+    return  sunlightAmbientColor;
 }
 
 const XMFLOAT4& SimulationConfigLoader::GetSunDiffuse() const
 {
-	return  sunlightDiffuseColor;
+    return  sunlightDiffuseColor;
 }
 
 const XMFLOAT4& SimulationConfigLoader::GetSunSpecular() const
 {
-	return  sunlightSpecularColor;
+    return  sunlightSpecularColor;
 }
 
 const float SimulationConfigLoader::GetSunSpecularPower() const
 {
-	return  sunlightSpecularIntensity;
+    return  sunlightSpecularIntensity;
 }
 
 const XMFLOAT4& SimulationConfigLoader::GetMoonAmbient() const
 {
-	return  moonlightAmbientColor;
+    return  moonlightAmbientColor;
 }
 
 const XMFLOAT4& SimulationConfigLoader::GetMoonDiffuse() const
 {
-	return  moonlightDiffuseColor;
+    return  moonlightDiffuseColor;
 }
 
 const XMFLOAT4& SimulationConfigLoader::GetMoonSpecular() const
 {
-	return  moonlightSpecularColor;
+    return  moonlightSpecularColor;
 }
 
 const float SimulationConfigLoader::GetMoonSpecularPower() const
 {
-	return  moonlightSpecularIntensity;
+    return  moonlightSpecularIntensity;
 }
 
 const XMFLOAT3& SimulationConfigLoader::GetLaunchPadScale() const
 {
-	return  launchPadScale;
+    return  launchPadScale;
 }
 
 const XMFLOAT4& SimulationConfigLoader::GetLaunchPadTessellationValues() const
 {
-	return  launchPadTessellationSettings;
+    return  launchPadTessellationSettings;
 }
 
 const XMFLOAT4& SimulationConfigLoader::GetLaunchPadDisplacementValues() const
 {
-	return  launchPadDisplacementSettings;
+    return  launchPadDisplacementSettings;
 }
