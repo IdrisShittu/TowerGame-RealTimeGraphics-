@@ -7,8 +7,8 @@ GraphicsDeviceManager::GraphicsDeviceManager(int screenWidth, int screenHeight, 
 	swapChain(nullptr), device(nullptr), deviceContext(nullptr), renderTargetView(nullptr),
 	depthStencilBuffer(nullptr), depthStencilStateEnabled(nullptr), depthStencilStateDisabled(nullptr),
 	depthStencilView(nullptr), rasterStateNormal(nullptr), rasterStateWireFrame(nullptr),
-	alphaEnabledBlendState(nullptr), alphaDisableBlendState(nullptr), projectionMatrix(XMMATRIX()), orthographicMatrix(XMMATRIX())
-{
+	alphaEnabledBlendState(nullptr), alphaDisableBlendState(nullptr), projectionMatrix(XMMATRIX()), orthographicMatrix(XMMATRIX()){
+
 	unsigned int numerator = 0;
 	unsigned int denominator = 0;
 
@@ -116,7 +116,6 @@ GraphicsDeviceManager::~GraphicsDeviceManager()
 	}
 }
 
-// Helper function to release a COM object and set its pointer to nullptr
 template <typename T>
 void GraphicsDeviceManager::ReleaseComObject(T*& ptr)
 {

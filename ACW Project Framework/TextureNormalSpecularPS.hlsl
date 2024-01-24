@@ -78,67 +78,6 @@ float CalculateShadow(Texture2D depthMap, float4 position, float nDotL)
 
 float4 TextureNormalSpecularPS(PixelInput input) : SV_TARGET
 {
-	//float3 lightPosWorld;
-	//float4 textureColour;
-	//float4 bumpMap;
-	//float3 bumpNormal;
-	//float lightIntensity;
-	//float4 colour = float4(0.0f, 0.0f, 0.0f, 0.0f);
-	//float4 specularIntensity;
-	//float3 reflection;
-	//float4 specular;
-
-	//input.normal = normalize(input.normal);
-
-	////Receive pixel sample from normal texture using the samplerstate
-	//bumpMap = textures[1].Sample(sampleType, input.tex);
-
-	////Range is held in [0,1], need to expand that to [-1.1]
-	//bumpMap = (bumpMap * 2.0f) - 1.0f;
-
-	////Calculate our normal
-	//bumpNormal = normalize((bumpMap.x * input.tangent) + (bumpMap.y * input.binormal) + (bumpMap.z * input.normal));
-
-	//for (int i = 0; i < lightCount; i++)
-	//{
-	//	lightPosWorld = normalize(lights[i].lightPositions - input.positionW);
-
-	//	lightIntensity = saturate(dot(bumpNormal, lightPosWorld));
-
-	//	colour += lights[i].diffuseColour * lightIntensity;
-
-	//	//If there is a light intensity we need to do a specular calculation on our colour
-	//	if (lightIntensity > 0.0f)
-	//	{
-	//		//Receive pixel sample from specular texture using the samplerstate
-	//		specularIntensity = textures[2].Sample(sampleType, input.tex);
-
-	//		//Calculate the reflection with the bumpmap normal
-	//		//reflection = normalize(2 * lightIntensity * bumpNormal - (-lightDirection));
-	//		reflection = normalize(((2.0f * lightIntensity) * dot(bumpNormal, lightPosWorld)) - lightPosWorld);
-
-	//		//Calculate the specular colour
-	//		//specular = pow(saturate(max(0.0f, dot(reflection, input.viewDirection)), lights[i].specularPower);
-
-	//		specular = lights[i].specularColour * (pow(max(0.0f, dot(reflection, input.viewDirection)), lights[i].specularPower));
-
-	//		//Multiply specular colour by intensity
-	//		specular = specular * specularIntensity;
-
-	//		//Add to our colour
-	//		colour += specular;
-	//	}
-	//}
-
-	////Receive pixel sample from colour texture using the samplerstate
-	//textureColour = textures[0].Sample(sampleType, input.tex);
-
-	//colour = saturate(colour) * textureColour;
-
-	////return float4(lightCount, 0.0f, 0.0f, 1.0f);
-
-	//return colour;
-
 	float3 viewDirection = normalize(input.viewDirection);
 
 	float4 baseColour = textures[0].Sample(sampleTypeWrap, input.tex);
@@ -147,13 +86,10 @@ float4 TextureNormalSpecularPS(PixelInput input) : SV_TARGET
 	float4 totalDiffuse = float4(0.0f, 0.0f, 0.0f, 0.0f);
 	float4 totalSpecular = float4(0.0f, 0.0f, 0.0f, 0.0f);
 
-	//Receive pixel sample from normal texture using the samplerstate
 	float4 bumpMap = textures[1].Sample(sampleTypeWrap, input.tex);
 
-	//Range is held in [0,1], need to expand that to [-1.1]
 	bumpMap = (bumpMap * 2.0f) - 1.0f;
 
-	//Calculate our normal
 	float3 bumpNormal = normalize((bumpMap.x * input.tangent) + (bumpMap.y * input.binormal) + (bumpMap.z * input.normal));
 
 	float shadow = 0.0f;

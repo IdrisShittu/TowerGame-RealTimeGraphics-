@@ -6,9 +6,6 @@ ParticleShader::ParticleShader(ID3D11Device* const device, HWND const hwnd) : Sh
 
 	unsigned int numberOfElements = 0;
 
-	//Setup layout of buffer data in the shader
-	//Setup of the layout needs to match the struct in our Model class and the struct in the shader
-
 	polygonLayout[0].SemanticName = "POSITION";
 	polygonLayout[0].SemanticIndex = 0;
 	polygonLayout[0].Format = DXGI_FORMAT_R32G32B32_FLOAT;
@@ -57,10 +54,8 @@ ParticleShader::ParticleShader(ID3D11Device* const device, HWND const hwnd) : Sh
 	polygonLayout[5].InputSlotClass = D3D11_INPUT_PER_INSTANCE_DATA;
 	polygonLayout[5].InstanceDataStepRate = 1;
 
-	//Get count of elements in layout
 	numberOfElements = sizeof(polygonLayout) / sizeof(polygonLayout[0]);
 
-	//Create vertex input layout
 	auto result = device->CreateInputLayout(polygonLayout, numberOfElements, GetVertexShaderBuffer()->GetBufferPointer(), GetVertexShaderBuffer()->GetBufferSize(), &inputLayout);
 
 	GetVertexShaderBuffer()->Release();
@@ -74,9 +69,6 @@ ParticleShader::ParticleShader(ID3D11Device* const device, HWND const hwnd) : Sh
 
 	D3D11_SAMPLER_DESC samplerDescription;
 
-	//Create our texture sampler state description
-	//Filter determines which pixels will be used/combined for the final look of the texture on the polygon face
-	//The filter used is costly in performance but best in visual looks
 	samplerDescription.Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR;
 	samplerDescription.AddressU = D3D11_TEXTURE_ADDRESS_WRAP;
 	samplerDescription.AddressV = D3D11_TEXTURE_ADDRESS_WRAP;
@@ -142,7 +134,6 @@ ParticleShader::~ParticleShader()
 {
 	try
 	{
-		//Release resources
 		if (sampleState)
 		{
 			sampleState->Release();
@@ -191,17 +182,12 @@ bool ParticleShader::SetParticleShaderParameters(ID3D11DeviceContext* const devi
 		return false;
 	}
 
-	//Hopefully this works, doubt there is going to ever be more than 10 textures
 	ID3D11ShaderResourceView* textureArray[1];
 
 	copy(textures.begin(), textures.end(), textureArray);
-
-	//Set the texture resource to the pixel shader
 	deviceContext->PSSetShaderResources(0, static_cast<UINT>(textures.size()), textureArray);
-
 	auto mappedResource = GetMappedSubResource();
 
-	//Lock matrix constant buffer and set the transposed matrices to it
 	auto failed = deviceContext->Map(inverseViewMatrixBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource);
 
 	if (FAILED(failed))
@@ -210,23 +196,14 @@ bool ParticleShader::SetParticleShaderParameters(ID3D11DeviceContext* const devi
 	}
 
 	auto* inverseViewMatrixBufferDataPointer = static_cast<InverseViewBuffer*>(mappedResource.pData);
-
-	//auto matrixDeterminant = XMMatrixDeterminant(viewMatrix);
-
 	const auto inverseViewMatrix = XMMatrixInverse(nullptr, viewMatrix);
-
 	inverseViewMatrixBufferDataPointer->inverseViewMatrix = XMMatrixTranspose(inverseViewMatrix);
-
 	inverseViewMatrixBufferDataPointer = nullptr;
-
 	deviceContext->Unmap(inverseViewMatrixBuffer, 0);
-
 	deviceContext->VSSetConstantBuffers(GetVertexBufferResourceCount(), 1, &inverseViewMatrixBuffer);
 	deviceContext->DSSetConstantBuffers(GetDomainBufferResourceCount(), 1, &inverseViewMatrixBuffer);
-
 	IncrementVertexBufferResourceCount();
 	IncrementDomainBufferResourceCount();
-
 	failed = deviceContext->Map(particleParametersBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource);
 
 	if (FAILED(failed))
@@ -235,33 +212,19 @@ bool ParticleShader::SetParticleShaderParameters(ID3D11DeviceContext* const devi
 	}
 
 	auto* particleParametersBufferDataPointer = static_cast<ParticleParametersBuffer*>(mappedResource.pData);
-
 	particleParametersBufferDataPointer->colourTint = colourTint;
 	particleParametersBufferDataPointer->transparency = transparency;
-
 	particleParametersBufferDataPointer = nullptr;
-
 	deviceContext->Unmap(particleParametersBuffer, 0);
-
 	deviceContext->PSSetConstantBuffers(GetPixelBufferResourceCount(), 1, &particleParametersBuffer);
-
 	IncrementPixelBufferResourceCount();
-
 	return true;
 }
 
 void ParticleShader::RenderShader(ID3D11DeviceContext* const deviceContext, const int indexCount, const int instanceCount) const
 {
-	//Set input layout
 	deviceContext->IASetInputLayout(inputLayout);
-
-	//Set our shaders
 	SetShader(deviceContext);
-
-	//Set pixel shaders sampler state
 	deviceContext->PSSetSamplers(0, 1, &sampleState);
-
-	//Render triangle
-	//deviceContext->DrawIndexed(indexCount, 0, 0);
 	deviceContext->DrawInstanced(indexCount, instanceCount, 0, 0);
 }

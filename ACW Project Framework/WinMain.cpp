@@ -2,10 +2,10 @@
 #include "GraphicsEngine.h"
 
 int WINAPI WinMain(
-    _In_ HINSTANCE hInstance,      // Handle to the current instance
-    _In_opt_ HINSTANCE hPrevInstance,  // Handle to the previous instance (always NULL, but marked as optional)
-    _In_ LPSTR lpCmdLine,          // Command line for the application
-    _In_ int nCmdShow              // Controls how the window is to be shown
+    _In_ HINSTANCE hInstance,     
+    _In_opt_ HINSTANCE hPrevInstance, 
+    _In_ LPSTR lpCmdLine,        
+    _In_ int nCmdShow              
 ) {
     GraphicsEngine* graphicsEngine = new GraphicsEngine();
     if (!graphicsEngine->Initialize()) {

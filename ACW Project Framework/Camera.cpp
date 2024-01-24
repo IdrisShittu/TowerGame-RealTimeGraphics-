@@ -1,6 +1,6 @@
 #pragma once
 #include "Camera.h"
-#include <cmath> // For M_PI
+#include <cmath>
 
 Camera::Camera() : position(XMFLOAT3(0, 0, 0)), rotation(XMFLOAT3(0, 0, 0)) {}
 

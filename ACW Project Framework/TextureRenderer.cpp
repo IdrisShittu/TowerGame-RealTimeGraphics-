@@ -59,7 +59,7 @@ bool TextureRenderer::RenderObjectsToTexture(ID3D11DeviceContext* const deviceCo
 
         if (shader)
         {
-            // Set shader back to the original shader
+           
             gameObject->SetShaderComponent(originalShader);
         }
 

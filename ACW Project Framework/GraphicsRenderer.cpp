@@ -62,7 +62,6 @@ bool GraphicsRenderer::InitializeSceneObjects(HWND hwnd) {
 
 bool GraphicsRenderer::InitializeGameObjects(HWND hwnd) {
 
-
 	vector<const WCHAR*> textureNames = { L"BaseColour.dds", L"BaseNormal.dds", L"BaseSpecular.dds", L"BaseDisplacement.dds"};
 	auto gameObject = make_shared<GameObject>();
 	gameObject->AddPositionComponent(XMFLOAT3(8.0f, 0.0f, 0.0f));
@@ -77,9 +76,6 @@ bool GraphicsRenderer::InitializeGameObjects(HWND hwnd) {
 	gameObjects.push_back(gameObject);
 	gameObject->GetInitializationState();
 		
-
-
-
 	textureNames = { L"BaseColour.dds", L"BaseNormal.dds", L"BaseSpecular.dds", L"BaseDisplacement.dds" };
 
 	auto newGameObject = make_shared<GameObject>();
@@ -93,12 +89,9 @@ bool GraphicsRenderer::InitializeGameObjects(HWND hwnd) {
 	newGameObject->SetTessellationVariables(5.0f, 20.0f, 8.0f, 1.0f);
 	newGameObject->SetDisplacementVariables(20.0f, 0.0f, 6.0f, 0.15f);
 
-	// Add the GameObject to the gameObjects vector and check initialization
 	gameObjects.push_back(newGameObject);
 	newGameObject->GetInitializationState();
 		
-
-
 	textureNames.clear();
 	textureNames = { L"BaseColour.dds", L"BaseNormal.dds", L"BaseSpecular.dds", L"BaseDisplacement.dds" };
 
@@ -107,7 +100,6 @@ bool GraphicsRenderer::InitializeGameObjects(HWND hwnd) {
 
 	const auto terrainDimensions = configuration->GetTerrainDimensions();
 
-	//Launch pad
 	displacedFloor = make_shared<GameObject>();
 	displacedFloor->AddScaleComponent(configuration->GetLaunchPadScale());
 	displacedFloor->AddPositionComponent(XMFLOAT3(-terrainDimensions.z, 0.5f, 0.0f));
@@ -121,8 +113,6 @@ bool GraphicsRenderer::InitializeGameObjects(HWND hwnd) {
 
 	gameObjects.back()->GetInitializationState();
 	
-
-
 	textureNames.clear();
 	textureNames = { L"FloorColour.dds", L"FloorNormal.dds", L"FloorSpecular.dds", L"FloorDisplacement.dds" };
 
@@ -138,9 +128,6 @@ bool GraphicsRenderer::InitializeGameObjects(HWND hwnd) {
 
 	gameObjects.back()->GetInitializationState();
 	
-
-
-
 	textureNames.clear();
 	textureNames.push_back(L"skybox.dds");
 
@@ -370,7 +357,6 @@ bool GraphicsRenderer::RenderFrame() {
 		
 	d3D->EnabledDepthStencil();
 	d3D->DisableAlphaBlending();
-
 
 	d3D->EndScene();
 
