@@ -1,6 +1,6 @@
 #include "Rocket.h"
 
-Rocket::Rocket(ID3D11Device* const device, const XMFLOAT3& position, const XMFLOAT3& rotation, const XMFLOAT3& scale, const shared_ptr<ShaderManager>& shaderManager, const shared_ptr<ResourceManager>& resourceManager) : initializationFailed(false), rocketLaunched(false), changedParticleSystem(false), particleSystemActive(false), blastRadius(4.0f), initialVelocity(25.0f), gravity(-9.81f), velocity(XMFLOAT2()), angularVelocity(XMFLOAT2()), initialLauncherPosition(XMFLOAT3()), initialLauncherRotation(XMFLOAT3()), lookAtRocketPosition(XMFLOAT3()), lookAtRocketConePosition(XMFLOAT3()), rocketCone(nullptr), rocketBody(nullptr), rocketCap(nullptr), rocketLauncher(nullptr), particleSystemLight(nullptr), fireJetParticleSystem(nullptr), coneFlameParticleSystem(nullptr)
+Rocket::Rocket(ID3D11Device* const device, const XMFLOAT3& position, const XMFLOAT3& rotation, const XMFLOAT3& scale, const shared_ptr<ShaderManager>& shaderManager, const shared_ptr<ResourceManager>& resourceManager) : initializationFailed(false), rocketLaunched(false), blastRadius(5.0f), initialVelocity(25.0f), gravity(-9.81f), velocity(XMFLOAT2()), angularVelocity(XMFLOAT2()), initialLauncherPosition(XMFLOAT3()), initialLauncherRotation(XMFLOAT3()), lookAtRocketPosition(XMFLOAT3()), lookAtRocketConePosition(XMFLOAT3()), rocketCone(nullptr), rocketBody(nullptr), rocketCap(nullptr), rocketLauncher(nullptr)
 {
 	initialLauncherPosition = position;
 	initialLauncherRotation = rotation;
@@ -126,37 +126,12 @@ Rocket::Rocket(ID3D11Device* const device, const XMFLOAT3& position, const XMFLO
 	XMStoreFloat3(&lightPositionFloat, lightPosition);
 	XMStoreFloat3(&lightPointPositionFloat, lightPointPosition);
 
-	particleSystemLight = make_shared<Light>();
-	particleSystemLight->SetLightOrbit(false);
-	particleSystemLight->SetLightPosition(lightPositionFloat);
-	particleSystemLight->SetLightPointPosition(lightPointPositionFloat);
-	particleSystemLight->SetAmbientColour(0.15f, 0.15f, 0.15f, 1.0f);
-	particleSystemLight->SetDiffuseColour(0.8f, 0.3f, 0.0f, 1.0f);
-	particleSystemLight->SetSpecularColour(0.8f, 0.3f, 0.0f, 1.0f);
-	particleSystemLight->SetSpecularPower(8.0f);
-	particleSystemLight->GenerateLightProjectionMatrix(45.0f, 45.0f, 0.1f, 1000.0f);
-	particleSystemLight->UpdateLightVariables(0.0f);
-
-	fireJetParticleSystem = make_shared<FireJetParticleSystem>(device, nullptr, ModelType::Quad, XMFLOAT3(0.0f, -(3.0f * scale.y), 0.0f), XMFLOAT3(1.5f, 1.5f, 1.5f), XMFLOAT3(0.4f, 0.4f, 0.4f), 0.5f, 5.0f, 5.6f, 60, resourceManager);
-	fireJetParticleSystem->AddParentGameObject(rocketBody);
-
-	coneFlameParticleSystem = make_shared<FireJetParticleSystem>(device, nullptr, ModelType::SphereInverted, XMFLOAT3(0.0f, (4.0f * scale.y), 0.0f), XMFLOAT3(1.5f, 1.5f, 1.5f), XMFLOAT3(1.0f, 1.0f, 1.0f), 0.8f, 5.0f, 4.0f, 10, resourceManager);
-	coneFlameParticleSystem->AddParentGameObject(rocketBody);
-
 	rocketLauncher->Update();
 }
-
-//Rocket::Rocket(const Rocket& other) = default;
-
-//Rocket::Rocket(Rocket&& other) noexcept = default;
 
 Rocket::~Rocket()
 {
 }
-
-//Rocket& Rocket::operator=(const Rocket& other) = default;
-
-//Rocket& Rocket::operator=(Rocket&& other) noexcept = default;
 
 void Rocket::AdjustRotationLeft() const
 {
@@ -216,13 +191,8 @@ void Rocket::LaunchRocket()
 
 		angularVelocity = XMFLOAT2(totalAngularMovement / totalTimeOfJourney, totalAngularMovement / totalTimeOfJourney);
 
-		//totalTimeOfJourney = totalTimeOfJourney / (v * cos(angle));
-
-		//angularVelocity = XMFLOAT2(totalAngularMovement / totalTimeOfJourney, totalAngularMovement / totalTimeOfJourney);
-		//angularVelocity = XMFLOAT2(totalTimeOfJourney / totalAngularMovement, totalTimeOfJourney / totalAngularMovement);
-
 		rocketLaunched = true;
-		particleSystemActive = true;
+		
 	}
 }
 
@@ -230,13 +200,6 @@ const bool Rocket::RocketLaunched() const
 {
 	return rocketLaunched;
 }
-
-const bool Rocket::ParticleSystemActive() const
-{
-	return particleSystemActive;
-}
-
-
 
 const XMFLOAT3& Rocket::GetLauncherPosition() const
 {
@@ -306,10 +269,6 @@ const shared_ptr<GameObject> Rocket::GetRocketLauncher() const
 	return rocketLauncher;
 }
 
-const shared_ptr<Light>& Rocket::GetParticleSystemLight() const
-{
-	return particleSystemLight;
-}
 
 bool Rocket::CheckForTerrainCollision(const shared_ptr<Terrain>& terrain, XMFLOAT3& outCollisionPosition, float& outBlastRadius)
 {
@@ -411,8 +370,6 @@ void Rocket::ResetRocketState()
 	rocketBody->SetRotation(initialLauncherRotation);
 
 	rocketLaunched = false;
-	particleSystemActive = false;
-	changedParticleSystem = false;
 	rocketLauncher->Update();
 }
 
@@ -426,16 +383,8 @@ void Rocket::UpdateRocket(const float dt)
 
 		if (velocity.y < 0.0f)
 		{
-			if (!changedParticleSystem)
-			{
-				particleSystemActive = false;
-				changedParticleSystem = true;
-			}
-
 			auto rocketRotation = rocketBody->GetRotationComponent()->GetRotationAt(0);
-
 			rocketRotation = XMFLOAT3(rocketRotation.x, rocketRotation.y, rocketRotation.z + angularVelocity.x);
-
 			rocketBody->SetRotation(rocketRotation);
 		}
 
@@ -447,8 +396,6 @@ void Rocket::UpdateRocket(const float dt)
 	rocketBody->Update();
 	rocketCone->Update();
 	rocketCap->Update();
-	fireJetParticleSystem->UpdateParticles(dt);
-	coneFlameParticleSystem->UpdateParticles(dt);
 
 	UpdateLightPosition();
 }
@@ -492,8 +439,6 @@ void Rocket::UpdateLightPosition() const
 	XMStoreFloat3(&lightPositionFloat, lightPosition);
 	XMStoreFloat3(&lightPointPositionFloat, lightPointPosition);
 
-	particleSystemLight->SetLightPosition(lightPositionFloat);
-	particleSystemLight->SetLightPointPosition(lightPointPositionFloat);
 }
 
 
@@ -529,27 +474,17 @@ bool Rocket::RenderRocket(const shared_ptr<GraphicsDeviceManager>& d3dContainer,
 		return false;
 	}
 
-	if (particleSystemActive && rocketLaunched)
+	if (rocketLaunched)
 	{
 		d3dContainer->DisableDepthStencil();
 		d3dContainer->EnableAlphaBlending();
-
-		result = fireJetParticleSystem->RenderFireJetParticleSystem(d3dContainer->GetDeviceContext(), viewMatrix, projectionMatrix, cameraPosition);
-
 		d3dContainer->EnabledDepthStencil();
 		d3dContainer->DisableAlphaBlending();
-
-		if (!result)
-		{
-			return false;
-		}
 	}
 	else if (rocketLaunched)
 	{
 		d3dContainer->DisableDepthStencil();
 		d3dContainer->EnableAlphaBlending();
-
-		result = coneFlameParticleSystem->RenderFireJetParticleSystem(d3dContainer->GetDeviceContext(), viewMatrix, projectionMatrix, cameraPosition);
 
 		d3dContainer->EnabledDepthStencil();
 		d3dContainer->DisableAlphaBlending();

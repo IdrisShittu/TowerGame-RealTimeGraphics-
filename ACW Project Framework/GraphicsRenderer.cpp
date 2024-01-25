@@ -34,7 +34,6 @@ bool GraphicsRenderer::InitializeResources(HWND hwnd) {
 	shaderManager = make_shared<ShaderManager>(d3D->GetDevice(), hwnd);
 	shaderManager->GetInitializationState();
 	resourceManager = make_shared<ResourceManager>();
-	particleSystemManager = make_shared<ParticleSystemManager>();
 	return true;
 }
 
@@ -199,7 +198,6 @@ void GraphicsRenderer::ToggleOptionalGameObjects() {
 void GraphicsRenderer::ResetToInitialState() const {
 	rocket->ResetRocketState();
 	terrain->ResetTerrainState();
-	particleSystemManager->ResetParticleSystems();
 }
 
 void GraphicsRenderer::AddTimeScale(const int number)
@@ -277,13 +275,13 @@ bool GraphicsRenderer::UpdateFrame() {
 	UpdateGameObjects();
 
 	if (rocket->CheckForTerrainCollision(terrain, collisionPosition, blastRadius)) {
-		particleSystemManager->GenerateExplosion(d3D->GetDevice(), collisionPosition, blastRadius, resourceManager);
+		
 	}
 
 	terrain->UpdateTerrain();
 	rocket->UpdateRocket(dt);
 	UpdateCameraAndLights();
-	particleSystemManager->Update(dt);
+
 
 	return RenderFrame();
 }
@@ -333,15 +331,6 @@ bool GraphicsRenderer::RenderFrame() {
 
 	std::vector<shared_ptr<Light>> lightList = lightManager->GetLightList();
 
-	if (rocket->RocketLaunched() && rocket->ParticleSystemActive()) {
-		lightList.emplace_back(rocket->GetParticleSystemLight());
-	}
-
-	const auto explosionLights = particleSystemManager->GetLights();
-
-	if (!explosionLights.empty()) {
-		lightList.insert(lightList.end(), explosionLights.begin(), explosionLights.end());
-	}
 
 	for (const auto& gameObject : gameObjects) {
 		gameObject->Render(d3D->GetDeviceContext(), viewMatrix, projectionMatrix, shadowMapManager->GetShadowMapResources(), lightList, camera->GetPosition());
@@ -353,7 +342,7 @@ bool GraphicsRenderer::RenderFrame() {
 	d3D->DisableDepthStencil();
 	d3D->EnableAlphaBlending();
 
-	particleSystemManager->Render(d3D->GetDeviceContext(), viewMatrix, projectionMatrix, camera->GetPosition());
+	
 		
 	d3D->EnabledDepthStencil();
 	d3D->DisableAlphaBlending();

@@ -125,7 +125,6 @@
     <ClCompile Include="GraphicsDeviceManager.cpp" />
     <ClCompile Include="DepthShader.cpp" />
     <ClCompile Include="DirectionalLight.cpp" />
-    <ClCompile Include="FireJetParticleSystem.cpp" />
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="GraphicsRenderer.cpp" />
     <ClCompile Include="Keyboard.cpp" />
@@ -133,9 +132,6 @@
     <ClCompile Include="LightManager.cpp" />
     <ClCompile Include="LightShader.cpp" />
     <ClCompile Include="Model.cpp" />
-    <ClCompile Include="ParticleShader.cpp" />
-    <ClCompile Include="ParticleSystem.cpp" />
-    <ClCompile Include="ParticleSystemManager.cpp" />
     <ClCompile Include="PointLight.cpp" />
     <ClCompile Include="Position.cpp" />
     <ClCompile Include="ReflectionShader.cpp" />
@@ -148,7 +144,6 @@
     <ClCompile Include="Shader.cpp" />
     <ClCompile Include="ShaderManager.cpp" />
     <ClCompile Include="ShadowMapManager.cpp" />
-    <ClCompile Include="SmokeParticleSystem.cpp" />
     <ClCompile Include="GraphicsEngine.cpp" />
     <ClCompile Include="Terrain.cpp" />
     <ClCompile Include="Texture.cpp" />
@@ -180,7 +175,6 @@
     <ClInclude Include="GraphicsDeviceManager.h" />
     <ClInclude Include="DepthShader.h" />
     <ClInclude Include="DirectionalLight.h" />
-    <ClInclude Include="FireJetParticleSystem.h" />
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="GraphicsRenderer.h" />
     <ClInclude Include="Keyboard.h" />
@@ -188,9 +182,6 @@
     <ClInclude Include="LightManager.h" />
     <ClInclude Include="LightShader.h" />
     <ClInclude Include="Model.h" />
-    <ClInclude Include="ParticleShader.h" />
-    <ClInclude Include="ParticleSystem.h" />
-    <ClInclude Include="ParticleSystemManager.h" />
     <ClInclude Include="PointLight.h" />
     <ClInclude Include="Position.h" />
     <ClInclude Include="ReflectionShader.h" />
@@ -203,7 +194,6 @@
     <ClInclude Include="Shader.h" />
     <ClInclude Include="ShaderManager.h" />
     <ClInclude Include="ShadowMapManager.h" />
-    <ClInclude Include="SmokeParticleSystem.h" />
     <ClInclude Include="GraphicsEngine.h" />
     <ClInclude Include="Terrain.h" />
     <ClInclude Include="Texture.h" />
@@ -361,30 +351,6 @@
       <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">LightVertexShader</EntryPointName>
       <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">LightVertexShader</EntryPointName>
     </FxCompile>
-    <FxCompile Include="ParticleDomainShader.hlsl">
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Domain</ShaderType>
-      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Domain</ShaderType>
-      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">5.0</ShaderModel>
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Domain</ShaderType>
-      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">5.0</ShaderModel>
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Domain</ShaderType>
-      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">5.0</ShaderModel>
-      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">ParticleDomainShader</EntryPointName>
-      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">ParticleDomainShader</EntryPointName>
-    </FxCompile>
-    <FxCompile Include="ParticleHullShader.hlsl">
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Hull</ShaderType>
-      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Compute</ShaderType>
-      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">4.0</ShaderModel>
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Compute</ShaderType>
-      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">4.0</ShaderModel>
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Hull</ShaderType>
-      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">5.0</ShaderModel>
-      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">ParticleHullShader</EntryPointName>
-      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">ParticleHullShader</EntryPointName>
-    </FxCompile>
     <FxCompile Include="ParticlePixelShader.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
@@ -396,18 +362,6 @@
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">5.0</ShaderModel>
       <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">ParticlePixelShader</EntryPointName>
       <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">ParticlePixelShader</EntryPointName>
-    </FxCompile>
-    <FxCompile Include="ParticleVertexShader.hlsl">
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
-      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Compute</ShaderType>
-      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">4.0</ShaderModel>
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Compute</ShaderType>
-      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">4.0</ShaderModel>
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
-      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">5.0</ShaderModel>
-      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">ParticleVertexShader</EntryPointName>
-      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">ParticleVertexShader</EntryPointName>
     </FxCompile>
     <FxCompile Include="ReflectionDomainShader.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Domain</ShaderType>

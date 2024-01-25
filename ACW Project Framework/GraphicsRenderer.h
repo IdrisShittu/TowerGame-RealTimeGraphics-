@@ -11,12 +11,8 @@
 #include "LightManager.h"
 #include "TextureRenderer.h"
 #include "ShadowMapManager.h"
-#include "ParticleSystem.h"
-#include "FireJetParticleSystem.h"
-#include "SmokeParticleSystem.h"
 #include "Terrain.h"
 #include "Rocket.h"
-#include "ParticleSystemManager.h"
 #include "SimulationConfigLoader.h"
 
 auto const FULL_SCREEN = false;
@@ -72,7 +68,6 @@ private:
 
 	shared_ptr<GraphicsDeviceManager>  d3D;
 
-
 	shared_ptr<Camera>  camera;
 	shared_ptr<LightManager>  lightManager;
 
@@ -86,7 +81,6 @@ private:
 
 	shared_ptr<ShaderManager>  shaderManager;
 	shared_ptr<ResourceManager>  resourceManager;
-	shared_ptr<ParticleSystemManager>  particleSystemManager;
 	shared_ptr<ShadowMapManager>  shadowMapManager;
 
 	float  windowWidth;

@@ -49,12 +49,6 @@
     <Filter Include="Shaders\DomainShader">
       <UniqueIdentifier>{555aa054-b160-4650-a939-a84bc4239a6b}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\ParticleSystems">
-      <UniqueIdentifier>{49e61772-8bf6-4d8f-888e-f42cfc5a64e0}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\ParticleSystems">
-      <UniqueIdentifier>{d061fce1-6423-4895-b752-544a0bda7ce5}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files\GameObjects">
       <UniqueIdentifier>{6f966321-48ca-419c-9077-d6069d58659d}</UniqueIdentifier>
     </Filter>
@@ -139,21 +133,6 @@
       <Filter>Source Files\Shader Classes</Filter>
     </ClCompile>
     <ClCompile Include="ShadowMapManager.cpp">
-      <Filter>Source Files\Managers</Filter>
-    </ClCompile>
-    <ClCompile Include="ParticleSystem.cpp">
-      <Filter>Source Files\Components</Filter>
-    </ClCompile>
-    <ClCompile Include="SmokeParticleSystem.cpp">
-      <Filter>Source Files\ParticleSystems</Filter>
-    </ClCompile>
-    <ClCompile Include="FireJetParticleSystem.cpp">
-      <Filter>Source Files\ParticleSystems</Filter>
-    </ClCompile>
-    <ClCompile Include="ParticleShader.cpp">
-      <Filter>Source Files\Shader Classes</Filter>
-    </ClCompile>
-    <ClCompile Include="ParticleSystemManager.cpp">
       <Filter>Source Files\Managers</Filter>
     </ClCompile>
     <ClCompile Include="Texture2DShader.cpp">
@@ -255,21 +234,6 @@
       <Filter>Header Files\Shader Headers</Filter>
     </ClInclude>
     <ClInclude Include="ShadowMapManager.h">
-      <Filter>Header Files\Managers</Filter>
-    </ClInclude>
-    <ClInclude Include="ParticleSystem.h">
-      <Filter>Header Files\Components</Filter>
-    </ClInclude>
-    <ClInclude Include="FireJetParticleSystem.h">
-      <Filter>Header Files\ParticleSystems</Filter>
-    </ClInclude>
-    <ClInclude Include="SmokeParticleSystem.h">
-      <Filter>Header Files\ParticleSystems</Filter>
-    </ClInclude>
-    <ClInclude Include="ParticleShader.h">
-      <Filter>Header Files\Shader Headers</Filter>
-    </ClInclude>
-    <ClInclude Include="ParticleSystemManager.h">
       <Filter>Header Files\Managers</Filter>
     </ClInclude>
     <ClInclude Include="Texture2DShader.h">
@@ -417,15 +381,6 @@
     </FxCompile>
     <FxCompile Include="DepthPixelShader.hlsl">
       <Filter>Shaders\PixelShader</Filter>
-    </FxCompile>
-    <FxCompile Include="ParticleVertexShader.hlsl">
-      <Filter>Shaders\VertexShader</Filter>
-    </FxCompile>
-    <FxCompile Include="ParticleHullShader.hlsl">
-      <Filter>Shaders\HullShader</Filter>
-    </FxCompile>
-    <FxCompile Include="ParticleDomainShader.hlsl">
-      <Filter>Shaders\DomainShader</Filter>
     </FxCompile>
     <FxCompile Include="ParticlePixelShader.hlsl">
       <Filter>Shaders\PixelShader</Filter>
