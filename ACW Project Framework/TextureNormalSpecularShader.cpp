@@ -7,87 +7,87 @@ TextureNormalSpecularShader::TextureNormalSpecularShader(ID3D11Device* const dev
 		return;
 	}
 
-	D3D11_INPUT_ELEMENT_DESC polygonLayout[9];
+	D3D11_INPUT_ELEMENT_DESC layout[9];
 
 	unsigned int numberOfElements = 0;
 
-	polygonLayout[0].SemanticName = "POSITION";
-	polygonLayout[0].SemanticIndex = 0;
-	polygonLayout[0].Format = DXGI_FORMAT_R32G32B32_FLOAT;
-	polygonLayout[0].InputSlot = 0;
-	polygonLayout[0].AlignedByteOffset = 0;
-	polygonLayout[0].InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA;
-	polygonLayout[0].InstanceDataStepRate = 0;
+	layout[0].SemanticName = "POSITION";
+	layout[0].SemanticIndex = 0;
+	layout[0].Format = DXGI_FORMAT_R32G32B32_FLOAT;
+	layout[0].InputSlot = 0;
+	layout[0].AlignedByteOffset = 0;
+	layout[0].InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA;
+	layout[0].InstanceDataStepRate = 0;
 
-	polygonLayout[1].SemanticName = "TEXCOORD";
-	polygonLayout[1].SemanticIndex = 0;
-	polygonLayout[1].Format = DXGI_FORMAT_R32G32_FLOAT;
-	polygonLayout[1].InputSlot = 0;
-	polygonLayout[1].AlignedByteOffset = D3D11_APPEND_ALIGNED_ELEMENT;
-	polygonLayout[1].InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA;
-	polygonLayout[1].InstanceDataStepRate = 0;
+	layout[1].SemanticName = "TEXCOORD";
+	layout[1].SemanticIndex = 0;
+	layout[1].Format = DXGI_FORMAT_R32G32_FLOAT;
+	layout[1].InputSlot = 0;
+	layout[1].AlignedByteOffset = D3D11_APPEND_ALIGNED_ELEMENT;
+	layout[1].InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA;
+	layout[1].InstanceDataStepRate = 0;
 
-	polygonLayout[2].SemanticName = "NORMAL";
-	polygonLayout[2].SemanticIndex = 0;
-	polygonLayout[2].Format = DXGI_FORMAT_R32G32B32_FLOAT;
-	polygonLayout[2].InputSlot = 0;
-	polygonLayout[2].AlignedByteOffset = D3D11_APPEND_ALIGNED_ELEMENT;
-	polygonLayout[2].InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA;
-	polygonLayout[2].InstanceDataStepRate = 0;
+	layout[2].SemanticName = "NORMAL";
+	layout[2].SemanticIndex = 0;
+	layout[2].Format = DXGI_FORMAT_R32G32B32_FLOAT;
+	layout[2].InputSlot = 0;
+	layout[2].AlignedByteOffset = D3D11_APPEND_ALIGNED_ELEMENT;
+	layout[2].InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA;
+	layout[2].InstanceDataStepRate = 0;
 
-	polygonLayout[3].SemanticName = "TANGENT";
-	polygonLayout[3].SemanticIndex = 0;
-	polygonLayout[3].Format = DXGI_FORMAT_R32G32B32_FLOAT;
-	polygonLayout[3].InputSlot = 0;
-	polygonLayout[3].AlignedByteOffset = D3D11_APPEND_ALIGNED_ELEMENT;
-	polygonLayout[3].InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA;
-	polygonLayout[3].InstanceDataStepRate = 0;
+	layout[3].SemanticName = "TANGENT";
+	layout[3].SemanticIndex = 0;
+	layout[3].Format = DXGI_FORMAT_R32G32B32_FLOAT;
+	layout[3].InputSlot = 0;
+	layout[3].AlignedByteOffset = D3D11_APPEND_ALIGNED_ELEMENT;
+	layout[3].InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA;
+	layout[3].InstanceDataStepRate = 0;
 
-	polygonLayout[4].SemanticName = "BINORMAL";
-	polygonLayout[4].SemanticIndex = 0;
-	polygonLayout[4].Format = DXGI_FORMAT_R32G32B32_FLOAT;
-	polygonLayout[4].InputSlot = 0;
-	polygonLayout[4].AlignedByteOffset = D3D11_APPEND_ALIGNED_ELEMENT;
-	polygonLayout[4].InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA;
-	polygonLayout[4].InstanceDataStepRate = 0;
+	layout[4].SemanticName = "BINORMAL";
+	layout[4].SemanticIndex = 0;
+	layout[4].Format = DXGI_FORMAT_R32G32B32_FLOAT;
+	layout[4].InputSlot = 0;
+	layout[4].AlignedByteOffset = D3D11_APPEND_ALIGNED_ELEMENT;
+	layout[4].InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA;
+	layout[4].InstanceDataStepRate = 0;
 
-	polygonLayout[5].SemanticName = "INSTANCEMATRIX";
-	polygonLayout[5].SemanticIndex = 0;
-	polygonLayout[5].Format = DXGI_FORMAT_R32G32B32A32_FLOAT;
-	polygonLayout[5].InputSlot = 1;
-	polygonLayout[5].AlignedByteOffset = 0;
-	polygonLayout[5].InputSlotClass = D3D11_INPUT_PER_INSTANCE_DATA;
-	polygonLayout[5].InstanceDataStepRate = 1;
+	layout[5].SemanticName = "INSTANCEMATRIX";
+	layout[5].SemanticIndex = 0;
+	layout[5].Format = DXGI_FORMAT_R32G32B32A32_FLOAT;
+	layout[5].InputSlot = 1;
+	layout[5].AlignedByteOffset = 0;
+	layout[5].InputSlotClass = D3D11_INPUT_PER_INSTANCE_DATA;
+	layout[5].InstanceDataStepRate = 1;
 
-	polygonLayout[6].SemanticName = "INSTANCEMATRIX";
-	polygonLayout[6].SemanticIndex = 1;
-	polygonLayout[6].Format = DXGI_FORMAT_R32G32B32A32_FLOAT;
-	polygonLayout[6].InputSlot = 1;
-	polygonLayout[6].AlignedByteOffset = D3D11_APPEND_ALIGNED_ELEMENT;
-	polygonLayout[6].InputSlotClass = D3D11_INPUT_PER_INSTANCE_DATA;
-	polygonLayout[6].InstanceDataStepRate = 1;
+	layout[6].SemanticName = "INSTANCEMATRIX";
+	layout[6].SemanticIndex = 1;
+	layout[6].Format = DXGI_FORMAT_R32G32B32A32_FLOAT;
+	layout[6].InputSlot = 1;
+	layout[6].AlignedByteOffset = D3D11_APPEND_ALIGNED_ELEMENT;
+	layout[6].InputSlotClass = D3D11_INPUT_PER_INSTANCE_DATA;
+	layout[6].InstanceDataStepRate = 1;
 
-	polygonLayout[7].SemanticName = "INSTANCEMATRIX";
-	polygonLayout[7].SemanticIndex = 2;
-	polygonLayout[7].Format = DXGI_FORMAT_R32G32B32A32_FLOAT;
-	polygonLayout[7].InputSlot = 1;
-	polygonLayout[7].AlignedByteOffset = D3D11_APPEND_ALIGNED_ELEMENT;
-	polygonLayout[7].InputSlotClass = D3D11_INPUT_PER_INSTANCE_DATA;
-	polygonLayout[7].InstanceDataStepRate = 1;
+	layout[7].SemanticName = "INSTANCEMATRIX";
+	layout[7].SemanticIndex = 2;
+	layout[7].Format = DXGI_FORMAT_R32G32B32A32_FLOAT;
+	layout[7].InputSlot = 1;
+	layout[7].AlignedByteOffset = D3D11_APPEND_ALIGNED_ELEMENT;
+	layout[7].InputSlotClass = D3D11_INPUT_PER_INSTANCE_DATA;
+	layout[7].InstanceDataStepRate = 1;
 
-	polygonLayout[8].SemanticName = "INSTANCEMATRIX";
-	polygonLayout[8].SemanticIndex = 3;
-	polygonLayout[8].Format = DXGI_FORMAT_R32G32B32A32_FLOAT;
-	polygonLayout[8].InputSlot = 1;
-	polygonLayout[8].AlignedByteOffset = D3D11_APPEND_ALIGNED_ELEMENT;
-	polygonLayout[8].InputSlotClass = D3D11_INPUT_PER_INSTANCE_DATA;
-	polygonLayout[8].InstanceDataStepRate = 1;
+	layout[8].SemanticName = "INSTANCEMATRIX";
+	layout[8].SemanticIndex = 3;
+	layout[8].Format = DXGI_FORMAT_R32G32B32A32_FLOAT;
+	layout[8].InputSlot = 1;
+	layout[8].AlignedByteOffset = D3D11_APPEND_ALIGNED_ELEMENT;
+	layout[8].InputSlotClass = D3D11_INPUT_PER_INSTANCE_DATA;
+	layout[8].InstanceDataStepRate = 1;
 
 	//Get count of elements in layout
-	numberOfElements = sizeof(polygonLayout) / sizeof(polygonLayout[0]);
+	numberOfElements = sizeof(layout) / sizeof(layout[0]);
 
 	//Create vertex input layout
-	auto result = device->CreateInputLayout(polygonLayout, numberOfElements, GetVertexShaderBuffer()->GetBufferPointer(), GetVertexShaderBuffer()->GetBufferSize(), &inputLayout);
+	auto result = device->CreateInputLayout(layout, numberOfElements, GetVertexShaderBuffer()->GetBufferPointer(), GetVertexShaderBuffer()->GetBufferSize(), &inputLayout);
 
 	if (FAILED(result))
 	{
