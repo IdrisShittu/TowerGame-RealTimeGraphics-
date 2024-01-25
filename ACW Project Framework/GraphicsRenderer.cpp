@@ -144,7 +144,6 @@ bool GraphicsRenderer::InitializeGameObjects(HWND hwnd) {
 	gameObjects.back()->AddScaleComponent(2.0f, 2.0f, 2.0f);
 	gameObjects.back()->AddModelComponent(d3D->GetDevice(), ModelType::Sphere, resourceManager);
 	gameObjects.back()->AddTextureComponent(d3D->GetDevice(), textureNames, resourceManager);
-	gameObjects.back()->SetShaderComponent(shaderManager->GetReflectionShader());
 
 	return true;
 }

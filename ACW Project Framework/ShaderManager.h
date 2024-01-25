@@ -28,7 +28,6 @@ public:
 
 	const shared_ptr<Shader>& GetColourShader() const;
 	const shared_ptr<Shader>& GetLightShader() const;
-	const shared_ptr<Shader>& GetReflectionShader() const;
 	const shared_ptr<Shader>& GetTexture2DShader() const;
 	const shared_ptr<Shader>& GetTextureCubeShader() const;
 	const shared_ptr<Shader>& GetTextureNormalShader() const;
@@ -44,7 +43,6 @@ private:
 
 	shared_ptr<Shader> colourShader;
 	shared_ptr<Shader> lightShader;
-	shared_ptr<Shader> reflectionShader;
 	shared_ptr<Shader> texture2DShader;
 	shared_ptr<Shader> textureCubeShader;
 	shared_ptr<Shader> textureNormalShader;

@@ -1,13 +1,10 @@
 #include "ShaderManager.h"
 
-ShaderManager::ShaderManager(ID3D11Device* const device, HWND const hwnd) : initializationFailed(false), colourShader(nullptr), lightShader(nullptr), reflectionShader(nullptr), texture2DShader(nullptr), textureCubeShader(nullptr), textureNormalShader(nullptr), textureNormalSpecularShader(nullptr)
+ShaderManager::ShaderManager(ID3D11Device* const device, HWND const hwnd) : initializationFailed(false), colourShader(nullptr), lightShader(nullptr), texture2DShader(nullptr), textureCubeShader(nullptr), textureNormalShader(nullptr), textureNormalSpecularShader(nullptr)
 {
 	lightShader = make_shared<LightShader>(device, hwnd);
 	lightShader->GetInitializationState();
 
-	reflectionShader = make_shared<ReflectionShader>(device, hwnd);
-	reflectionShader->GetInitializationState();
-	
 	texture2DShader = make_shared<Texture2DShader>(device, hwnd);
 	texture2DShader->GetInitializationState();
 	textureCubeShader = make_shared<TextureCubeShader>(device, hwnd);
@@ -44,11 +41,6 @@ const shared_ptr<Shader>& ShaderManager::GetColourShader() const {
 
 const shared_ptr<Shader>& ShaderManager::GetLightShader() const {
 	return lightShader;
-}
-
-const shared_ptr<Shader>& ShaderManager::GetReflectionShader() const
-{
-	return reflectionShader;
 }
 
 const shared_ptr<Shader>& ShaderManager::GetTexture2DShader() const {

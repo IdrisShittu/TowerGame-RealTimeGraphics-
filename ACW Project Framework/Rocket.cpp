@@ -78,7 +78,6 @@ Rocket::Rocket(ID3D11Device* const device, const XMFLOAT3& position, const XMFLO
 	rocketCone->AddScaleComponent(1.0f, 2.0f, 1.0f);
 	rocketCone->AddModelComponent(device, ModelType::Cone, resourceManager);
 	rocketCone->AddTextureComponent(device, textureNames, resourceManager);
-	rocketCone->SetShaderComponent(shaderManager->GetReflectionShader());
 	rocketCone->SetTessellationVariables(5.0f, 20.0f, 8.0f, 1.0f);
 	rocketCone->AddParentGameObject(rocketBody);
 

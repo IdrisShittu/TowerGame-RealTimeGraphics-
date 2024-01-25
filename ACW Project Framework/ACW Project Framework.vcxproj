@@ -134,7 +134,6 @@
     <ClCompile Include="Model.cpp" />
     <ClCompile Include="PointLight.cpp" />
     <ClCompile Include="Position.cpp" />
-    <ClCompile Include="ReflectionShader.cpp" />
     <ClCompile Include="TextureRenderer.cpp" />
     <ClCompile Include="ResourceManager.cpp" />
     <ClCompile Include="RigidBody.cpp" />
@@ -184,7 +183,6 @@
     <ClInclude Include="Model.h" />
     <ClInclude Include="PointLight.h" />
     <ClInclude Include="Position.h" />
-    <ClInclude Include="ReflectionShader.h" />
     <ClInclude Include="TextureRenderer.h" />
     <ClInclude Include="ResourceManager.h" />
     <ClInclude Include="RigidBody.h" />
